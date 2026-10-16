@@ -25,6 +25,7 @@ const POKEBALL_SVG = `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w
 </svg>`;
 
 const DEFAULT_SETTINGS = {
+  language: "auto",
   charactersPerPokemon: 150,
   showCatchAnimation: true,
   soundEnabled: false,
@@ -36,20 +37,238 @@ const DEFAULT_SETTINGS = {
 };
 
 // Database of all 1025 Pokemon (Generations 1 to 9 with French names & types)
-const POKEMON_DATABASE = [{"id": 1, "name": "Bulbizarre", "types": ["Plante", "Poison"]}, {"id": 2, "name": "Herbizarre", "types": ["Plante", "Poison"]}, {"id": 3, "name": "Florizarre", "types": ["Plante", "Poison"]}, {"id": 4, "name": "Salamèche", "types": ["Feu"]}, {"id": 5, "name": "Reptincel", "types": ["Feu"]}, {"id": 6, "name": "Dracaufeu", "types": ["Feu", "Vol"]}, {"id": 7, "name": "Carapuce", "types": ["Eau"]}, {"id": 8, "name": "Carabaffe", "types": ["Eau"]}, {"id": 9, "name": "Tortank", "types": ["Eau"]}, {"id": 10, "name": "Chenipan", "types": ["Insecte"]}, {"id": 11, "name": "Chrysacier", "types": ["Insecte"]}, {"id": 12, "name": "Papilusion", "types": ["Insecte", "Vol"]}, {"id": 13, "name": "Aspicot", "types": ["Insecte", "Poison"]}, {"id": 14, "name": "Coconfort", "types": ["Insecte", "Poison"]}, {"id": 15, "name": "Dardargnan", "types": ["Insecte", "Poison"]}, {"id": 16, "name": "Roucool", "types": ["Normal", "Vol"]}, {"id": 17, "name": "Roucoups", "types": ["Normal", "Vol"]}, {"id": 18, "name": "Roucarnage", "types": ["Normal", "Vol"]}, {"id": 19, "name": "Rattata", "types": ["Normal"]}, {"id": 20, "name": "Rattatac", "types": ["Normal"]}, {"id": 21, "name": "Piafabec", "types": ["Normal", "Vol"]}, {"id": 22, "name": "Rapasdepic", "types": ["Normal", "Vol"]}, {"id": 23, "name": "Abo", "types": ["Poison"]}, {"id": 24, "name": "Arbok", "types": ["Poison"]}, {"id": 25, "name": "Pikachu", "types": ["Électrik"]}, {"id": 26, "name": "Raichu", "types": ["Électrik"]}, {"id": 27, "name": "Sabelette", "types": ["Sol"]}, {"id": 28, "name": "Sablaireau", "types": ["Sol"]}, {"id": 29, "name": "Nidoran♀", "types": ["Poison"]}, {"id": 30, "name": "Nidorina", "types": ["Poison"]}, {"id": 31, "name": "Nidoqueen", "types": ["Poison", "Sol"]}, {"id": 32, "name": "Nidoran♂", "types": ["Poison"]}, {"id": 33, "name": "Nidorino", "types": ["Poison"]}, {"id": 34, "name": "Nidoking", "types": ["Poison", "Sol"]}, {"id": 35, "name": "Mélofée", "types": ["Fée"]}, {"id": 36, "name": "Mélodelfe", "types": ["Fée"]}, {"id": 37, "name": "Goupix", "types": ["Feu"]}, {"id": 38, "name": "Feunard", "types": ["Feu"]}, {"id": 39, "name": "Rondoudou", "types": ["Normal", "Fée"]}, {"id": 40, "name": "Grodoudou", "types": ["Normal", "Fée"]}, {"id": 41, "name": "Nosferapti", "types": ["Poison", "Vol"]}, {"id": 42, "name": "Nosferalto", "types": ["Poison", "Vol"]}, {"id": 43, "name": "Mystherbe", "types": ["Plante", "Poison"]}, {"id": 44, "name": "Ortide", "types": ["Plante", "Poison"]}, {"id": 45, "name": "Rafflesia", "types": ["Plante", "Poison"]}, {"id": 46, "name": "Paras", "types": ["Insecte", "Plante"]}, {"id": 47, "name": "Parasect", "types": ["Insecte", "Plante"]}, {"id": 48, "name": "Mimitoss", "types": ["Insecte", "Poison"]}, {"id": 49, "name": "Aéromite", "types": ["Insecte", "Poison"]}, {"id": 50, "name": "Taupiqueur", "types": ["Sol"]}, {"id": 51, "name": "Triopikeur", "types": ["Sol"]}, {"id": 52, "name": "Miaouss", "types": ["Normal"]}, {"id": 53, "name": "Persian", "types": ["Normal"]}, {"id": 54, "name": "Psykokwak", "types": ["Eau"]}, {"id": 55, "name": "Akwakwak", "types": ["Eau"]}, {"id": 56, "name": "Férosinge", "types": ["Combat"]}, {"id": 57, "name": "Colossinge", "types": ["Combat"]}, {"id": 58, "name": "Caninos", "types": ["Feu"]}, {"id": 59, "name": "Arcanin", "types": ["Feu"]}, {"id": 60, "name": "Ptitard", "types": ["Eau"]}, {"id": 61, "name": "Têtarte", "types": ["Eau"]}, {"id": 62, "name": "Tartard", "types": ["Eau", "Combat"]}, {"id": 63, "name": "Abra", "types": ["Psy"]}, {"id": 64, "name": "Kadabra", "types": ["Psy"]}, {"id": 65, "name": "Alakazam", "types": ["Psy"]}, {"id": 66, "name": "Machoc", "types": ["Combat"]}, {"id": 67, "name": "Machopeur", "types": ["Combat"]}, {"id": 68, "name": "Mackogneur", "types": ["Combat"]}, {"id": 69, "name": "Chétiflor", "types": ["Plante", "Poison"]}, {"id": 70, "name": "Boustiflor", "types": ["Plante", "Poison"]}, {"id": 71, "name": "Empiflor", "types": ["Plante", "Poison"]}, {"id": 72, "name": "Tentacool", "types": ["Eau", "Poison"]}, {"id": 73, "name": "Tentacruel", "types": ["Eau", "Poison"]}, {"id": 74, "name": "Racaillou", "types": ["Roche", "Sol"]}, {"id": 75, "name": "Gravalanch", "types": ["Roche", "Sol"]}, {"id": 76, "name": "Grolem", "types": ["Roche", "Sol"]}, {"id": 77, "name": "Ponyta", "types": ["Feu"]}, {"id": 78, "name": "Galopa", "types": ["Feu"]}, {"id": 79, "name": "Ramoloss", "types": ["Eau", "Psy"]}, {"id": 80, "name": "Flagadoss", "types": ["Eau", "Psy"]}, {"id": 81, "name": "Magnéti", "types": ["Électrik", "Acier"]}, {"id": 82, "name": "Magnéton", "types": ["Électrik", "Acier"]}, {"id": 83, "name": "Canarticho", "types": ["Normal", "Vol"]}, {"id": 84, "name": "Doduo", "types": ["Normal", "Vol"]}, {"id": 85, "name": "Dodrio", "types": ["Normal", "Vol"]}, {"id": 86, "name": "Otaria", "types": ["Eau"]}, {"id": 87, "name": "Lamantine", "types": ["Eau", "Glace"]}, {"id": 88, "name": "Tadmorv", "types": ["Poison"]}, {"id": 89, "name": "Grotadmorv", "types": ["Poison"]}, {"id": 90, "name": "Kokiyas", "types": ["Eau"]}, {"id": 91, "name": "Crustabri", "types": ["Eau", "Glace"]}, {"id": 92, "name": "Fantominus", "types": ["Spectre", "Poison"]}, {"id": 93, "name": "Spectrum", "types": ["Spectre", "Poison"]}, {"id": 94, "name": "Ectoplasma", "types": ["Spectre", "Poison"]}, {"id": 95, "name": "Onix", "types": ["Roche", "Sol"]}, {"id": 96, "name": "Soporifik", "types": ["Psy"]}, {"id": 97, "name": "Hypnomade", "types": ["Psy"]}, {"id": 98, "name": "Krabby", "types": ["Eau"]}, {"id": 99, "name": "Krabboss", "types": ["Eau"]}, {"id": 100, "name": "Voltorbe", "types": ["Électrik"]}, {"id": 101, "name": "Électrode", "types": ["Électrik"]}, {"id": 102, "name": "Noeunoeuf", "types": ["Plante", "Psy"]}, {"id": 103, "name": "Noadkoko", "types": ["Plante", "Psy"]}, {"id": 104, "name": "Osselait", "types": ["Sol"]}, {"id": 105, "name": "Ossatueur", "types": ["Sol"]}, {"id": 106, "name": "Kicklee", "types": ["Combat"]}, {"id": 107, "name": "Tygnon", "types": ["Combat"]}, {"id": 108, "name": "Excelangue", "types": ["Normal"]}, {"id": 109, "name": "Smogo", "types": ["Poison"]}, {"id": 110, "name": "Smogogo", "types": ["Poison"]}, {"id": 111, "name": "Rhinocorne", "types": ["Sol", "Roche"]}, {"id": 112, "name": "Rhinoféros", "types": ["Sol", "Roche"]}, {"id": 113, "name": "Leveinard", "types": ["Normal"]}, {"id": 114, "name": "Saquedeneu", "types": ["Plante"]}, {"id": 115, "name": "Kangourex", "types": ["Normal"]}, {"id": 116, "name": "Hypotrempe", "types": ["Eau"]}, {"id": 117, "name": "Hypocéan", "types": ["Eau"]}, {"id": 118, "name": "Poissirène", "types": ["Eau"]}, {"id": 119, "name": "Poissoroy", "types": ["Eau"]}, {"id": 120, "name": "Stari", "types": ["Eau"]}, {"id": 121, "name": "Staross", "types": ["Eau", "Psy"]}, {"id": 122, "name": "M. Mime", "types": ["Psy", "Fée"]}, {"id": 123, "name": "Insécateur", "types": ["Insecte", "Vol"]}, {"id": 124, "name": "Lippoutou", "types": ["Glace", "Psy"]}, {"id": 125, "name": "Élektek", "types": ["Électrik"]}, {"id": 126, "name": "Magmar", "types": ["Feu"]}, {"id": 127, "name": "Scarabrute", "types": ["Insecte"]}, {"id": 128, "name": "Tauros", "types": ["Normal"]}, {"id": 129, "name": "Magicarpe", "types": ["Eau"]}, {"id": 130, "name": "Léviator", "types": ["Eau", "Vol"]}, {"id": 131, "name": "Lokhlass", "types": ["Eau", "Glace"]}, {"id": 132, "name": "Métamorph", "types": ["Normal"]}, {"id": 133, "name": "Évoli", "types": ["Normal"]}, {"id": 134, "name": "Aquali", "types": ["Eau"]}, {"id": 135, "name": "Voltali", "types": ["Électrik"]}, {"id": 136, "name": "Pyroli", "types": ["Feu"]}, {"id": 137, "name": "Porygon", "types": ["Normal"]}, {"id": 138, "name": "Amonita", "types": ["Roche", "Eau"]}, {"id": 139, "name": "Amonistar", "types": ["Roche", "Eau"]}, {"id": 140, "name": "Kabuto", "types": ["Roche", "Eau"]}, {"id": 141, "name": "Kabutops", "types": ["Roche", "Eau"]}, {"id": 142, "name": "Ptéra", "types": ["Roche", "Vol"]}, {"id": 143, "name": "Ronflex", "types": ["Normal"]}, {"id": 144, "name": "Artikodin", "types": ["Glace", "Vol"]}, {"id": 145, "name": "Électhor", "types": ["Électrik", "Vol"]}, {"id": 146, "name": "Sulfura", "types": ["Feu", "Vol"]}, {"id": 147, "name": "Minidraco", "types": ["Dragon"]}, {"id": 148, "name": "Draco", "types": ["Dragon"]}, {"id": 149, "name": "Dracolosse", "types": ["Dragon", "Vol"]}, {"id": 150, "name": "Mewtwo", "types": ["Psy"]}, {"id": 151, "name": "Mew", "types": ["Psy"]}, {"id": 152, "name": "Germignon", "types": ["Plante"]}, {"id": 153, "name": "Macronium", "types": ["Plante"]}, {"id": 154, "name": "Méganium", "types": ["Plante"]}, {"id": 155, "name": "Héricendre", "types": ["Feu"]}, {"id": 156, "name": "Feurisson", "types": ["Feu"]}, {"id": 157, "name": "Typhlosion", "types": ["Feu"]}, {"id": 158, "name": "Kaiminus", "types": ["Eau"]}, {"id": 159, "name": "Crocrodil", "types": ["Eau"]}, {"id": 160, "name": "Aligatueur", "types": ["Eau"]}, {"id": 161, "name": "Fouinette", "types": ["Normal"]}, {"id": 162, "name": "Fouinar", "types": ["Normal"]}, {"id": 163, "name": "Hoothoot", "types": ["Normal", "Vol"]}, {"id": 164, "name": "Noarfang", "types": ["Normal", "Vol"]}, {"id": 165, "name": "Coxy", "types": ["Insecte", "Vol"]}, {"id": 166, "name": "Coxyclaque", "types": ["Insecte", "Vol"]}, {"id": 167, "name": "Mimigal", "types": ["Insecte", "Poison"]}, {"id": 168, "name": "Migalos", "types": ["Insecte", "Poison"]}, {"id": 169, "name": "Nostenfer", "types": ["Poison", "Vol"]}, {"id": 170, "name": "Loupio", "types": ["Eau", "Électrik"]}, {"id": 171, "name": "Lanturn", "types": ["Eau", "Électrik"]}, {"id": 172, "name": "Pichu", "types": ["Électrik"]}, {"id": 173, "name": "Mélo", "types": ["Fée"]}, {"id": 174, "name": "Toudoudou", "types": ["Normal", "Fée"]}, {"id": 175, "name": "Togepi", "types": ["Fée"]}, {"id": 176, "name": "Togetic", "types": ["Fée", "Vol"]}, {"id": 177, "name": "Natu", "types": ["Psy", "Vol"]}, {"id": 178, "name": "Xatu", "types": ["Psy", "Vol"]}, {"id": 179, "name": "Wattouat", "types": ["Électrik"]}, {"id": 180, "name": "Lainergie", "types": ["Électrik"]}, {"id": 181, "name": "Pharamp", "types": ["Électrik"]}, {"id": 182, "name": "Joliflor", "types": ["Plante"]}, {"id": 183, "name": "Marill", "types": ["Eau", "Fée"]}, {"id": 184, "name": "Azumarill", "types": ["Eau", "Fée"]}, {"id": 185, "name": "Simularbre", "types": ["Roche"]}, {"id": 186, "name": "Tarpaud", "types": ["Eau"]}, {"id": 187, "name": "Granivol", "types": ["Plante", "Vol"]}, {"id": 188, "name": "Floravol", "types": ["Plante", "Vol"]}, {"id": 189, "name": "Cotovol", "types": ["Plante", "Vol"]}, {"id": 190, "name": "Capumain", "types": ["Normal"]}, {"id": 191, "name": "Tournegrin", "types": ["Plante"]}, {"id": 192, "name": "Héliatronc", "types": ["Plante"]}, {"id": 193, "name": "Yanma", "types": ["Insecte", "Vol"]}, {"id": 194, "name": "Axoloto", "types": ["Eau", "Sol"]}, {"id": 195, "name": "Maraiste", "types": ["Eau", "Sol"]}, {"id": 196, "name": "Mentali", "types": ["Psy"]}, {"id": 197, "name": "Noctali", "types": ["Ténèbres"]}, {"id": 198, "name": "Cornèbre", "types": ["Ténèbres", "Vol"]}, {"id": 199, "name": "Roigada", "types": ["Eau", "Psy"]}, {"id": 200, "name": "Feuforêve", "types": ["Spectre"]}, {"id": 201, "name": "Zarbi", "types": ["Psy"]}, {"id": 202, "name": "Qulbutoké", "types": ["Psy"]}, {"id": 203, "name": "Girafarig", "types": ["Normal", "Psy"]}, {"id": 204, "name": "Pomdepik", "types": ["Insecte"]}, {"id": 205, "name": "Foretress", "types": ["Insecte", "Acier"]}, {"id": 206, "name": "Insolourdo", "types": ["Normal"]}, {"id": 207, "name": "Scorplane", "types": ["Sol", "Vol"]}, {"id": 208, "name": "Steelix", "types": ["Acier", "Sol"]}, {"id": 209, "name": "Snubbull", "types": ["Fée"]}, {"id": 210, "name": "Granbull", "types": ["Fée"]}, {"id": 211, "name": "Qwilfish", "types": ["Eau", "Poison"]}, {"id": 212, "name": "Cizayox", "types": ["Insecte", "Acier"]}, {"id": 213, "name": "Caratroc", "types": ["Insecte", "Roche"]}, {"id": 214, "name": "Scarhino", "types": ["Insecte", "Combat"]}, {"id": 215, "name": "Farfuret", "types": ["Ténèbres", "Glace"]}, {"id": 216, "name": "Teddiursa", "types": ["Normal"]}, {"id": 217, "name": "Ursaring", "types": ["Normal"]}, {"id": 218, "name": "Limagma", "types": ["Feu"]}, {"id": 219, "name": "Volcaropod", "types": ["Feu", "Roche"]}, {"id": 220, "name": "Marcacrin", "types": ["Glace", "Sol"]}, {"id": 221, "name": "Cochignon", "types": ["Glace", "Sol"]}, {"id": 222, "name": "Corayon", "types": ["Eau", "Roche"]}, {"id": 223, "name": "Rémoraid", "types": ["Eau"]}, {"id": 224, "name": "Octillery", "types": ["Eau"]}, {"id": 225, "name": "Cadoizo", "types": ["Glace", "Vol"]}, {"id": 226, "name": "Démanta", "types": ["Eau", "Vol"]}, {"id": 227, "name": "Airmure", "types": ["Acier", "Vol"]}, {"id": 228, "name": "Malosse", "types": ["Ténèbres", "Feu"]}, {"id": 229, "name": "Démolosse", "types": ["Ténèbres", "Feu"]}, {"id": 230, "name": "Hyporoi", "types": ["Eau", "Dragon"]}, {"id": 231, "name": "Phanpy", "types": ["Sol"]}, {"id": 232, "name": "Donphan", "types": ["Sol"]}, {"id": 233, "name": "Porygon2", "types": ["Normal"]}, {"id": 234, "name": "Cerfrousse", "types": ["Normal"]}, {"id": 235, "name": "Queulorior", "types": ["Normal"]}, {"id": 236, "name": "Debugant", "types": ["Combat"]}, {"id": 237, "name": "Kapoera", "types": ["Combat"]}, {"id": 238, "name": "Lippouti", "types": ["Glace", "Psy"]}, {"id": 239, "name": "Élekid", "types": ["Électrik"]}, {"id": 240, "name": "Magby", "types": ["Feu"]}, {"id": 241, "name": "Écrémeuh", "types": ["Normal"]}, {"id": 242, "name": "Leuphorie", "types": ["Normal"]}, {"id": 243, "name": "Raikou", "types": ["Électrik"]}, {"id": 244, "name": "Entei", "types": ["Feu"]}, {"id": 245, "name": "Suicune", "types": ["Eau"]}, {"id": 246, "name": "Embrylex", "types": ["Roche", "Sol"]}, {"id": 247, "name": "Ymphect", "types": ["Roche", "Sol"]}, {"id": 248, "name": "Tyranocif", "types": ["Roche", "Ténèbres"]}, {"id": 249, "name": "Lugia", "types": ["Psy", "Vol"]}, {"id": 250, "name": "Ho-Oh", "types": ["Feu", "Vol"]}, {"id": 251, "name": "Celebi", "types": ["Psy", "Plante"]}, {"id": 252, "name": "Arcko", "types": ["Plante"]}, {"id": 253, "name": "Massko", "types": ["Plante"]}, {"id": 254, "name": "Jungko", "types": ["Plante"]}, {"id": 255, "name": "Poussifeu", "types": ["Feu"]}, {"id": 256, "name": "Galifeu", "types": ["Feu", "Combat"]}, {"id": 257, "name": "Braségali", "types": ["Feu", "Combat"]}, {"id": 258, "name": "Gobou", "types": ["Eau"]}, {"id": 259, "name": "Flobio", "types": ["Eau", "Sol"]}, {"id": 260, "name": "Laggron", "types": ["Eau", "Sol"]}, {"id": 261, "name": "Medhyèna", "types": ["Ténèbres"]}, {"id": 262, "name": "Grahyèna", "types": ["Ténèbres"]}, {"id": 263, "name": "Zigzaton", "types": ["Normal"]}, {"id": 264, "name": "Linéon", "types": ["Normal"]}, {"id": 265, "name": "Chenipotte", "types": ["Insecte"]}, {"id": 266, "name": "Armulys", "types": ["Insecte"]}, {"id": 267, "name": "Charmillon", "types": ["Insecte", "Vol"]}, {"id": 268, "name": "Blindalys", "types": ["Insecte"]}, {"id": 269, "name": "Papinox", "types": ["Insecte", "Poison"]}, {"id": 270, "name": "Nénupiot", "types": ["Eau", "Plante"]}, {"id": 271, "name": "Lombre", "types": ["Eau", "Plante"]}, {"id": 272, "name": "Ludicolo", "types": ["Eau", "Plante"]}, {"id": 273, "name": "Grainipiot", "types": ["Plante"]}, {"id": 274, "name": "Pifeuil", "types": ["Plante", "Ténèbres"]}, {"id": 275, "name": "Tengalice", "types": ["Plante", "Ténèbres"]}, {"id": 276, "name": "Nirondelle", "types": ["Normal", "Vol"]}, {"id": 277, "name": "Hélédelle", "types": ["Normal", "Vol"]}, {"id": 278, "name": "Goélise", "types": ["Eau", "Vol"]}, {"id": 279, "name": "Bekipan", "types": ["Eau", "Vol"]}, {"id": 280, "name": "Tarsal", "types": ["Psy", "Fée"]}, {"id": 281, "name": "Kirlia", "types": ["Psy", "Fée"]}, {"id": 282, "name": "Gardevoir", "types": ["Psy", "Fée"]}, {"id": 283, "name": "Arakdo", "types": ["Insecte", "Eau"]}, {"id": 284, "name": "Maskadra", "types": ["Insecte", "Vol"]}, {"id": 285, "name": "Balignon", "types": ["Plante"]}, {"id": 286, "name": "Chapignon", "types": ["Plante", "Combat"]}, {"id": 287, "name": "Parecool", "types": ["Normal"]}, {"id": 288, "name": "Vigoroth", "types": ["Normal"]}, {"id": 289, "name": "Monaflèmit", "types": ["Normal"]}, {"id": 290, "name": "Ningale", "types": ["Insecte", "Sol"]}, {"id": 291, "name": "Ninjask", "types": ["Insecte", "Vol"]}, {"id": 292, "name": "Munja", "types": ["Insecte", "Spectre"]}, {"id": 293, "name": "Chuchmur", "types": ["Normal"]}, {"id": 294, "name": "Ramboum", "types": ["Normal"]}, {"id": 295, "name": "Brouhabam", "types": ["Normal"]}, {"id": 296, "name": "Makuhita", "types": ["Combat"]}, {"id": 297, "name": "Hariyama", "types": ["Combat"]}, {"id": 298, "name": "Azurill", "types": ["Normal", "Fée"]}, {"id": 299, "name": "Tarinor", "types": ["Roche"]}, {"id": 300, "name": "Skitty", "types": ["Normal"]}, {"id": 301, "name": "Delcatty", "types": ["Normal"]}, {"id": 302, "name": "Ténéfix", "types": ["Ténèbres", "Spectre"]}, {"id": 303, "name": "Mysdibule", "types": ["Acier", "Fée"]}, {"id": 304, "name": "Galekid", "types": ["Acier", "Roche"]}, {"id": 305, "name": "Galegon", "types": ["Acier", "Roche"]}, {"id": 306, "name": "Galeking", "types": ["Acier", "Roche"]}, {"id": 307, "name": "Méditikka", "types": ["Combat", "Psy"]}, {"id": 308, "name": "Charmina", "types": ["Combat", "Psy"]}, {"id": 309, "name": "Dynavolt", "types": ["Électrik"]}, {"id": 310, "name": "Élecsprint", "types": ["Électrik"]}, {"id": 311, "name": "Posipi", "types": ["Électrik"]}, {"id": 312, "name": "Négapi", "types": ["Électrik"]}, {"id": 313, "name": "Muciole", "types": ["Insecte"]}, {"id": 314, "name": "Lumivole", "types": ["Insecte"]}, {"id": 315, "name": "Rosélia", "types": ["Plante", "Poison"]}, {"id": 316, "name": "Gloupti", "types": ["Poison"]}, {"id": 317, "name": "Avaltout", "types": ["Poison"]}, {"id": 318, "name": "Carvanha", "types": ["Eau", "Ténèbres"]}, {"id": 319, "name": "Sharpedo", "types": ["Eau", "Ténèbres"]}, {"id": 320, "name": "Wailmer", "types": ["Eau"]}, {"id": 321, "name": "Wailord", "types": ["Eau"]}, {"id": 322, "name": "Chamallot", "types": ["Feu", "Sol"]}, {"id": 323, "name": "Camérupt", "types": ["Feu", "Sol"]}, {"id": 324, "name": "Chartor", "types": ["Feu"]}, {"id": 325, "name": "Spoink", "types": ["Psy"]}, {"id": 326, "name": "Groret", "types": ["Psy"]}, {"id": 327, "name": "Spinda", "types": ["Normal"]}, {"id": 328, "name": "Kraknoix", "types": ["Sol"]}, {"id": 329, "name": "Vibraninf", "types": ["Sol", "Dragon"]}, {"id": 330, "name": "Libégon", "types": ["Sol", "Dragon"]}, {"id": 331, "name": "Cacnea", "types": ["Plante"]}, {"id": 332, "name": "Cacturne", "types": ["Plante", "Ténèbres"]}, {"id": 333, "name": "Tylton", "types": ["Normal", "Vol"]}, {"id": 334, "name": "Altaria", "types": ["Dragon", "Vol"]}, {"id": 335, "name": "Mangriff", "types": ["Normal"]}, {"id": 336, "name": "Séviper", "types": ["Poison"]}, {"id": 337, "name": "Séléroc", "types": ["Roche", "Psy"]}, {"id": 338, "name": "Solaroc", "types": ["Roche", "Psy"]}, {"id": 339, "name": "Barloche", "types": ["Eau", "Sol"]}, {"id": 340, "name": "Barbicha", "types": ["Eau", "Sol"]}, {"id": 341, "name": "Écrapince", "types": ["Eau"]}, {"id": 342, "name": "Colhomard", "types": ["Eau", "Ténèbres"]}, {"id": 343, "name": "Balbuto", "types": ["Sol", "Psy"]}, {"id": 344, "name": "Kaorine", "types": ["Sol", "Psy"]}, {"id": 345, "name": "Lilia", "types": ["Roche", "Plante"]}, {"id": 346, "name": "Vacilys", "types": ["Roche", "Plante"]}, {"id": 347, "name": "Anorith", "types": ["Roche", "Insecte"]}, {"id": 348, "name": "Armaldo", "types": ["Roche", "Insecte"]}, {"id": 349, "name": "Barpau", "types": ["Eau"]}, {"id": 350, "name": "Milobellus", "types": ["Eau"]}, {"id": 351, "name": "Morphéo", "types": ["Normal"]}, {"id": 352, "name": "Kecleon", "types": ["Normal"]}, {"id": 353, "name": "Polichombr", "types": ["Spectre"]}, {"id": 354, "name": "Branette", "types": ["Spectre"]}, {"id": 355, "name": "Skelénox", "types": ["Spectre"]}, {"id": 356, "name": "Téraclope", "types": ["Spectre"]}, {"id": 357, "name": "Tropius", "types": ["Plante", "Vol"]}, {"id": 358, "name": "Éoko", "types": ["Psy"]}, {"id": 359, "name": "Absol", "types": ["Ténèbres"]}, {"id": 360, "name": "Okéoké", "types": ["Psy"]}, {"id": 361, "name": "Stalgamin", "types": ["Glace"]}, {"id": 362, "name": "Oniglali", "types": ["Glace"]}, {"id": 363, "name": "Obalie", "types": ["Glace", "Eau"]}, {"id": 364, "name": "Phogleur", "types": ["Glace", "Eau"]}, {"id": 365, "name": "Kaimorse", "types": ["Glace", "Eau"]}, {"id": 366, "name": "Coquiperl", "types": ["Eau"]}, {"id": 367, "name": "Serpang", "types": ["Eau"]}, {"id": 368, "name": "Rosabyss", "types": ["Eau"]}, {"id": 369, "name": "Relicanth", "types": ["Eau", "Roche"]}, {"id": 370, "name": "Lovdisc", "types": ["Eau"]}, {"id": 371, "name": "Draby", "types": ["Dragon"]}, {"id": 372, "name": "Drackhaus", "types": ["Dragon"]}, {"id": 373, "name": "Drattak", "types": ["Dragon", "Vol"]}, {"id": 374, "name": "Terhal", "types": ["Acier", "Psy"]}, {"id": 375, "name": "Métang", "types": ["Acier", "Psy"]}, {"id": 376, "name": "Métalosse", "types": ["Acier", "Psy"]}, {"id": 377, "name": "Regirock", "types": ["Roche"]}, {"id": 378, "name": "Regice", "types": ["Glace"]}, {"id": 379, "name": "Registeel", "types": ["Acier"]}, {"id": 380, "name": "Latias", "types": ["Dragon", "Psy"]}, {"id": 381, "name": "Latios", "types": ["Dragon", "Psy"]}, {"id": 382, "name": "Kyogre", "types": ["Eau"]}, {"id": 383, "name": "Groudon", "types": ["Sol"]}, {"id": 384, "name": "Rayquaza", "types": ["Dragon", "Vol"]}, {"id": 385, "name": "Jirachi", "types": ["Acier", "Psy"]}, {"id": 386, "name": "Deoxys", "types": ["Psy"]}, {"id": 387, "name": "Tortipouss", "types": ["Plante"]}, {"id": 388, "name": "Boskara", "types": ["Plante"]}, {"id": 389, "name": "Torterra", "types": ["Plante", "Sol"]}, {"id": 390, "name": "Ouisticram", "types": ["Feu"]}, {"id": 391, "name": "Chimpenfeu", "types": ["Feu", "Combat"]}, {"id": 392, "name": "Simiabraz", "types": ["Feu", "Combat"]}, {"id": 393, "name": "Tiplouf", "types": ["Eau"]}, {"id": 394, "name": "Prinplouf", "types": ["Eau"]}, {"id": 395, "name": "Pingoléon", "types": ["Eau", "Acier"]}, {"id": 396, "name": "Étourmi", "types": ["Normal", "Vol"]}, {"id": 397, "name": "Étourvol", "types": ["Normal", "Vol"]}, {"id": 398, "name": "Étouraptor", "types": ["Normal", "Vol"]}, {"id": 399, "name": "Keunotor", "types": ["Normal"]}, {"id": 400, "name": "Castorno", "types": ["Normal", "Eau"]}, {"id": 401, "name": "Crikzik", "types": ["Insecte"]}, {"id": 402, "name": "Mélokrik", "types": ["Insecte"]}, {"id": 403, "name": "Lixy", "types": ["Électrik"]}, {"id": 404, "name": "Luxio", "types": ["Électrik"]}, {"id": 405, "name": "Luxray", "types": ["Électrik"]}, {"id": 406, "name": "Rozbouton", "types": ["Plante", "Poison"]}, {"id": 407, "name": "Roserade", "types": ["Plante", "Poison"]}, {"id": 408, "name": "Kranidos", "types": ["Roche"]}, {"id": 409, "name": "Charkos", "types": ["Roche"]}, {"id": 410, "name": "Dinoclier", "types": ["Roche", "Acier"]}, {"id": 411, "name": "Bastiodon", "types": ["Roche", "Acier"]}, {"id": 412, "name": "Cheniti", "types": ["Insecte"]}, {"id": 413, "name": "Cheniselle", "types": ["Insecte", "Plante"]}, {"id": 414, "name": "Papilord", "types": ["Insecte", "Vol"]}, {"id": 415, "name": "Apitrini", "types": ["Insecte", "Vol"]}, {"id": 416, "name": "Apireine", "types": ["Insecte", "Vol"]}, {"id": 417, "name": "Pachirisu", "types": ["Électrik"]}, {"id": 418, "name": "Mustébouée", "types": ["Eau"]}, {"id": 419, "name": "Mustéflott", "types": ["Eau"]}, {"id": 420, "name": "Ceribou", "types": ["Plante"]}, {"id": 421, "name": "Ceriflor", "types": ["Plante"]}, {"id": 422, "name": "Sancoki", "types": ["Eau"]}, {"id": 423, "name": "Tritosor", "types": ["Eau", "Sol"]}, {"id": 424, "name": "Capidextre", "types": ["Normal"]}, {"id": 425, "name": "Baudrive", "types": ["Spectre", "Vol"]}, {"id": 426, "name": "Grodrive", "types": ["Spectre", "Vol"]}, {"id": 427, "name": "Laporeille", "types": ["Normal"]}, {"id": 428, "name": "Lockpin", "types": ["Normal"]}, {"id": 429, "name": "Magirêve", "types": ["Spectre"]}, {"id": 430, "name": "Corboss", "types": ["Ténèbres", "Vol"]}, {"id": 431, "name": "Chaglam", "types": ["Normal"]}, {"id": 432, "name": "Chaffreux", "types": ["Normal"]}, {"id": 433, "name": "Korillon", "types": ["Psy"]}, {"id": 434, "name": "Moufouette", "types": ["Poison", "Ténèbres"]}, {"id": 435, "name": "Moufflair", "types": ["Poison", "Ténèbres"]}, {"id": 436, "name": "Archéomire", "types": ["Acier", "Psy"]}, {"id": 437, "name": "Archéodong", "types": ["Acier", "Psy"]}, {"id": 438, "name": "Manzaï", "types": ["Roche"]}, {"id": 439, "name": "Mime Jr.", "types": ["Psy", "Fée"]}, {"id": 440, "name": "Ptiravi", "types": ["Normal"]}, {"id": 441, "name": "Pijako", "types": ["Normal", "Vol"]}, {"id": 442, "name": "Spiritomb", "types": ["Spectre", "Ténèbres"]}, {"id": 443, "name": "Griknot", "types": ["Dragon", "Sol"]}, {"id": 444, "name": "Carmache", "types": ["Dragon", "Sol"]}, {"id": 445, "name": "Carchacrok", "types": ["Dragon", "Sol"]}, {"id": 446, "name": "Goinfrex", "types": ["Normal"]}, {"id": 447, "name": "Riolu", "types": ["Combat"]}, {"id": 448, "name": "Lucario", "types": ["Combat", "Acier"]}, {"id": 449, "name": "Hippopotas", "types": ["Sol"]}, {"id": 450, "name": "Hippodocus", "types": ["Sol"]}, {"id": 451, "name": "Rapion", "types": ["Poison", "Insecte"]}, {"id": 452, "name": "Drascore", "types": ["Poison", "Ténèbres"]}, {"id": 453, "name": "Cradopaud", "types": ["Poison", "Combat"]}, {"id": 454, "name": "Coatox", "types": ["Poison", "Combat"]}, {"id": 455, "name": "Vortente", "types": ["Plante"]}, {"id": 456, "name": "Écayon", "types": ["Eau"]}, {"id": 457, "name": "Luminéon", "types": ["Eau"]}, {"id": 458, "name": "Babimanta", "types": ["Eau", "Vol"]}, {"id": 459, "name": "Blizzi", "types": ["Plante", "Glace"]}, {"id": 460, "name": "Blizzaroi", "types": ["Plante", "Glace"]}, {"id": 461, "name": "Dimoret", "types": ["Ténèbres", "Glace"]}, {"id": 462, "name": "Magnézone", "types": ["Électrik", "Acier"]}, {"id": 463, "name": "Coudlangue", "types": ["Normal"]}, {"id": 464, "name": "Rhinastoc", "types": ["Sol", "Roche"]}, {"id": 465, "name": "Bouldeneu", "types": ["Plante"]}, {"id": 466, "name": "Élekable", "types": ["Électrik"]}, {"id": 467, "name": "Maganon", "types": ["Feu"]}, {"id": 468, "name": "Togekiss", "types": ["Fée", "Vol"]}, {"id": 469, "name": "Yanmega", "types": ["Insecte", "Vol"]}, {"id": 470, "name": "Phyllali", "types": ["Plante"]}, {"id": 471, "name": "Givrali", "types": ["Glace"]}, {"id": 472, "name": "Scorvol", "types": ["Sol", "Vol"]}, {"id": 473, "name": "Mammochon", "types": ["Glace", "Sol"]}, {"id": 474, "name": "Porygon-Z", "types": ["Normal"]}, {"id": 475, "name": "Gallame", "types": ["Psy", "Combat"]}, {"id": 476, "name": "Tarinorme", "types": ["Roche", "Acier"]}, {"id": 477, "name": "Noctunoir", "types": ["Spectre"]}, {"id": 478, "name": "Momartik", "types": ["Glace", "Spectre"]}, {"id": 479, "name": "Motisma", "types": ["Électrik", "Spectre"]}, {"id": 480, "name": "Créhelf", "types": ["Psy"]}, {"id": 481, "name": "Créfollet", "types": ["Psy"]}, {"id": 482, "name": "Créfadet", "types": ["Psy"]}, {"id": 483, "name": "Dialga", "types": ["Acier", "Dragon"]}, {"id": 484, "name": "Palkia", "types": ["Eau", "Dragon"]}, {"id": 485, "name": "Heatran", "types": ["Feu", "Acier"]}, {"id": 486, "name": "Regigigas", "types": ["Normal"]}, {"id": 487, "name": "Giratina", "types": ["Spectre", "Dragon"]}, {"id": 488, "name": "Cresselia", "types": ["Psy"]}, {"id": 489, "name": "Phione", "types": ["Eau"]}, {"id": 490, "name": "Manaphy", "types": ["Eau"]}, {"id": 491, "name": "Darkrai", "types": ["Ténèbres"]}, {"id": 492, "name": "Shaymin", "types": ["Plante"]}, {"id": 493, "name": "Arceus", "types": ["Normal"]}, {"id": 494, "name": "Victini", "types": ["Psy", "Feu"]}, {"id": 495, "name": "Vipélierre", "types": ["Plante"]}, {"id": 496, "name": "Lianaja", "types": ["Plante"]}, {"id": 497, "name": "Majaspic", "types": ["Plante"]}, {"id": 498, "name": "Gruikui", "types": ["Feu"]}, {"id": 499, "name": "Grotichon", "types": ["Feu", "Combat"]}, {"id": 500, "name": "Roitiflam", "types": ["Feu", "Combat"]}, {"id": 501, "name": "Moustillon", "types": ["Eau"]}, {"id": 502, "name": "Mateloutre", "types": ["Eau"]}, {"id": 503, "name": "Clamiral", "types": ["Eau"]}, {"id": 504, "name": "Ratentif", "types": ["Normal"]}, {"id": 505, "name": "Miradar", "types": ["Normal"]}, {"id": 506, "name": "Ponchiot", "types": ["Normal"]}, {"id": 507, "name": "Ponchien", "types": ["Normal"]}, {"id": 508, "name": "Mastouffe", "types": ["Normal"]}, {"id": 509, "name": "Chacripan", "types": ["Ténèbres"]}, {"id": 510, "name": "Léopardus", "types": ["Ténèbres"]}, {"id": 511, "name": "Feuillajou", "types": ["Plante"]}, {"id": 512, "name": "Feuiloutan", "types": ["Plante"]}, {"id": 513, "name": "Flamajou", "types": ["Feu"]}, {"id": 514, "name": "Flamoutan", "types": ["Feu"]}, {"id": 515, "name": "Flotajou", "types": ["Eau"]}, {"id": 516, "name": "Flotoutan", "types": ["Eau"]}, {"id": 517, "name": "Munna", "types": ["Psy"]}, {"id": 518, "name": "Mushana", "types": ["Psy"]}, {"id": 519, "name": "Poichigeon", "types": ["Normal", "Vol"]}, {"id": 520, "name": "Colombeau", "types": ["Normal", "Vol"]}, {"id": 521, "name": "Déflaisan", "types": ["Normal", "Vol"]}, {"id": 522, "name": "Zébibron", "types": ["Électrik"]}, {"id": 523, "name": "Zéblitz", "types": ["Électrik"]}, {"id": 524, "name": "Nodulithe", "types": ["Roche"]}, {"id": 525, "name": "Géolithe", "types": ["Roche"]}, {"id": 526, "name": "Gigalithe", "types": ["Roche"]}, {"id": 527, "name": "Chovsourir", "types": ["Psy", "Vol"]}, {"id": 528, "name": "Rhinolove", "types": ["Psy", "Vol"]}, {"id": 529, "name": "Rototaupe", "types": ["Sol"]}, {"id": 530, "name": "Minotaupe", "types": ["Sol", "Acier"]}, {"id": 531, "name": "Nanméouïe", "types": ["Normal"]}, {"id": 532, "name": "Charpenti", "types": ["Combat"]}, {"id": 533, "name": "Ouvrifier", "types": ["Combat"]}, {"id": 534, "name": "Bétochef", "types": ["Combat"]}, {"id": 535, "name": "Tritonde", "types": ["Eau"]}, {"id": 536, "name": "Batracné", "types": ["Eau", "Sol"]}, {"id": 537, "name": "Crapustule", "types": ["Eau", "Sol"]}, {"id": 538, "name": "Judokrak", "types": ["Combat"]}, {"id": 539, "name": "Karaclée", "types": ["Combat"]}, {"id": 540, "name": "Larveyette", "types": ["Insecte", "Plante"]}, {"id": 541, "name": "Couverdure", "types": ["Insecte", "Plante"]}, {"id": 542, "name": "Manternel", "types": ["Insecte", "Plante"]}, {"id": 543, "name": "Venipatte", "types": ["Insecte", "Poison"]}, {"id": 544, "name": "Scobolide", "types": ["Insecte", "Poison"]}, {"id": 545, "name": "Brutapode", "types": ["Insecte", "Poison"]}, {"id": 546, "name": "Doudouvet", "types": ["Plante", "Fée"]}, {"id": 547, "name": "Farfaduvet", "types": ["Plante", "Fée"]}, {"id": 548, "name": "Chlorobule", "types": ["Plante"]}, {"id": 549, "name": "Fragilady", "types": ["Plante"]}, {"id": 550, "name": "Bargantua", "types": ["Eau"]}, {"id": 551, "name": "Mascaïman", "types": ["Sol", "Ténèbres"]}, {"id": 552, "name": "Escroco", "types": ["Sol", "Ténèbres"]}, {"id": 553, "name": "Crocorible", "types": ["Sol", "Ténèbres"]}, {"id": 554, "name": "Darumarond", "types": ["Feu"]}, {"id": 555, "name": "Darumacho", "types": ["Feu"]}, {"id": 556, "name": "Maracachi", "types": ["Plante"]}, {"id": 557, "name": "Crabicoque", "types": ["Insecte", "Roche"]}, {"id": 558, "name": "Crabaraque", "types": ["Insecte", "Roche"]}, {"id": 559, "name": "Baggiguane", "types": ["Ténèbres", "Combat"]}, {"id": 560, "name": "Baggaïd", "types": ["Ténèbres", "Combat"]}, {"id": 561, "name": "Cryptéro", "types": ["Psy", "Vol"]}, {"id": 562, "name": "Tutafeh", "types": ["Spectre"]}, {"id": 563, "name": "Tutankafer", "types": ["Spectre"]}, {"id": 564, "name": "Carapagos", "types": ["Eau", "Roche"]}, {"id": 565, "name": "Mégapagos", "types": ["Eau", "Roche"]}, {"id": 566, "name": "Arkéapti", "types": ["Roche", "Vol"]}, {"id": 567, "name": "Aéroptéryx", "types": ["Roche", "Vol"]}, {"id": 568, "name": "Miamiasme", "types": ["Poison"]}, {"id": 569, "name": "Miasmax", "types": ["Poison"]}, {"id": 570, "name": "Zorua", "types": ["Ténèbres"]}, {"id": 571, "name": "Zoroark", "types": ["Ténèbres"]}, {"id": 572, "name": "Chinchidou", "types": ["Normal"]}, {"id": 573, "name": "Pashmilla", "types": ["Normal"]}, {"id": 574, "name": "Scrutella", "types": ["Psy"]}, {"id": 575, "name": "Mesmérella", "types": ["Psy"]}, {"id": 576, "name": "Sidérella", "types": ["Psy"]}, {"id": 577, "name": "Nucléos", "types": ["Psy"]}, {"id": 578, "name": "Méios", "types": ["Psy"]}, {"id": 579, "name": "Symbios", "types": ["Psy"]}, {"id": 580, "name": "Couaneton", "types": ["Eau", "Vol"]}, {"id": 581, "name": "Lakmécygne", "types": ["Eau", "Vol"]}, {"id": 582, "name": "Sorbébé", "types": ["Glace"]}, {"id": 583, "name": "Sorboul", "types": ["Glace"]}, {"id": 584, "name": "Sorbouboul", "types": ["Glace"]}, {"id": 585, "name": "Vivaldaim", "types": ["Normal", "Plante"]}, {"id": 586, "name": "Haydaim", "types": ["Normal", "Plante"]}, {"id": 587, "name": "Emolga", "types": ["Électrik", "Vol"]}, {"id": 588, "name": "Carabing", "types": ["Insecte"]}, {"id": 589, "name": "Lançargot", "types": ["Insecte", "Acier"]}, {"id": 590, "name": "Trompignon", "types": ["Plante", "Poison"]}, {"id": 591, "name": "Gaulet", "types": ["Plante", "Poison"]}, {"id": 592, "name": "Viskuse", "types": ["Eau", "Spectre"]}, {"id": 593, "name": "Moyade", "types": ["Eau", "Spectre"]}, {"id": 594, "name": "Mamanbo", "types": ["Eau"]}, {"id": 595, "name": "Statitik", "types": ["Insecte", "Électrik"]}, {"id": 596, "name": "Mygavolt", "types": ["Insecte", "Électrik"]}, {"id": 597, "name": "Grindur", "types": ["Plante", "Acier"]}, {"id": 598, "name": "Noacier", "types": ["Plante", "Acier"]}, {"id": 599, "name": "Tic", "types": ["Acier"]}, {"id": 600, "name": "Clic", "types": ["Acier"]}, {"id": 601, "name": "Cliticlic", "types": ["Acier"]}, {"id": 602, "name": "Anchwatt", "types": ["Électrik"]}, {"id": 603, "name": "Lampéroie", "types": ["Électrik"]}, {"id": 604, "name": "Ohmassacre", "types": ["Électrik"]}, {"id": 605, "name": "Lewsor", "types": ["Psy"]}, {"id": 606, "name": "Neitram", "types": ["Psy"]}, {"id": 607, "name": "Funécire", "types": ["Spectre", "Feu"]}, {"id": 608, "name": "Mélancolux", "types": ["Spectre", "Feu"]}, {"id": 609, "name": "Lugulabre", "types": ["Spectre", "Feu"]}, {"id": 610, "name": "Coupenotte", "types": ["Dragon"]}, {"id": 611, "name": "Incisache", "types": ["Dragon"]}, {"id": 612, "name": "Tranchodon", "types": ["Dragon"]}, {"id": 613, "name": "Polarhume", "types": ["Glace"]}, {"id": 614, "name": "Polagriffe", "types": ["Glace"]}, {"id": 615, "name": "Hexagel", "types": ["Glace"]}, {"id": 616, "name": "Escargaume", "types": ["Insecte"]}, {"id": 617, "name": "Limaspeed", "types": ["Insecte"]}, {"id": 618, "name": "Limonde", "types": ["Sol", "Électrik"]}, {"id": 619, "name": "Kungfouine", "types": ["Combat"]}, {"id": 620, "name": "Shaofouine", "types": ["Combat"]}, {"id": 621, "name": "Drakkarmin", "types": ["Dragon"]}, {"id": 622, "name": "Gringolem", "types": ["Sol", "Spectre"]}, {"id": 623, "name": "Golemastoc", "types": ["Sol", "Spectre"]}, {"id": 624, "name": "Scalpion", "types": ["Ténèbres", "Acier"]}, {"id": 625, "name": "Scalproie", "types": ["Ténèbres", "Acier"]}, {"id": 626, "name": "Frison", "types": ["Normal"]}, {"id": 627, "name": "Furaiglon", "types": ["Normal", "Vol"]}, {"id": 628, "name": "Gueriaigle", "types": ["Normal", "Vol"]}, {"id": 629, "name": "Vostourno", "types": ["Ténèbres", "Vol"]}, {"id": 630, "name": "Vaututrice", "types": ["Ténèbres", "Vol"]}, {"id": 631, "name": "Aflamanoir", "types": ["Feu"]}, {"id": 632, "name": "Fermite", "types": ["Insecte", "Acier"]}, {"id": 633, "name": "Solochi", "types": ["Ténèbres", "Dragon"]}, {"id": 634, "name": "Diamat", "types": ["Ténèbres", "Dragon"]}, {"id": 635, "name": "Trioxhydre", "types": ["Ténèbres", "Dragon"]}, {"id": 636, "name": "Pyronille", "types": ["Insecte", "Feu"]}, {"id": 637, "name": "Pyrax", "types": ["Insecte", "Feu"]}, {"id": 638, "name": "Cobaltium", "types": ["Acier", "Combat"]}, {"id": 639, "name": "Terrakium", "types": ["Roche", "Combat"]}, {"id": 640, "name": "Viridium", "types": ["Plante", "Combat"]}, {"id": 641, "name": "Boréas", "types": ["Vol"]}, {"id": 642, "name": "Fulguris", "types": ["Électrik", "Vol"]}, {"id": 643, "name": "Reshiram", "types": ["Dragon", "Feu"]}, {"id": 644, "name": "Zekrom", "types": ["Dragon", "Électrik"]}, {"id": 645, "name": "Démétéros", "types": ["Sol", "Vol"]}, {"id": 646, "name": "Kyurem", "types": ["Dragon", "Glace"]}, {"id": 647, "name": "Keldeo", "types": ["Eau", "Combat"]}, {"id": 648, "name": "Meloetta", "types": ["Normal", "Psy"]}, {"id": 649, "name": "Genesect", "types": ["Insecte", "Acier"]}, {"id": 650, "name": "Marisson", "types": ["Plante"]}, {"id": 651, "name": "Boguérisse", "types": ["Plante"]}, {"id": 652, "name": "Blindépique", "types": ["Plante", "Combat"]}, {"id": 653, "name": "Feunnec", "types": ["Feu"]}, {"id": 654, "name": "Roussil", "types": ["Feu"]}, {"id": 655, "name": "Goupelin", "types": ["Feu", "Psy"]}, {"id": 656, "name": "Grenousse", "types": ["Eau"]}, {"id": 657, "name": "Croâporal", "types": ["Eau"]}, {"id": 658, "name": "Amphinobi", "types": ["Eau", "Ténèbres"]}, {"id": 659, "name": "Sapereau", "types": ["Normal"]}, {"id": 660, "name": "Excavarenne", "types": ["Normal", "Sol"]}, {"id": 661, "name": "Passerouge", "types": ["Normal", "Vol"]}, {"id": 662, "name": "Braisillon", "types": ["Feu", "Vol"]}, {"id": 663, "name": "Flambusard", "types": ["Feu", "Vol"]}, {"id": 664, "name": "Lépidonille", "types": ["Insecte"]}, {"id": 665, "name": "Pérégrain", "types": ["Insecte"]}, {"id": 666, "name": "Prismillon", "types": ["Insecte", "Vol"]}, {"id": 667, "name": "Hélionceau", "types": ["Feu", "Normal"]}, {"id": 668, "name": "Némélios", "types": ["Feu", "Normal"]}, {"id": 669, "name": "Flabébé", "types": ["Fée"]}, {"id": 670, "name": "Floette", "types": ["Fée"]}, {"id": 671, "name": "Florges", "types": ["Fée"]}, {"id": 672, "name": "Cabriolaine", "types": ["Plante"]}, {"id": 673, "name": "Chevroum", "types": ["Plante"]}, {"id": 674, "name": "Pandespiègle", "types": ["Combat"]}, {"id": 675, "name": "Pandarbare", "types": ["Combat", "Ténèbres"]}, {"id": 676, "name": "Couafarel", "types": ["Normal"]}, {"id": 677, "name": "Psystigri", "types": ["Psy"]}, {"id": 678, "name": "Mistigrix", "types": ["Psy"]}, {"id": 679, "name": "Monorpale", "types": ["Acier", "Spectre"]}, {"id": 680, "name": "Dimoclès", "types": ["Acier", "Spectre"]}, {"id": 681, "name": "Exagide", "types": ["Acier", "Spectre"]}, {"id": 682, "name": "Fluvetin", "types": ["Fée"]}, {"id": 683, "name": "Cocotine", "types": ["Fée"]}, {"id": 684, "name": "Sucroquin", "types": ["Fée"]}, {"id": 685, "name": "Cupcanaille", "types": ["Fée"]}, {"id": 686, "name": "Sepiatop", "types": ["Ténèbres", "Psy"]}, {"id": 687, "name": "Sepiatroce", "types": ["Ténèbres", "Psy"]}, {"id": 688, "name": "Opermine", "types": ["Roche", "Eau"]}, {"id": 689, "name": "Golgopathe", "types": ["Roche", "Eau"]}, {"id": 690, "name": "Venalgue", "types": ["Poison", "Eau"]}, {"id": 691, "name": "Kravarech", "types": ["Poison", "Dragon"]}, {"id": 692, "name": "Flingouste", "types": ["Eau"]}, {"id": 693, "name": "Gamblast", "types": ["Eau"]}, {"id": 694, "name": "Galvaran", "types": ["Électrik", "Normal"]}, {"id": 695, "name": "Iguolta", "types": ["Électrik", "Normal"]}, {"id": 696, "name": "Ptyranidur", "types": ["Roche", "Dragon"]}, {"id": 697, "name": "Rexillius", "types": ["Roche", "Dragon"]}, {"id": 698, "name": "Amagara", "types": ["Roche", "Glace"]}, {"id": 699, "name": "Dragmara", "types": ["Roche", "Glace"]}, {"id": 700, "name": "Nymphali", "types": ["Fée"]}, {"id": 701, "name": "Brutalibré", "types": ["Combat", "Vol"]}, {"id": 702, "name": "Dedenne", "types": ["Électrik", "Fée"]}, {"id": 703, "name": "Strassie", "types": ["Roche", "Fée"]}, {"id": 704, "name": "Mucuscule", "types": ["Dragon"]}, {"id": 705, "name": "Colimucus", "types": ["Dragon"]}, {"id": 706, "name": "Muplodocus", "types": ["Dragon"]}, {"id": 707, "name": "Trousselin", "types": ["Acier", "Fée"]}, {"id": 708, "name": "Brocélôme", "types": ["Spectre", "Plante"]}, {"id": 709, "name": "Desséliande", "types": ["Spectre", "Plante"]}, {"id": 710, "name": "Pitrouille", "types": ["Spectre", "Plante"]}, {"id": 711, "name": "Banshitrouye", "types": ["Spectre", "Plante"]}, {"id": 712, "name": "Grelaçon", "types": ["Glace"]}, {"id": 713, "name": "Séracrawl", "types": ["Glace"]}, {"id": 714, "name": "Sonistrelle", "types": ["Vol", "Dragon"]}, {"id": 715, "name": "Bruyverne", "types": ["Vol", "Dragon"]}, {"id": 716, "name": "Xerneas", "types": ["Fée"]}, {"id": 717, "name": "Yveltal", "types": ["Ténèbres", "Vol"]}, {"id": 718, "name": "Zygarde", "types": ["Dragon", "Sol"]}, {"id": 719, "name": "Diancie", "types": ["Roche", "Fée"]}, {"id": 720, "name": "Hoopa", "types": ["Psy", "Spectre"]}, {"id": 721, "name": "Volcanion", "types": ["Feu", "Eau"]}, {"id": 722, "name": "Brindibou", "types": ["Plante", "Vol"]}, {"id": 723, "name": "Efflèche", "types": ["Plante", "Vol"]}, {"id": 724, "name": "Archéduc", "types": ["Plante", "Spectre"]}, {"id": 725, "name": "Flamiaou", "types": ["Feu"]}, {"id": 726, "name": "Matoufeu", "types": ["Feu"]}, {"id": 727, "name": "Félinferno", "types": ["Feu", "Ténèbres"]}, {"id": 728, "name": "Otaquin", "types": ["Eau"]}, {"id": 729, "name": "Otarlette", "types": ["Eau"]}, {"id": 730, "name": "Oratoria", "types": ["Eau", "Fée"]}, {"id": 731, "name": "Picassaut", "types": ["Normal", "Vol"]}, {"id": 732, "name": "Piclairon", "types": ["Normal", "Vol"]}, {"id": 733, "name": "Bazoucan", "types": ["Normal", "Vol"]}, {"id": 734, "name": "Manglouton", "types": ["Normal"]}, {"id": 735, "name": "Argouste", "types": ["Normal"]}, {"id": 736, "name": "Larvibule", "types": ["Insecte"]}, {"id": 737, "name": "Chrysapile", "types": ["Insecte", "Électrik"]}, {"id": 738, "name": "Lucanon", "types": ["Insecte", "Électrik"]}, {"id": 739, "name": "Crabagarre", "types": ["Combat"]}, {"id": 740, "name": "Crabominable", "types": ["Combat", "Glace"]}, {"id": 741, "name": "Plumeline", "types": ["Feu", "Vol"]}, {"id": 742, "name": "Bombydou", "types": ["Insecte", "Fée"]}, {"id": 743, "name": "Rubombelle", "types": ["Insecte", "Fée"]}, {"id": 744, "name": "Rocabot", "types": ["Roche"]}, {"id": 745, "name": "Lougaroc", "types": ["Roche"]}, {"id": 746, "name": "Froussardine", "types": ["Eau"]}, {"id": 747, "name": "Vorastérie", "types": ["Poison", "Eau"]}, {"id": 748, "name": "Prédastérie", "types": ["Poison", "Eau"]}, {"id": 749, "name": "Tiboudet", "types": ["Sol"]}, {"id": 750, "name": "Bourrinos", "types": ["Sol"]}, {"id": 751, "name": "Araqua", "types": ["Eau", "Insecte"]}, {"id": 752, "name": "Tarenbulle", "types": ["Eau", "Insecte"]}, {"id": 753, "name": "Mimantis", "types": ["Plante"]}, {"id": 754, "name": "Floramantis", "types": ["Plante"]}, {"id": 755, "name": "Spododo", "types": ["Plante", "Fée"]}, {"id": 756, "name": "Lampignon", "types": ["Plante", "Fée"]}, {"id": 757, "name": "Tritox", "types": ["Poison", "Feu"]}, {"id": 758, "name": "Malamandre", "types": ["Poison", "Feu"]}, {"id": 759, "name": "Nounourson", "types": ["Normal", "Combat"]}, {"id": 760, "name": "Chelours", "types": ["Normal", "Combat"]}, {"id": 761, "name": "Croquine", "types": ["Plante"]}, {"id": 762, "name": "Candine", "types": ["Plante"]}, {"id": 763, "name": "Sucreine", "types": ["Plante"]}, {"id": 764, "name": "Guérilande", "types": ["Fée"]}, {"id": 765, "name": "Gouroutan", "types": ["Normal", "Psy"]}, {"id": 766, "name": "Quartermac", "types": ["Combat"]}, {"id": 767, "name": "Sovkipou", "types": ["Insecte", "Eau"]}, {"id": 768, "name": "Sarmuraï", "types": ["Insecte", "Eau"]}, {"id": 769, "name": "Bacabouh", "types": ["Spectre", "Sol"]}, {"id": 770, "name": "Trépassable", "types": ["Spectre", "Sol"]}, {"id": 771, "name": "Concombaffe", "types": ["Eau"]}, {"id": 772, "name": "Type:0", "types": ["Normal"]}, {"id": 773, "name": "Silvallié", "types": ["Normal"]}, {"id": 774, "name": "Météno", "types": ["Roche", "Vol"]}, {"id": 775, "name": "Dodoala", "types": ["Normal"]}, {"id": 776, "name": "Boumata", "types": ["Feu", "Dragon"]}, {"id": 777, "name": "Togedemaru", "types": ["Électrik", "Acier"]}, {"id": 778, "name": "Mimiqui", "types": ["Spectre", "Fée"]}, {"id": 779, "name": "Denticrisse", "types": ["Eau", "Psy"]}, {"id": 780, "name": "Draïeul", "types": ["Normal", "Dragon"]}, {"id": 781, "name": "Sinistrail", "types": ["Spectre", "Plante"]}, {"id": 782, "name": "Bébécaille", "types": ["Dragon"]}, {"id": 783, "name": "Écaïd", "types": ["Dragon", "Combat"]}, {"id": 784, "name": "Ékaïser", "types": ["Dragon", "Combat"]}, {"id": 785, "name": "Tokorico", "types": ["Électrik", "Fée"]}, {"id": 786, "name": "Tokopiyon", "types": ["Psy", "Fée"]}, {"id": 787, "name": "Tokotoro", "types": ["Plante", "Fée"]}, {"id": 788, "name": "Tokopisco", "types": ["Eau", "Fée"]}, {"id": 789, "name": "Cosmog", "types": ["Psy"]}, {"id": 790, "name": "Cosmovum", "types": ["Psy"]}, {"id": 791, "name": "Solgaleo", "types": ["Psy", "Acier"]}, {"id": 792, "name": "Lunala", "types": ["Psy", "Spectre"]}, {"id": 793, "name": "Zéroïd", "types": ["Roche", "Poison"]}, {"id": 794, "name": "Mouscoto", "types": ["Insecte", "Combat"]}, {"id": 795, "name": "Cancrelove", "types": ["Insecte", "Combat"]}, {"id": 796, "name": "Câblifère", "types": ["Électrik"]}, {"id": 797, "name": "Bamboiselle", "types": ["Acier", "Vol"]}, {"id": 798, "name": "Katagami", "types": ["Plante", "Acier"]}, {"id": 799, "name": "Engloutyran", "types": ["Ténèbres", "Dragon"]}, {"id": 800, "name": "Necrozma", "types": ["Psy"]}, {"id": 801, "name": "Magearna", "types": ["Acier", "Fée"]}, {"id": 802, "name": "Marshadow", "types": ["Combat", "Spectre"]}, {"id": 803, "name": "Vémini", "types": ["Poison"]}, {"id": 804, "name": "Mandrillon", "types": ["Poison", "Dragon"]}, {"id": 805, "name": "Ama-Ama", "types": ["Roche", "Acier"]}, {"id": 806, "name": "Pierroteknik", "types": ["Feu", "Spectre"]}, {"id": 807, "name": "Zeraora", "types": ["Électrik"]}, {"id": 808, "name": "Meltan", "types": ["Acier"]}, {"id": 809, "name": "Melmetal", "types": ["Acier"]}, {"id": 810, "name": "Ouistempo", "types": ["Plante"]}, {"id": 811, "name": "Badabouin", "types": ["Plante"]}, {"id": 812, "name": "Gorythmic", "types": ["Plante"]}, {"id": 813, "name": "Flambino", "types": ["Feu"]}, {"id": 814, "name": "Lapyro", "types": ["Feu"]}, {"id": 815, "name": "Pyrobut", "types": ["Feu"]}, {"id": 816, "name": "Larméléon", "types": ["Eau"]}, {"id": 817, "name": "Arrozard", "types": ["Eau"]}, {"id": 818, "name": "Lézargus", "types": ["Eau"]}, {"id": 819, "name": "Rongourmand", "types": ["Normal"]}, {"id": 820, "name": "Rongrigou", "types": ["Normal"]}, {"id": 821, "name": "Minisange", "types": ["Vol"]}, {"id": 822, "name": "Bleuseille", "types": ["Vol"]}, {"id": 823, "name": "Corvaillus", "types": ["Vol", "Acier"]}, {"id": 824, "name": "Larvadar", "types": ["Insecte"]}, {"id": 825, "name": "Coléodôme", "types": ["Insecte", "Psy"]}, {"id": 826, "name": "Astronelle", "types": ["Insecte", "Psy"]}, {"id": 827, "name": "Goupilou", "types": ["Ténèbres"]}, {"id": 828, "name": "Roublenard", "types": ["Ténèbres"]}, {"id": 829, "name": "Tournicoton", "types": ["Plante"]}, {"id": 830, "name": "Blancoton", "types": ["Plante"]}, {"id": 831, "name": "Moumouton", "types": ["Normal"]}, {"id": 832, "name": "Moumouflon", "types": ["Normal"]}, {"id": 833, "name": "Khélocrok", "types": ["Eau"]}, {"id": 834, "name": "Torgamord", "types": ["Eau", "Roche"]}, {"id": 835, "name": "Voltoutou", "types": ["Électrik"]}, {"id": 836, "name": "Fulgudog", "types": ["Électrik"]}, {"id": 837, "name": "Charbi", "types": ["Roche"]}, {"id": 838, "name": "Wagomine", "types": ["Roche", "Feu"]}, {"id": 839, "name": "Monthracite", "types": ["Roche", "Feu"]}, {"id": 840, "name": "Verpom", "types": ["Plante", "Dragon"]}, {"id": 841, "name": "Pomdrapi", "types": ["Plante", "Dragon"]}, {"id": 842, "name": "Dratatin", "types": ["Plante", "Dragon"]}, {"id": 843, "name": "Dunaja", "types": ["Sol"]}, {"id": 844, "name": "Dunaconda", "types": ["Sol"]}, {"id": 845, "name": "Nigosier", "types": ["Vol", "Eau"]}, {"id": 846, "name": "Embrochet", "types": ["Eau"]}, {"id": 847, "name": "Hastacuda", "types": ["Eau"]}, {"id": 848, "name": "Toxizap", "types": ["Électrik", "Poison"]}, {"id": 849, "name": "Salarsen", "types": ["Électrik", "Poison"]}, {"id": 850, "name": "Grillepattes", "types": ["Feu", "Insecte"]}, {"id": 851, "name": "Scolocendre", "types": ["Feu", "Insecte"]}, {"id": 852, "name": "Poulpaf", "types": ["Combat"]}, {"id": 853, "name": "Krakos", "types": ["Combat"]}, {"id": 854, "name": "Théffroi", "types": ["Spectre"]}, {"id": 855, "name": "Polthégeist", "types": ["Spectre"]}, {"id": 856, "name": "Bibichut", "types": ["Psy"]}, {"id": 857, "name": "Chapotus", "types": ["Psy"]}, {"id": 858, "name": "Sorcilence", "types": ["Psy", "Fée"]}, {"id": 859, "name": "Grimalin", "types": ["Ténèbres", "Fée"]}, {"id": 860, "name": "Fourbelin", "types": ["Ténèbres", "Fée"]}, {"id": 861, "name": "Angoliath", "types": ["Ténèbres", "Fée"]}, {"id": 862, "name": "Ixon", "types": ["Ténèbres", "Normal"]}, {"id": 863, "name": "Berserkatt", "types": ["Acier"]}, {"id": 864, "name": "Corayôme", "types": ["Spectre"]}, {"id": 865, "name": "Palarticho", "types": ["Combat"]}, {"id": 866, "name": "M. Glaquette", "types": ["Glace", "Psy"]}, {"id": 867, "name": "Tutétékri", "types": ["Sol", "Spectre"]}, {"id": 868, "name": "Crèmy", "types": ["Fée"]}, {"id": 869, "name": "Charmilly", "types": ["Fée"]}, {"id": 870, "name": "Hexadron", "types": ["Combat"]}, {"id": 871, "name": "Wattapik", "types": ["Électrik"]}, {"id": 872, "name": "Frissonille", "types": ["Glace", "Insecte"]}, {"id": 873, "name": "Beldeneige", "types": ["Glace", "Insecte"]}, {"id": 874, "name": "Dolman", "types": ["Roche"]}, {"id": 875, "name": "Bekaglaçon", "types": ["Glace"]}, {"id": 876, "name": "Wimessir", "types": ["Psy", "Normal"]}, {"id": 877, "name": "Morpeko", "types": ["Électrik", "Ténèbres"]}, {"id": 878, "name": "Charibari", "types": ["Acier"]}, {"id": 879, "name": "Pachyradjah", "types": ["Acier"]}, {"id": 880, "name": "Galvagon", "types": ["Électrik", "Dragon"]}, {"id": 881, "name": "Galvagla", "types": ["Électrik", "Glace"]}, {"id": 882, "name": "Hydragon", "types": ["Eau", "Dragon"]}, {"id": 883, "name": "Hydragla", "types": ["Eau", "Glace"]}, {"id": 884, "name": "Duralugon", "types": ["Acier", "Dragon"]}, {"id": 885, "name": "Fantyrm", "types": ["Dragon", "Spectre"]}, {"id": 886, "name": "Dispareptil", "types": ["Dragon", "Spectre"]}, {"id": 887, "name": "Lanssorien", "types": ["Dragon", "Spectre"]}, {"id": 888, "name": "Zacian", "types": ["Fée"]}, {"id": 889, "name": "Zamazenta", "types": ["Combat"]}, {"id": 890, "name": "Éthernatos", "types": ["Poison", "Dragon"]}, {"id": 891, "name": "Wushours", "types": ["Combat"]}, {"id": 892, "name": "Shifours", "types": ["Combat", "Ténèbres"]}, {"id": 893, "name": "Zarude", "types": ["Ténèbres", "Plante"]}, {"id": 894, "name": "Regieleki", "types": ["Électrik"]}, {"id": 895, "name": "Regidrago", "types": ["Dragon"]}, {"id": 896, "name": "Blizzeval", "types": ["Glace"]}, {"id": 897, "name": "Spectreval", "types": ["Spectre"]}, {"id": 898, "name": "Sylveroy", "types": ["Psy", "Plante"]}, {"id": 899, "name": "Cerbyllin", "types": ["Normal", "Psy"]}, {"id": 900, "name": "Hachécateur", "types": ["Insecte", "Roche"]}, {"id": 901, "name": "Ursaking", "types": ["Sol", "Normal"]}, {"id": 902, "name": "Paragruel", "types": ["Eau", "Spectre"]}, {"id": 903, "name": "Farfurex", "types": ["Combat", "Poison"]}, {"id": 904, "name": "Qwilpik", "types": ["Ténèbres", "Poison"]}, {"id": 905, "name": "Amovénus", "types": ["Fée", "Vol"]}, {"id": 906, "name": "Poussacha", "types": ["Plante"]}, {"id": 907, "name": "Matourgeon", "types": ["Plante"]}, {"id": 908, "name": "Miascarade", "types": ["Plante", "Ténèbres"]}, {"id": 909, "name": "Chochodile", "types": ["Feu"]}, {"id": 910, "name": "Crocogril", "types": ["Feu"]}, {"id": 911, "name": "Flâmigator", "types": ["Feu", "Spectre"]}, {"id": 912, "name": "Coiffeton", "types": ["Eau"]}, {"id": 913, "name": "Canarbello", "types": ["Eau"]}, {"id": 914, "name": "Palmaval", "types": ["Eau", "Combat"]}, {"id": 915, "name": "Gourmelet", "types": ["Normal"]}, {"id": 916, "name": "Fragroin", "types": ["Normal"]}, {"id": 917, "name": "Tissenboule", "types": ["Insecte"]}, {"id": 918, "name": "Filentrappe", "types": ["Insecte"]}, {"id": 919, "name": "Lilliterelle", "types": ["Insecte"]}, {"id": 920, "name": "Gambex", "types": ["Insecte", "Ténèbres"]}, {"id": 921, "name": "Pohm", "types": ["Électrik"]}, {"id": 922, "name": "Pohmotte", "types": ["Électrik", "Combat"]}, {"id": 923, "name": "Pohmarmotte", "types": ["Électrik", "Combat"]}, {"id": 924, "name": "Compagnol", "types": ["Normal"]}, {"id": 925, "name": "Famignol", "types": ["Normal"]}, {"id": 926, "name": "Pâtachiot", "types": ["Fée"]}, {"id": 927, "name": "Briochien", "types": ["Fée"]}, {"id": 928, "name": "Olivini", "types": ["Plante", "Normal"]}, {"id": 929, "name": "Olivado", "types": ["Plante", "Normal"]}, {"id": 930, "name": "Arboliva", "types": ["Plante", "Normal"]}, {"id": 931, "name": "Tapatoès", "types": ["Normal", "Vol"]}, {"id": 932, "name": "Selutin", "types": ["Roche"]}, {"id": 933, "name": "Amassel", "types": ["Roche"]}, {"id": 934, "name": "Gigansel", "types": ["Roche"]}, {"id": 935, "name": "Charbambin", "types": ["Feu"]}, {"id": 936, "name": "Carmadura", "types": ["Feu", "Psy"]}, {"id": 937, "name": "Malvalame", "types": ["Feu", "Spectre"]}, {"id": 938, "name": "Têtampoule", "types": ["Électrik"]}, {"id": 939, "name": "Ampibidou", "types": ["Électrik"]}, {"id": 940, "name": "Zapétrel", "types": ["Électrik", "Vol"]}, {"id": 941, "name": "Fulgulairo", "types": ["Électrik", "Vol"]}, {"id": 942, "name": "Grondogue", "types": ["Ténèbres"]}, {"id": 943, "name": "Dogrino", "types": ["Ténèbres"]}, {"id": 944, "name": "Gribouraigne", "types": ["Poison", "Normal"]}, {"id": 945, "name": "Tag-Tag", "types": ["Poison", "Normal"]}, {"id": 946, "name": "Virovent", "types": ["Plante", "Spectre"]}, {"id": 947, "name": "Virevorreur", "types": ["Plante", "Spectre"]}, {"id": 948, "name": "Terracool", "types": ["Sol", "Plante"]}, {"id": 949, "name": "Terracruel", "types": ["Sol", "Plante"]}, {"id": 950, "name": "Craparoi", "types": ["Roche"]}, {"id": 951, "name": "Pimito", "types": ["Plante"]}, {"id": 952, "name": "Scovilain", "types": ["Plante", "Feu"]}, {"id": 953, "name": "Léboulérou", "types": ["Insecte"]}, {"id": 954, "name": "Bérasca", "types": ["Insecte", "Psy"]}, {"id": 955, "name": "Flotillon", "types": ["Psy"]}, {"id": 956, "name": "Cléopsytra", "types": ["Psy"]}, {"id": 957, "name": "Forgerette", "types": ["Fée", "Acier"]}, {"id": 958, "name": "Forgella", "types": ["Fée", "Acier"]}, {"id": 959, "name": "Forgelina", "types": ["Fée", "Acier"]}, {"id": 960, "name": "Taupikeau", "types": ["Eau"]}, {"id": 961, "name": "Triopikeau", "types": ["Eau"]}, {"id": 962, "name": "Lestombaile", "types": ["Vol", "Ténèbres"]}, {"id": 963, "name": "Dofin", "types": ["Eau"]}, {"id": 964, "name": "Superdofin", "types": ["Eau"]}, {"id": 965, "name": "Vrombi", "types": ["Acier", "Poison"]}, {"id": 966, "name": "Vrombotor", "types": ["Acier", "Poison"]}, {"id": 967, "name": "Motorizard", "types": ["Dragon", "Normal"]}, {"id": 968, "name": "Ferdeter", "types": ["Acier"]}, {"id": 969, "name": "Germéclat", "types": ["Roche", "Poison"]}, {"id": 970, "name": "Floréclat", "types": ["Roche", "Poison"]}, {"id": 971, "name": "Toutombe", "types": ["Spectre"]}, {"id": 972, "name": "Tomberro", "types": ["Spectre"]}, {"id": 973, "name": "Flamenroule", "types": ["Vol", "Combat"]}, {"id": 974, "name": "Piétacé", "types": ["Glace"]}, {"id": 975, "name": "Balbalèze", "types": ["Glace"]}, {"id": 976, "name": "Délestin", "types": ["Eau", "Psy"]}, {"id": 977, "name": "Oyacata", "types": ["Eau"]}, {"id": 978, "name": "Nigirigon", "types": ["Dragon", "Eau"]}, {"id": 979, "name": "Courrousinge", "types": ["Combat", "Spectre"]}, {"id": 980, "name": "Terraiste", "types": ["Poison", "Sol"]}, {"id": 981, "name": "Farigiraf", "types": ["Normal", "Psy"]}, {"id": 982, "name": "Deusolourdo", "types": ["Normal"]}, {"id": 983, "name": "Scalpereur", "types": ["Ténèbres", "Acier"]}, {"id": 984, "name": "Fort-Ivoire", "types": ["Sol", "Combat"]}, {"id": 985, "name": "Hurle-Queue", "types": ["Fée", "Psy"]}, {"id": 986, "name": "Fongus-Furie", "types": ["Plante", "Ténèbres"]}, {"id": 987, "name": "Flotte-Mèche", "types": ["Spectre", "Fée"]}, {"id": 988, "name": "Rampe-Ailes", "types": ["Insecte", "Combat"]}, {"id": 989, "name": "Pelage-Sablé", "types": ["Électrik", "Sol"]}, {"id": 990, "name": "Roue-de-Fer", "types": ["Sol", "Acier"]}, {"id": 991, "name": "Hotte-de-Fer", "types": ["Glace", "Eau"]}, {"id": 992, "name": "Paume-de-Fer", "types": ["Combat", "Électrik"]}, {"id": 993, "name": "Têtes-de-Fer", "types": ["Ténèbres", "Vol"]}, {"id": 994, "name": "Mite-de-Fer", "types": ["Feu", "Poison"]}, {"id": 995, "name": "Épine-de-Fer", "types": ["Roche", "Électrik"]}, {"id": 996, "name": "Frigodo", "types": ["Dragon", "Glace"]}, {"id": 997, "name": "Cryodo", "types": ["Dragon", "Glace"]}, {"id": 998, "name": "Glaivodo", "types": ["Dragon", "Glace"]}, {"id": 999, "name": "Mordudor", "types": ["Spectre"]}, {"id": 1000, "name": "Gromago", "types": ["Acier", "Spectre"]}, {"id": 1001, "name": "Chongjian", "types": ["Ténèbres", "Plante"]}, {"id": 1002, "name": "Baojian", "types": ["Ténèbres", "Glace"]}, {"id": 1003, "name": "Dinglu", "types": ["Ténèbres", "Sol"]}, {"id": 1004, "name": "Yuyu", "types": ["Ténèbres", "Feu"]}, {"id": 1005, "name": "Rugit-Lune", "types": ["Dragon", "Ténèbres"]}, {"id": 1006, "name": "Garde-de-Fer", "types": ["Fée", "Combat"]}, {"id": 1007, "name": "Koraidon", "types": ["Combat", "Dragon"]}, {"id": 1008, "name": "Miraidon", "types": ["Électrik", "Dragon"]}, {"id": 1009, "name": "Serpente-Eau", "types": ["Eau", "Dragon"]}, {"id": 1010, "name": "Vert-de-Fer", "types": ["Plante", "Psy"]}, {"id": 1011, "name": "Pomdramour", "types": ["Plante", "Dragon"]}, {"id": 1012, "name": "Poltchageist", "types": ["Plante", "Spectre"]}, {"id": 1013, "name": "Théffroyable", "types": ["Plante", "Spectre"]}, {"id": 1014, "name": "Félicanis", "types": ["Poison", "Combat"]}, {"id": 1015, "name": "Fortusimia", "types": ["Poison", "Psy"]}, {"id": 1016, "name": "Favianos", "types": ["Poison", "Fée"]}, {"id": 1017, "name": "Ogerpon", "types": ["Plante"]}, {"id": 1018, "name": "Pondralugon", "types": ["Acier", "Dragon"]}, {"id": 1019, "name": "Pomdorochi", "types": ["Plante", "Dragon"]}, {"id": 1020, "name": "Feu-Perçant", "types": ["Feu", "Dragon"]}, {"id": 1021, "name": "Ire-Foudre", "types": ["Électrik", "Dragon"]}, {"id": 1022, "name": "Roc-de-Fer", "types": ["Roche", "Psy"]}, {"id": 1023, "name": "Chef-de-Fer", "types": ["Acier", "Psy"]}, {"id": 1024, "name": "Terapagos", "types": ["Normal"]}, {"id": 1025, "name": "Pêchaminus", "types": ["Poison", "Spectre"]}];
+const POKEMON_DATABASE = [{"id":1,"name":"Bulbizarre","nameEn":"Bulbasaur","types":["Plante","Poison"]},{"id":2,"name":"Herbizarre","nameEn":"Ivysaur","types":["Plante","Poison"]},{"id":3,"name":"Florizarre","nameEn":"Venusaur","types":["Plante","Poison"]},{"id":4,"name":"Salamèche","nameEn":"Charmander","types":["Feu"]},{"id":5,"name":"Reptincel","nameEn":"Charmeleon","types":["Feu"]},{"id":6,"name":"Dracaufeu","nameEn":"Charizard","types":["Feu","Vol"]},{"id":7,"name":"Carapuce","nameEn":"Squirtle","types":["Eau"]},{"id":8,"name":"Carabaffe","nameEn":"Wartortle","types":["Eau"]},{"id":9,"name":"Tortank","nameEn":"Blastoise","types":["Eau"]},{"id":10,"name":"Chenipan","nameEn":"Caterpie","types":["Insecte"]},{"id":11,"name":"Chrysacier","nameEn":"Metapod","types":["Insecte"]},{"id":12,"name":"Papilusion","nameEn":"Butterfree","types":["Insecte","Vol"]},{"id":13,"name":"Aspicot","nameEn":"Weedle","types":["Insecte","Poison"]},{"id":14,"name":"Coconfort","nameEn":"Kakuna","types":["Insecte","Poison"]},{"id":15,"name":"Dardargnan","nameEn":"Beedrill","types":["Insecte","Poison"]},{"id":16,"name":"Roucool","nameEn":"Pidgey","types":["Normal","Vol"]},{"id":17,"name":"Roucoups","nameEn":"Pidgeotto","types":["Normal","Vol"]},{"id":18,"name":"Roucarnage","nameEn":"Pidgeot","types":["Normal","Vol"]},{"id":19,"name":"Rattata","nameEn":"Rattata","types":["Normal"]},{"id":20,"name":"Rattatac","nameEn":"Raticate","types":["Normal"]},{"id":21,"name":"Piafabec","nameEn":"Spearow","types":["Normal","Vol"]},{"id":22,"name":"Rapasdepic","nameEn":"Fearow","types":["Normal","Vol"]},{"id":23,"name":"Abo","nameEn":"Ekans","types":["Poison"]},{"id":24,"name":"Arbok","nameEn":"Arbok","types":["Poison"]},{"id":25,"name":"Pikachu","nameEn":"Pikachu","types":["Électrik"]},{"id":26,"name":"Raichu","nameEn":"Raichu","types":["Électrik"]},{"id":27,"name":"Sabelette","nameEn":"Sandshrew","types":["Sol"]},{"id":28,"name":"Sablaireau","nameEn":"Sandslash","types":["Sol"]},{"id":29,"name":"Nidoran♀","nameEn":"Nidoran♀","types":["Poison"]},{"id":30,"name":"Nidorina","nameEn":"Nidorina","types":["Poison"]},{"id":31,"name":"Nidoqueen","nameEn":"Nidoqueen","types":["Poison","Sol"]},{"id":32,"name":"Nidoran♂","nameEn":"Nidoran♂","types":["Poison"]},{"id":33,"name":"Nidorino","nameEn":"Nidorino","types":["Poison"]},{"id":34,"name":"Nidoking","nameEn":"Nidoking","types":["Poison","Sol"]},{"id":35,"name":"Mélofée","nameEn":"Clefairy","types":["Fée"]},{"id":36,"name":"Mélodelfe","nameEn":"Clefable","types":["Fée"]},{"id":37,"name":"Goupix","nameEn":"Vulpix","types":["Feu"]},{"id":38,"name":"Feunard","nameEn":"Ninetales","types":["Feu"]},{"id":39,"name":"Rondoudou","nameEn":"Jigglypuff","types":["Normal","Fée"]},{"id":40,"name":"Grodoudou","nameEn":"Wigglytuff","types":["Normal","Fée"]},{"id":41,"name":"Nosferapti","nameEn":"Zubat","types":["Poison","Vol"]},{"id":42,"name":"Nosferalto","nameEn":"Golbat","types":["Poison","Vol"]},{"id":43,"name":"Mystherbe","nameEn":"Oddish","types":["Plante","Poison"]},{"id":44,"name":"Ortide","nameEn":"Gloom","types":["Plante","Poison"]},{"id":45,"name":"Rafflesia","nameEn":"Vileplume","types":["Plante","Poison"]},{"id":46,"name":"Paras","nameEn":"Paras","types":["Insecte","Plante"]},{"id":47,"name":"Parasect","nameEn":"Parasect","types":["Insecte","Plante"]},{"id":48,"name":"Mimitoss","nameEn":"Venonat","types":["Insecte","Poison"]},{"id":49,"name":"Aéromite","nameEn":"Venomoth","types":["Insecte","Poison"]},{"id":50,"name":"Taupiqueur","nameEn":"Diglett","types":["Sol"]},{"id":51,"name":"Triopikeur","nameEn":"Dugtrio","types":["Sol"]},{"id":52,"name":"Miaouss","nameEn":"Meowth","types":["Normal"]},{"id":53,"name":"Persian","nameEn":"Persian","types":["Normal"]},{"id":54,"name":"Psykokwak","nameEn":"Psyduck","types":["Eau"]},{"id":55,"name":"Akwakwak","nameEn":"Golduck","types":["Eau"]},{"id":56,"name":"Férosinge","nameEn":"Mankey","types":["Combat"]},{"id":57,"name":"Colossinge","nameEn":"Primeape","types":["Combat"]},{"id":58,"name":"Caninos","nameEn":"Growlithe","types":["Feu"]},{"id":59,"name":"Arcanin","nameEn":"Arcanine","types":["Feu"]},{"id":60,"name":"Ptitard","nameEn":"Poliwag","types":["Eau"]},{"id":61,"name":"Têtarte","nameEn":"Poliwhirl","types":["Eau"]},{"id":62,"name":"Tartard","nameEn":"Poliwrath","types":["Eau","Combat"]},{"id":63,"name":"Abra","nameEn":"Abra","types":["Psy"]},{"id":64,"name":"Kadabra","nameEn":"Kadabra","types":["Psy"]},{"id":65,"name":"Alakazam","nameEn":"Alakazam","types":["Psy"]},{"id":66,"name":"Machoc","nameEn":"Machop","types":["Combat"]},{"id":67,"name":"Machopeur","nameEn":"Machoke","types":["Combat"]},{"id":68,"name":"Mackogneur","nameEn":"Machamp","types":["Combat"]},{"id":69,"name":"Chétiflor","nameEn":"Bellsprout","types":["Plante","Poison"]},{"id":70,"name":"Boustiflor","nameEn":"Weepinbell","types":["Plante","Poison"]},{"id":71,"name":"Empiflor","nameEn":"Victreebel","types":["Plante","Poison"]},{"id":72,"name":"Tentacool","nameEn":"Tentacool","types":["Eau","Poison"]},{"id":73,"name":"Tentacruel","nameEn":"Tentacruel","types":["Eau","Poison"]},{"id":74,"name":"Racaillou","nameEn":"Geodude","types":["Roche","Sol"]},{"id":75,"name":"Gravalanch","nameEn":"Graveler","types":["Roche","Sol"]},{"id":76,"name":"Grolem","nameEn":"Golem","types":["Roche","Sol"]},{"id":77,"name":"Ponyta","nameEn":"Ponyta","types":["Feu"]},{"id":78,"name":"Galopa","nameEn":"Rapidash","types":["Feu"]},{"id":79,"name":"Ramoloss","nameEn":"Slowpoke","types":["Eau","Psy"]},{"id":80,"name":"Flagadoss","nameEn":"Slowbro","types":["Eau","Psy"]},{"id":81,"name":"Magnéti","nameEn":"Magnemite","types":["Électrik","Acier"]},{"id":82,"name":"Magnéton","nameEn":"Magneton","types":["Électrik","Acier"]},{"id":83,"name":"Canarticho","nameEn":"Farfetch'd","types":["Normal","Vol"]},{"id":84,"name":"Doduo","nameEn":"Doduo","types":["Normal","Vol"]},{"id":85,"name":"Dodrio","nameEn":"Dodrio","types":["Normal","Vol"]},{"id":86,"name":"Otaria","nameEn":"Seel","types":["Eau"]},{"id":87,"name":"Lamantine","nameEn":"Dewgong","types":["Eau","Glace"]},{"id":88,"name":"Tadmorv","nameEn":"Grimer","types":["Poison"]},{"id":89,"name":"Grotadmorv","nameEn":"Muk","types":["Poison"]},{"id":90,"name":"Kokiyas","nameEn":"Shellder","types":["Eau"]},{"id":91,"name":"Crustabri","nameEn":"Cloyster","types":["Eau","Glace"]},{"id":92,"name":"Fantominus","nameEn":"Gastly","types":["Spectre","Poison"]},{"id":93,"name":"Spectrum","nameEn":"Haunter","types":["Spectre","Poison"]},{"id":94,"name":"Ectoplasma","nameEn":"Gengar","types":["Spectre","Poison"]},{"id":95,"name":"Onix","nameEn":"Onix","types":["Roche","Sol"]},{"id":96,"name":"Soporifik","nameEn":"Drowzee","types":["Psy"]},{"id":97,"name":"Hypnomade","nameEn":"Hypno","types":["Psy"]},{"id":98,"name":"Krabby","nameEn":"Krabby","types":["Eau"]},{"id":99,"name":"Krabboss","nameEn":"Kingler","types":["Eau"]},{"id":100,"name":"Voltorbe","nameEn":"Voltorb","types":["Électrik"]},{"id":101,"name":"Électrode","nameEn":"Electrode","types":["Électrik"]},{"id":102,"name":"Noeunoeuf","nameEn":"Exeggcute","types":["Plante","Psy"]},{"id":103,"name":"Noadkoko","nameEn":"Exeggutor","types":["Plante","Psy"]},{"id":104,"name":"Osselait","nameEn":"Cubone","types":["Sol"]},{"id":105,"name":"Ossatueur","nameEn":"Marowak","types":["Sol"]},{"id":106,"name":"Kicklee","nameEn":"Hitmonlee","types":["Combat"]},{"id":107,"name":"Tygnon","nameEn":"Hitmonchan","types":["Combat"]},{"id":108,"name":"Excelangue","nameEn":"Lickitung","types":["Normal"]},{"id":109,"name":"Smogo","nameEn":"Koffing","types":["Poison"]},{"id":110,"name":"Smogogo","nameEn":"Weezing","types":["Poison"]},{"id":111,"name":"Rhinocorne","nameEn":"Rhyhorn","types":["Sol","Roche"]},{"id":112,"name":"Rhinoféros","nameEn":"Rhydon","types":["Sol","Roche"]},{"id":113,"name":"Leveinard","nameEn":"Chansey","types":["Normal"]},{"id":114,"name":"Saquedeneu","nameEn":"Tangela","types":["Plante"]},{"id":115,"name":"Kangourex","nameEn":"Kangaskhan","types":["Normal"]},{"id":116,"name":"Hypotrempe","nameEn":"Horsea","types":["Eau"]},{"id":117,"name":"Hypocéan","nameEn":"Seadra","types":["Eau"]},{"id":118,"name":"Poissirène","nameEn":"Goldeen","types":["Eau"]},{"id":119,"name":"Poissoroy","nameEn":"Seaking","types":["Eau"]},{"id":120,"name":"Stari","nameEn":"Staryu","types":["Eau"]},{"id":121,"name":"Staross","nameEn":"Starmie","types":["Eau","Psy"]},{"id":122,"name":"M. Mime","nameEn":"Mr. Mime","types":["Psy","Fée"]},{"id":123,"name":"Insécateur","nameEn":"Scyther","types":["Insecte","Vol"]},{"id":124,"name":"Lippoutou","nameEn":"Jynx","types":["Glace","Psy"]},{"id":125,"name":"Élektek","nameEn":"Electabuzz","types":["Électrik"]},{"id":126,"name":"Magmar","nameEn":"Magmar","types":["Feu"]},{"id":127,"name":"Scarabrute","nameEn":"Pinsir","types":["Insecte"]},{"id":128,"name":"Tauros","nameEn":"Tauros","types":["Normal"]},{"id":129,"name":"Magicarpe","nameEn":"Magikarp","types":["Eau"]},{"id":130,"name":"Léviator","nameEn":"Gyarados","types":["Eau","Vol"]},{"id":131,"name":"Lokhlass","nameEn":"Lapras","types":["Eau","Glace"]},{"id":132,"name":"Métamorph","nameEn":"Ditto","types":["Normal"]},{"id":133,"name":"Évoli","nameEn":"Eevee","types":["Normal"]},{"id":134,"name":"Aquali","nameEn":"Vaporeon","types":["Eau"]},{"id":135,"name":"Voltali","nameEn":"Jolteon","types":["Électrik"]},{"id":136,"name":"Pyroli","nameEn":"Flareon","types":["Feu"]},{"id":137,"name":"Porygon","nameEn":"Porygon","types":["Normal"]},{"id":138,"name":"Amonita","nameEn":"Omanyte","types":["Roche","Eau"]},{"id":139,"name":"Amonistar","nameEn":"Omastar","types":["Roche","Eau"]},{"id":140,"name":"Kabuto","nameEn":"Kabuto","types":["Roche","Eau"]},{"id":141,"name":"Kabutops","nameEn":"Kabutops","types":["Roche","Eau"]},{"id":142,"name":"Ptéra","nameEn":"Aerodactyl","types":["Roche","Vol"]},{"id":143,"name":"Ronflex","nameEn":"Snorlax","types":["Normal"]},{"id":144,"name":"Artikodin","nameEn":"Articuno","types":["Glace","Vol"]},{"id":145,"name":"Électhor","nameEn":"Zapdos","types":["Électrik","Vol"]},{"id":146,"name":"Sulfura","nameEn":"Moltres","types":["Feu","Vol"]},{"id":147,"name":"Minidraco","nameEn":"Dratini","types":["Dragon"]},{"id":148,"name":"Draco","nameEn":"Dragonair","types":["Dragon"]},{"id":149,"name":"Dracolosse","nameEn":"Dragonite","types":["Dragon","Vol"]},{"id":150,"name":"Mewtwo","nameEn":"Mewtwo","types":["Psy"]},{"id":151,"name":"Mew","nameEn":"Mew","types":["Psy"]},{"id":152,"name":"Germignon","nameEn":"Chikorita","types":["Plante"]},{"id":153,"name":"Macronium","nameEn":"Bayleef","types":["Plante"]},{"id":154,"name":"Méganium","nameEn":"Meganium","types":["Plante"]},{"id":155,"name":"Héricendre","nameEn":"Cyndaquil","types":["Feu"]},{"id":156,"name":"Feurisson","nameEn":"Quilava","types":["Feu"]},{"id":157,"name":"Typhlosion","nameEn":"Typhlosion","types":["Feu"]},{"id":158,"name":"Kaiminus","nameEn":"Totodile","types":["Eau"]},{"id":159,"name":"Crocrodil","nameEn":"Croconaw","types":["Eau"]},{"id":160,"name":"Aligatueur","nameEn":"Feraligatr","types":["Eau"]},{"id":161,"name":"Fouinette","nameEn":"Sentret","types":["Normal"]},{"id":162,"name":"Fouinar","nameEn":"Furret","types":["Normal"]},{"id":163,"name":"Hoothoot","nameEn":"Hoothoot","types":["Normal","Vol"]},{"id":164,"name":"Noarfang","nameEn":"Noctowl","types":["Normal","Vol"]},{"id":165,"name":"Coxy","nameEn":"Ledyba","types":["Insecte","Vol"]},{"id":166,"name":"Coxyclaque","nameEn":"Ledian","types":["Insecte","Vol"]},{"id":167,"name":"Mimigal","nameEn":"Spinarak","types":["Insecte","Poison"]},{"id":168,"name":"Migalos","nameEn":"Ariados","types":["Insecte","Poison"]},{"id":169,"name":"Nostenfer","nameEn":"Crobat","types":["Poison","Vol"]},{"id":170,"name":"Loupio","nameEn":"Chinchou","types":["Eau","Électrik"]},{"id":171,"name":"Lanturn","nameEn":"Lanturn","types":["Eau","Électrik"]},{"id":172,"name":"Pichu","nameEn":"Pichu","types":["Électrik"]},{"id":173,"name":"Mélo","nameEn":"Cleffa","types":["Fée"]},{"id":174,"name":"Toudoudou","nameEn":"Igglybuff","types":["Normal","Fée"]},{"id":175,"name":"Togepi","nameEn":"Togepi","types":["Fée"]},{"id":176,"name":"Togetic","nameEn":"Togetic","types":["Fée","Vol"]},{"id":177,"name":"Natu","nameEn":"Natu","types":["Psy","Vol"]},{"id":178,"name":"Xatu","nameEn":"Xatu","types":["Psy","Vol"]},{"id":179,"name":"Wattouat","nameEn":"Mareep","types":["Électrik"]},{"id":180,"name":"Lainergie","nameEn":"Flaaffy","types":["Électrik"]},{"id":181,"name":"Pharamp","nameEn":"Ampharos","types":["Électrik"]},{"id":182,"name":"Joliflor","nameEn":"Bellossom","types":["Plante"]},{"id":183,"name":"Marill","nameEn":"Marill","types":["Eau","Fée"]},{"id":184,"name":"Azumarill","nameEn":"Azumarill","types":["Eau","Fée"]},{"id":185,"name":"Simularbre","nameEn":"Sudowoodo","types":["Roche"]},{"id":186,"name":"Tarpaud","nameEn":"Politoed","types":["Eau"]},{"id":187,"name":"Granivol","nameEn":"Hoppip","types":["Plante","Vol"]},{"id":188,"name":"Floravol","nameEn":"Skiploom","types":["Plante","Vol"]},{"id":189,"name":"Cotovol","nameEn":"Jumpluff","types":["Plante","Vol"]},{"id":190,"name":"Capumain","nameEn":"Aipom","types":["Normal"]},{"id":191,"name":"Tournegrin","nameEn":"Sunkern","types":["Plante"]},{"id":192,"name":"Héliatronc","nameEn":"Sunflora","types":["Plante"]},{"id":193,"name":"Yanma","nameEn":"Yanma","types":["Insecte","Vol"]},{"id":194,"name":"Axoloto","nameEn":"Wooper","types":["Eau","Sol"]},{"id":195,"name":"Maraiste","nameEn":"Quagsire","types":["Eau","Sol"]},{"id":196,"name":"Mentali","nameEn":"Espeon","types":["Psy"]},{"id":197,"name":"Noctali","nameEn":"Umbreon","types":["Ténèbres"]},{"id":198,"name":"Cornèbre","nameEn":"Murkrow","types":["Ténèbres","Vol"]},{"id":199,"name":"Roigada","nameEn":"Slowking","types":["Eau","Psy"]},{"id":200,"name":"Feuforêve","nameEn":"Misdreavus","types":["Spectre"]},{"id":201,"name":"Zarbi","nameEn":"Unown","types":["Psy"]},{"id":202,"name":"Qulbutoké","nameEn":"Wobbuffet","types":["Psy"]},{"id":203,"name":"Girafarig","nameEn":"Girafarig","types":["Normal","Psy"]},{"id":204,"name":"Pomdepik","nameEn":"Pineco","types":["Insecte"]},{"id":205,"name":"Foretress","nameEn":"Forretress","types":["Insecte","Acier"]},{"id":206,"name":"Insolourdo","nameEn":"Dunsparce","types":["Normal"]},{"id":207,"name":"Scorplane","nameEn":"Gligar","types":["Sol","Vol"]},{"id":208,"name":"Steelix","nameEn":"Steelix","types":["Acier","Sol"]},{"id":209,"name":"Snubbull","nameEn":"Snubbull","types":["Fée"]},{"id":210,"name":"Granbull","nameEn":"Granbull","types":["Fée"]},{"id":211,"name":"Qwilfish","nameEn":"Qwilfish","types":["Eau","Poison"]},{"id":212,"name":"Cizayox","nameEn":"Scizor","types":["Insecte","Acier"]},{"id":213,"name":"Caratroc","nameEn":"Shuckle","types":["Insecte","Roche"]},{"id":214,"name":"Scarhino","nameEn":"Heracross","types":["Insecte","Combat"]},{"id":215,"name":"Farfuret","nameEn":"Sneasel","types":["Ténèbres","Glace"]},{"id":216,"name":"Teddiursa","nameEn":"Teddiursa","types":["Normal"]},{"id":217,"name":"Ursaring","nameEn":"Ursaring","types":["Normal"]},{"id":218,"name":"Limagma","nameEn":"Slugma","types":["Feu"]},{"id":219,"name":"Volcaropod","nameEn":"Magcargo","types":["Feu","Roche"]},{"id":220,"name":"Marcacrin","nameEn":"Swinub","types":["Glace","Sol"]},{"id":221,"name":"Cochignon","nameEn":"Piloswine","types":["Glace","Sol"]},{"id":222,"name":"Corayon","nameEn":"Corsola","types":["Eau","Roche"]},{"id":223,"name":"Rémoraid","nameEn":"Remoraid","types":["Eau"]},{"id":224,"name":"Octillery","nameEn":"Octillery","types":["Eau"]},{"id":225,"name":"Cadoizo","nameEn":"Delibird","types":["Glace","Vol"]},{"id":226,"name":"Démanta","nameEn":"Mantine","types":["Eau","Vol"]},{"id":227,"name":"Airmure","nameEn":"Skarmory","types":["Acier","Vol"]},{"id":228,"name":"Malosse","nameEn":"Houndour","types":["Ténèbres","Feu"]},{"id":229,"name":"Démolosse","nameEn":"Houndoom","types":["Ténèbres","Feu"]},{"id":230,"name":"Hyporoi","nameEn":"Kingdra","types":["Eau","Dragon"]},{"id":231,"name":"Phanpy","nameEn":"Phanpy","types":["Sol"]},{"id":232,"name":"Donphan","nameEn":"Donphan","types":["Sol"]},{"id":233,"name":"Porygon2","nameEn":"Porygon2","types":["Normal"]},{"id":234,"name":"Cerfrousse","nameEn":"Stantler","types":["Normal"]},{"id":235,"name":"Queulorior","nameEn":"Smeargle","types":["Normal"]},{"id":236,"name":"Debugant","nameEn":"Tyrogue","types":["Combat"]},{"id":237,"name":"Kapoera","nameEn":"Hitmontop","types":["Combat"]},{"id":238,"name":"Lippouti","nameEn":"Smoochum","types":["Glace","Psy"]},{"id":239,"name":"Élekid","nameEn":"Elekid","types":["Électrik"]},{"id":240,"name":"Magby","nameEn":"Magby","types":["Feu"]},{"id":241,"name":"Écrémeuh","nameEn":"Miltank","types":["Normal"]},{"id":242,"name":"Leuphorie","nameEn":"Blissey","types":["Normal"]},{"id":243,"name":"Raikou","nameEn":"Raikou","types":["Électrik"]},{"id":244,"name":"Entei","nameEn":"Entei","types":["Feu"]},{"id":245,"name":"Suicune","nameEn":"Suicune","types":["Eau"]},{"id":246,"name":"Embrylex","nameEn":"Larvitar","types":["Roche","Sol"]},{"id":247,"name":"Ymphect","nameEn":"Pupitar","types":["Roche","Sol"]},{"id":248,"name":"Tyranocif","nameEn":"Tyranitar","types":["Roche","Ténèbres"]},{"id":249,"name":"Lugia","nameEn":"Lugia","types":["Psy","Vol"]},{"id":250,"name":"Ho-Oh","nameEn":"Ho-Oh","types":["Feu","Vol"]},{"id":251,"name":"Celebi","nameEn":"Celebi","types":["Psy","Plante"]},{"id":252,"name":"Arcko","nameEn":"Treecko","types":["Plante"]},{"id":253,"name":"Massko","nameEn":"Grovyle","types":["Plante"]},{"id":254,"name":"Jungko","nameEn":"Sceptile","types":["Plante"]},{"id":255,"name":"Poussifeu","nameEn":"Torchic","types":["Feu"]},{"id":256,"name":"Galifeu","nameEn":"Combusken","types":["Feu","Combat"]},{"id":257,"name":"Braségali","nameEn":"Blaziken","types":["Feu","Combat"]},{"id":258,"name":"Gobou","nameEn":"Mudkip","types":["Eau"]},{"id":259,"name":"Flobio","nameEn":"Marshtomp","types":["Eau","Sol"]},{"id":260,"name":"Laggron","nameEn":"Swampert","types":["Eau","Sol"]},{"id":261,"name":"Medhyèna","nameEn":"Poochyena","types":["Ténèbres"]},{"id":262,"name":"Grahyèna","nameEn":"Mightyena","types":["Ténèbres"]},{"id":263,"name":"Zigzaton","nameEn":"Zigzagoon","types":["Normal"]},{"id":264,"name":"Linéon","nameEn":"Linoone","types":["Normal"]},{"id":265,"name":"Chenipotte","nameEn":"Wurmple","types":["Insecte"]},{"id":266,"name":"Armulys","nameEn":"Silcoon","types":["Insecte"]},{"id":267,"name":"Charmillon","nameEn":"Beautifly","types":["Insecte","Vol"]},{"id":268,"name":"Blindalys","nameEn":"Cascoon","types":["Insecte"]},{"id":269,"name":"Papinox","nameEn":"Dustox","types":["Insecte","Poison"]},{"id":270,"name":"Nénupiot","nameEn":"Lotad","types":["Eau","Plante"]},{"id":271,"name":"Lombre","nameEn":"Lombre","types":["Eau","Plante"]},{"id":272,"name":"Ludicolo","nameEn":"Ludicolo","types":["Eau","Plante"]},{"id":273,"name":"Grainipiot","nameEn":"Seedot","types":["Plante"]},{"id":274,"name":"Pifeuil","nameEn":"Nuzleaf","types":["Plante","Ténèbres"]},{"id":275,"name":"Tengalice","nameEn":"Shiftry","types":["Plante","Ténèbres"]},{"id":276,"name":"Nirondelle","nameEn":"Taillow","types":["Normal","Vol"]},{"id":277,"name":"Hélédelle","nameEn":"Swellow","types":["Normal","Vol"]},{"id":278,"name":"Goélise","nameEn":"Wingull","types":["Eau","Vol"]},{"id":279,"name":"Bekipan","nameEn":"Pelipper","types":["Eau","Vol"]},{"id":280,"name":"Tarsal","nameEn":"Ralts","types":["Psy","Fée"]},{"id":281,"name":"Kirlia","nameEn":"Kirlia","types":["Psy","Fée"]},{"id":282,"name":"Gardevoir","nameEn":"Gardevoir","types":["Psy","Fée"]},{"id":283,"name":"Arakdo","nameEn":"Surskit","types":["Insecte","Eau"]},{"id":284,"name":"Maskadra","nameEn":"Masquerain","types":["Insecte","Vol"]},{"id":285,"name":"Balignon","nameEn":"Shroomish","types":["Plante"]},{"id":286,"name":"Chapignon","nameEn":"Breloom","types":["Plante","Combat"]},{"id":287,"name":"Parecool","nameEn":"Slakoth","types":["Normal"]},{"id":288,"name":"Vigoroth","nameEn":"Vigoroth","types":["Normal"]},{"id":289,"name":"Monaflèmit","nameEn":"Slaking","types":["Normal"]},{"id":290,"name":"Ningale","nameEn":"Nincada","types":["Insecte","Sol"]},{"id":291,"name":"Ninjask","nameEn":"Ninjask","types":["Insecte","Vol"]},{"id":292,"name":"Munja","nameEn":"Shedinja","types":["Insecte","Spectre"]},{"id":293,"name":"Chuchmur","nameEn":"Whismur","types":["Normal"]},{"id":294,"name":"Ramboum","nameEn":"Loudred","types":["Normal"]},{"id":295,"name":"Brouhabam","nameEn":"Exploud","types":["Normal"]},{"id":296,"name":"Makuhita","nameEn":"Makuhita","types":["Combat"]},{"id":297,"name":"Hariyama","nameEn":"Hariyama","types":["Combat"]},{"id":298,"name":"Azurill","nameEn":"Azurill","types":["Normal","Fée"]},{"id":299,"name":"Tarinor","nameEn":"Nosepass","types":["Roche"]},{"id":300,"name":"Skitty","nameEn":"Skitty","types":["Normal"]},{"id":301,"name":"Delcatty","nameEn":"Delcatty","types":["Normal"]},{"id":302,"name":"Ténéfix","nameEn":"Sableye","types":["Ténèbres","Spectre"]},{"id":303,"name":"Mysdibule","nameEn":"Mawile","types":["Acier","Fée"]},{"id":304,"name":"Galekid","nameEn":"Aron","types":["Acier","Roche"]},{"id":305,"name":"Galegon","nameEn":"Lairon","types":["Acier","Roche"]},{"id":306,"name":"Galeking","nameEn":"Aggron","types":["Acier","Roche"]},{"id":307,"name":"Méditikka","nameEn":"Meditite","types":["Combat","Psy"]},{"id":308,"name":"Charmina","nameEn":"Medicham","types":["Combat","Psy"]},{"id":309,"name":"Dynavolt","nameEn":"Electrike","types":["Électrik"]},{"id":310,"name":"Élecsprint","nameEn":"Manectric","types":["Électrik"]},{"id":311,"name":"Posipi","nameEn":"Plusle","types":["Électrik"]},{"id":312,"name":"Négapi","nameEn":"Minun","types":["Électrik"]},{"id":313,"name":"Muciole","nameEn":"Volbeat","types":["Insecte"]},{"id":314,"name":"Lumivole","nameEn":"Illumise","types":["Insecte"]},{"id":315,"name":"Rosélia","nameEn":"Roselia","types":["Plante","Poison"]},{"id":316,"name":"Gloupti","nameEn":"Gulpin","types":["Poison"]},{"id":317,"name":"Avaltout","nameEn":"Swalot","types":["Poison"]},{"id":318,"name":"Carvanha","nameEn":"Carvanha","types":["Eau","Ténèbres"]},{"id":319,"name":"Sharpedo","nameEn":"Sharpedo","types":["Eau","Ténèbres"]},{"id":320,"name":"Wailmer","nameEn":"Wailmer","types":["Eau"]},{"id":321,"name":"Wailord","nameEn":"Wailord","types":["Eau"]},{"id":322,"name":"Chamallot","nameEn":"Numel","types":["Feu","Sol"]},{"id":323,"name":"Camérupt","nameEn":"Camerupt","types":["Feu","Sol"]},{"id":324,"name":"Chartor","nameEn":"Torkoal","types":["Feu"]},{"id":325,"name":"Spoink","nameEn":"Spoink","types":["Psy"]},{"id":326,"name":"Groret","nameEn":"Grumpig","types":["Psy"]},{"id":327,"name":"Spinda","nameEn":"Spinda","types":["Normal"]},{"id":328,"name":"Kraknoix","nameEn":"Trapinch","types":["Sol"]},{"id":329,"name":"Vibraninf","nameEn":"Vibrava","types":["Sol","Dragon"]},{"id":330,"name":"Libégon","nameEn":"Flygon","types":["Sol","Dragon"]},{"id":331,"name":"Cacnea","nameEn":"Cacnea","types":["Plante"]},{"id":332,"name":"Cacturne","nameEn":"Cacturne","types":["Plante","Ténèbres"]},{"id":333,"name":"Tylton","nameEn":"Swablu","types":["Normal","Vol"]},{"id":334,"name":"Altaria","nameEn":"Altaria","types":["Dragon","Vol"]},{"id":335,"name":"Mangriff","nameEn":"Zangoose","types":["Normal"]},{"id":336,"name":"Séviper","nameEn":"Seviper","types":["Poison"]},{"id":337,"name":"Séléroc","nameEn":"Lunatone","types":["Roche","Psy"]},{"id":338,"name":"Solaroc","nameEn":"Solrock","types":["Roche","Psy"]},{"id":339,"name":"Barloche","nameEn":"Barboach","types":["Eau","Sol"]},{"id":340,"name":"Barbicha","nameEn":"Whiscash","types":["Eau","Sol"]},{"id":341,"name":"Écrapince","nameEn":"Corphish","types":["Eau"]},{"id":342,"name":"Colhomard","nameEn":"Crawdaunt","types":["Eau","Ténèbres"]},{"id":343,"name":"Balbuto","nameEn":"Baltoy","types":["Sol","Psy"]},{"id":344,"name":"Kaorine","nameEn":"Claydol","types":["Sol","Psy"]},{"id":345,"name":"Lilia","nameEn":"Lileep","types":["Roche","Plante"]},{"id":346,"name":"Vacilys","nameEn":"Cradily","types":["Roche","Plante"]},{"id":347,"name":"Anorith","nameEn":"Anorith","types":["Roche","Insecte"]},{"id":348,"name":"Armaldo","nameEn":"Armaldo","types":["Roche","Insecte"]},{"id":349,"name":"Barpau","nameEn":"Feebas","types":["Eau"]},{"id":350,"name":"Milobellus","nameEn":"Milotic","types":["Eau"]},{"id":351,"name":"Morphéo","nameEn":"Castform","types":["Normal"]},{"id":352,"name":"Kecleon","nameEn":"Kecleon","types":["Normal"]},{"id":353,"name":"Polichombr","nameEn":"Shuppet","types":["Spectre"]},{"id":354,"name":"Branette","nameEn":"Banette","types":["Spectre"]},{"id":355,"name":"Skelénox","nameEn":"Duskull","types":["Spectre"]},{"id":356,"name":"Téraclope","nameEn":"Dusclops","types":["Spectre"]},{"id":357,"name":"Tropius","nameEn":"Tropius","types":["Plante","Vol"]},{"id":358,"name":"Éoko","nameEn":"Chimecho","types":["Psy"]},{"id":359,"name":"Absol","nameEn":"Absol","types":["Ténèbres"]},{"id":360,"name":"Okéoké","nameEn":"Wynaut","types":["Psy"]},{"id":361,"name":"Stalgamin","nameEn":"Snorunt","types":["Glace"]},{"id":362,"name":"Oniglali","nameEn":"Glalie","types":["Glace"]},{"id":363,"name":"Obalie","nameEn":"Spheal","types":["Glace","Eau"]},{"id":364,"name":"Phogleur","nameEn":"Sealeo","types":["Glace","Eau"]},{"id":365,"name":"Kaimorse","nameEn":"Walrein","types":["Glace","Eau"]},{"id":366,"name":"Coquiperl","nameEn":"Clamperl","types":["Eau"]},{"id":367,"name":"Serpang","nameEn":"Huntail","types":["Eau"]},{"id":368,"name":"Rosabyss","nameEn":"Gorebyss","types":["Eau"]},{"id":369,"name":"Relicanth","nameEn":"Relicanth","types":["Eau","Roche"]},{"id":370,"name":"Lovdisc","nameEn":"Luvdisc","types":["Eau"]},{"id":371,"name":"Draby","nameEn":"Bagon","types":["Dragon"]},{"id":372,"name":"Drackhaus","nameEn":"Shelgon","types":["Dragon"]},{"id":373,"name":"Drattak","nameEn":"Salamence","types":["Dragon","Vol"]},{"id":374,"name":"Terhal","nameEn":"Beldum","types":["Acier","Psy"]},{"id":375,"name":"Métang","nameEn":"Metang","types":["Acier","Psy"]},{"id":376,"name":"Métalosse","nameEn":"Metagross","types":["Acier","Psy"]},{"id":377,"name":"Regirock","nameEn":"Regirock","types":["Roche"]},{"id":378,"name":"Regice","nameEn":"Regice","types":["Glace"]},{"id":379,"name":"Registeel","nameEn":"Registeel","types":["Acier"]},{"id":380,"name":"Latias","nameEn":"Latias","types":["Dragon","Psy"]},{"id":381,"name":"Latios","nameEn":"Latios","types":["Dragon","Psy"]},{"id":382,"name":"Kyogre","nameEn":"Kyogre","types":["Eau"]},{"id":383,"name":"Groudon","nameEn":"Groudon","types":["Sol"]},{"id":384,"name":"Rayquaza","nameEn":"Rayquaza","types":["Dragon","Vol"]},{"id":385,"name":"Jirachi","nameEn":"Jirachi","types":["Acier","Psy"]},{"id":386,"name":"Deoxys","nameEn":"Deoxys","types":["Psy"]},{"id":387,"name":"Tortipouss","nameEn":"Turtwig","types":["Plante"]},{"id":388,"name":"Boskara","nameEn":"Grotle","types":["Plante"]},{"id":389,"name":"Torterra","nameEn":"Torterra","types":["Plante","Sol"]},{"id":390,"name":"Ouisticram","nameEn":"Chimchar","types":["Feu"]},{"id":391,"name":"Chimpenfeu","nameEn":"Monferno","types":["Feu","Combat"]},{"id":392,"name":"Simiabraz","nameEn":"Infernape","types":["Feu","Combat"]},{"id":393,"name":"Tiplouf","nameEn":"Piplup","types":["Eau"]},{"id":394,"name":"Prinplouf","nameEn":"Prinplup","types":["Eau"]},{"id":395,"name":"Pingoléon","nameEn":"Empoleon","types":["Eau","Acier"]},{"id":396,"name":"Étourmi","nameEn":"Starly","types":["Normal","Vol"]},{"id":397,"name":"Étourvol","nameEn":"Staravia","types":["Normal","Vol"]},{"id":398,"name":"Étouraptor","nameEn":"Staraptor","types":["Normal","Vol"]},{"id":399,"name":"Keunotor","nameEn":"Bidoof","types":["Normal"]},{"id":400,"name":"Castorno","nameEn":"Bibarel","types":["Normal","Eau"]},{"id":401,"name":"Crikzik","nameEn":"Kricketot","types":["Insecte"]},{"id":402,"name":"Mélokrik","nameEn":"Kricketune","types":["Insecte"]},{"id":403,"name":"Lixy","nameEn":"Shinx","types":["Électrik"]},{"id":404,"name":"Luxio","nameEn":"Luxio","types":["Électrik"]},{"id":405,"name":"Luxray","nameEn":"Luxray","types":["Électrik"]},{"id":406,"name":"Rozbouton","nameEn":"Budew","types":["Plante","Poison"]},{"id":407,"name":"Roserade","nameEn":"Roserade","types":["Plante","Poison"]},{"id":408,"name":"Kranidos","nameEn":"Cranidos","types":["Roche"]},{"id":409,"name":"Charkos","nameEn":"Rampardos","types":["Roche"]},{"id":410,"name":"Dinoclier","nameEn":"Shieldon","types":["Roche","Acier"]},{"id":411,"name":"Bastiodon","nameEn":"Bastiodon","types":["Roche","Acier"]},{"id":412,"name":"Cheniti","nameEn":"Burmy","types":["Insecte"]},{"id":413,"name":"Cheniselle","nameEn":"Wormadam","types":["Insecte","Plante"]},{"id":414,"name":"Papilord","nameEn":"Mothim","types":["Insecte","Vol"]},{"id":415,"name":"Apitrini","nameEn":"Combee","types":["Insecte","Vol"]},{"id":416,"name":"Apireine","nameEn":"Vespiquen","types":["Insecte","Vol"]},{"id":417,"name":"Pachirisu","nameEn":"Pachirisu","types":["Électrik"]},{"id":418,"name":"Mustébouée","nameEn":"Buizel","types":["Eau"]},{"id":419,"name":"Mustéflott","nameEn":"Floatzel","types":["Eau"]},{"id":420,"name":"Ceribou","nameEn":"Cherubi","types":["Plante"]},{"id":421,"name":"Ceriflor","nameEn":"Cherrim","types":["Plante"]},{"id":422,"name":"Sancoki","nameEn":"Shellos","types":["Eau"]},{"id":423,"name":"Tritosor","nameEn":"Gastrodon","types":["Eau","Sol"]},{"id":424,"name":"Capidextre","nameEn":"Ambipom","types":["Normal"]},{"id":425,"name":"Baudrive","nameEn":"Drifloon","types":["Spectre","Vol"]},{"id":426,"name":"Grodrive","nameEn":"Drifblim","types":["Spectre","Vol"]},{"id":427,"name":"Laporeille","nameEn":"Buneary","types":["Normal"]},{"id":428,"name":"Lockpin","nameEn":"Lopunny","types":["Normal"]},{"id":429,"name":"Magirêve","nameEn":"Mismagius","types":["Spectre"]},{"id":430,"name":"Corboss","nameEn":"Honchkrow","types":["Ténèbres","Vol"]},{"id":431,"name":"Chaglam","nameEn":"Glameow","types":["Normal"]},{"id":432,"name":"Chaffreux","nameEn":"Purugly","types":["Normal"]},{"id":433,"name":"Korillon","nameEn":"Chingling","types":["Psy"]},{"id":434,"name":"Moufouette","nameEn":"Stunky","types":["Poison","Ténèbres"]},{"id":435,"name":"Moufflair","nameEn":"Skuntank","types":["Poison","Ténèbres"]},{"id":436,"name":"Archéomire","nameEn":"Bronzor","types":["Acier","Psy"]},{"id":437,"name":"Archéodong","nameEn":"Bronzong","types":["Acier","Psy"]},{"id":438,"name":"Manzaï","nameEn":"Bonsly","types":["Roche"]},{"id":439,"name":"Mime Jr.","nameEn":"Mime Jr.","types":["Psy","Fée"]},{"id":440,"name":"Ptiravi","nameEn":"Happiny","types":["Normal"]},{"id":441,"name":"Pijako","nameEn":"Chatot","types":["Normal","Vol"]},{"id":442,"name":"Spiritomb","nameEn":"Spiritomb","types":["Spectre","Ténèbres"]},{"id":443,"name":"Griknot","nameEn":"Gible","types":["Dragon","Sol"]},{"id":444,"name":"Carmache","nameEn":"Gabite","types":["Dragon","Sol"]},{"id":445,"name":"Carchacrok","nameEn":"Garchomp","types":["Dragon","Sol"]},{"id":446,"name":"Goinfrex","nameEn":"Munchlax","types":["Normal"]},{"id":447,"name":"Riolu","nameEn":"Riolu","types":["Combat"]},{"id":448,"name":"Lucario","nameEn":"Lucario","types":["Combat","Acier"]},{"id":449,"name":"Hippopotas","nameEn":"Hippopotas","types":["Sol"]},{"id":450,"name":"Hippodocus","nameEn":"Hippowdon","types":["Sol"]},{"id":451,"name":"Rapion","nameEn":"Skorupi","types":["Poison","Insecte"]},{"id":452,"name":"Drascore","nameEn":"Drapion","types":["Poison","Ténèbres"]},{"id":453,"name":"Cradopaud","nameEn":"Croagunk","types":["Poison","Combat"]},{"id":454,"name":"Coatox","nameEn":"Toxicroak","types":["Poison","Combat"]},{"id":455,"name":"Vortente","nameEn":"Carnivine","types":["Plante"]},{"id":456,"name":"Écayon","nameEn":"Finneon","types":["Eau"]},{"id":457,"name":"Luminéon","nameEn":"Lumineon","types":["Eau"]},{"id":458,"name":"Babimanta","nameEn":"Mantyke","types":["Eau","Vol"]},{"id":459,"name":"Blizzi","nameEn":"Snover","types":["Plante","Glace"]},{"id":460,"name":"Blizzaroi","nameEn":"Abomasnow","types":["Plante","Glace"]},{"id":461,"name":"Dimoret","nameEn":"Weavile","types":["Ténèbres","Glace"]},{"id":462,"name":"Magnézone","nameEn":"Magnezone","types":["Électrik","Acier"]},{"id":463,"name":"Coudlangue","nameEn":"Lickilicky","types":["Normal"]},{"id":464,"name":"Rhinastoc","nameEn":"Rhyperior","types":["Sol","Roche"]},{"id":465,"name":"Bouldeneu","nameEn":"Tangrowth","types":["Plante"]},{"id":466,"name":"Élekable","nameEn":"Electivire","types":["Électrik"]},{"id":467,"name":"Maganon","nameEn":"Magmortar","types":["Feu"]},{"id":468,"name":"Togekiss","nameEn":"Togekiss","types":["Fée","Vol"]},{"id":469,"name":"Yanmega","nameEn":"Yanmega","types":["Insecte","Vol"]},{"id":470,"name":"Phyllali","nameEn":"Leafeon","types":["Plante"]},{"id":471,"name":"Givrali","nameEn":"Glaceon","types":["Glace"]},{"id":472,"name":"Scorvol","nameEn":"Gliscor","types":["Sol","Vol"]},{"id":473,"name":"Mammochon","nameEn":"Mamoswine","types":["Glace","Sol"]},{"id":474,"name":"Porygon-Z","nameEn":"Porygon-Z","types":["Normal"]},{"id":475,"name":"Gallame","nameEn":"Gallade","types":["Psy","Combat"]},{"id":476,"name":"Tarinorme","nameEn":"Probopass","types":["Roche","Acier"]},{"id":477,"name":"Noctunoir","nameEn":"Dusknoir","types":["Spectre"]},{"id":478,"name":"Momartik","nameEn":"Froslass","types":["Glace","Spectre"]},{"id":479,"name":"Motisma","nameEn":"Rotom","types":["Électrik","Spectre"]},{"id":480,"name":"Créhelf","nameEn":"Uxie","types":["Psy"]},{"id":481,"name":"Créfollet","nameEn":"Mesprit","types":["Psy"]},{"id":482,"name":"Créfadet","nameEn":"Azelf","types":["Psy"]},{"id":483,"name":"Dialga","nameEn":"Dialga","types":["Acier","Dragon"]},{"id":484,"name":"Palkia","nameEn":"Palkia","types":["Eau","Dragon"]},{"id":485,"name":"Heatran","nameEn":"Heatran","types":["Feu","Acier"]},{"id":486,"name":"Regigigas","nameEn":"Regigigas","types":["Normal"]},{"id":487,"name":"Giratina","nameEn":"Giratina","types":["Spectre","Dragon"]},{"id":488,"name":"Cresselia","nameEn":"Cresselia","types":["Psy"]},{"id":489,"name":"Phione","nameEn":"Phione","types":["Eau"]},{"id":490,"name":"Manaphy","nameEn":"Manaphy","types":["Eau"]},{"id":491,"name":"Darkrai","nameEn":"Darkrai","types":["Ténèbres"]},{"id":492,"name":"Shaymin","nameEn":"Shaymin","types":["Plante"]},{"id":493,"name":"Arceus","nameEn":"Arceus","types":["Normal"]},{"id":494,"name":"Victini","nameEn":"Victini","types":["Psy","Feu"]},{"id":495,"name":"Vipélierre","nameEn":"Snivy","types":["Plante"]},{"id":496,"name":"Lianaja","nameEn":"Servine","types":["Plante"]},{"id":497,"name":"Majaspic","nameEn":"Serperior","types":["Plante"]},{"id":498,"name":"Gruikui","nameEn":"Tepig","types":["Feu"]},{"id":499,"name":"Grotichon","nameEn":"Pignite","types":["Feu","Combat"]},{"id":500,"name":"Roitiflam","nameEn":"Emboar","types":["Feu","Combat"]},{"id":501,"name":"Moustillon","nameEn":"Oshawott","types":["Eau"]},{"id":502,"name":"Mateloutre","nameEn":"Dewott","types":["Eau"]},{"id":503,"name":"Clamiral","nameEn":"Samurott","types":["Eau"]},{"id":504,"name":"Ratentif","nameEn":"Patrat","types":["Normal"]},{"id":505,"name":"Miradar","nameEn":"Watchog","types":["Normal"]},{"id":506,"name":"Ponchiot","nameEn":"Lillipup","types":["Normal"]},{"id":507,"name":"Ponchien","nameEn":"Herdier","types":["Normal"]},{"id":508,"name":"Mastouffe","nameEn":"Stoutland","types":["Normal"]},{"id":509,"name":"Chacripan","nameEn":"Purrloin","types":["Ténèbres"]},{"id":510,"name":"Léopardus","nameEn":"Liepard","types":["Ténèbres"]},{"id":511,"name":"Feuillajou","nameEn":"Pansage","types":["Plante"]},{"id":512,"name":"Feuiloutan","nameEn":"Simisage","types":["Plante"]},{"id":513,"name":"Flamajou","nameEn":"Pansear","types":["Feu"]},{"id":514,"name":"Flamoutan","nameEn":"Simisear","types":["Feu"]},{"id":515,"name":"Flotajou","nameEn":"Panpour","types":["Eau"]},{"id":516,"name":"Flotoutan","nameEn":"Simipour","types":["Eau"]},{"id":517,"name":"Munna","nameEn":"Munna","types":["Psy"]},{"id":518,"name":"Mushana","nameEn":"Musharna","types":["Psy"]},{"id":519,"name":"Poichigeon","nameEn":"Pidove","types":["Normal","Vol"]},{"id":520,"name":"Colombeau","nameEn":"Tranquill","types":["Normal","Vol"]},{"id":521,"name":"Déflaisan","nameEn":"Unfezant","types":["Normal","Vol"]},{"id":522,"name":"Zébibron","nameEn":"Blitzle","types":["Électrik"]},{"id":523,"name":"Zéblitz","nameEn":"Zebstrika","types":["Électrik"]},{"id":524,"name":"Nodulithe","nameEn":"Roggenrola","types":["Roche"]},{"id":525,"name":"Géolithe","nameEn":"Boldore","types":["Roche"]},{"id":526,"name":"Gigalithe","nameEn":"Gigalith","types":["Roche"]},{"id":527,"name":"Chovsourir","nameEn":"Woobat","types":["Psy","Vol"]},{"id":528,"name":"Rhinolove","nameEn":"Swoobat","types":["Psy","Vol"]},{"id":529,"name":"Rototaupe","nameEn":"Drilbur","types":["Sol"]},{"id":530,"name":"Minotaupe","nameEn":"Excadrill","types":["Sol","Acier"]},{"id":531,"name":"Nanméouïe","nameEn":"Audino","types":["Normal"]},{"id":532,"name":"Charpenti","nameEn":"Timburr","types":["Combat"]},{"id":533,"name":"Ouvrifier","nameEn":"Gurdurr","types":["Combat"]},{"id":534,"name":"Bétochef","nameEn":"Conkeldurr","types":["Combat"]},{"id":535,"name":"Tritonde","nameEn":"Tympole","types":["Eau"]},{"id":536,"name":"Batracné","nameEn":"Palpitoad","types":["Eau","Sol"]},{"id":537,"name":"Crapustule","nameEn":"Seismitoad","types":["Eau","Sol"]},{"id":538,"name":"Judokrak","nameEn":"Throh","types":["Combat"]},{"id":539,"name":"Karaclée","nameEn":"Sawk","types":["Combat"]},{"id":540,"name":"Larveyette","nameEn":"Sewaddle","types":["Insecte","Plante"]},{"id":541,"name":"Couverdure","nameEn":"Swadloon","types":["Insecte","Plante"]},{"id":542,"name":"Manternel","nameEn":"Leavanny","types":["Insecte","Plante"]},{"id":543,"name":"Venipatte","nameEn":"Venipede","types":["Insecte","Poison"]},{"id":544,"name":"Scobolide","nameEn":"Whirlipede","types":["Insecte","Poison"]},{"id":545,"name":"Brutapode","nameEn":"Scolipede","types":["Insecte","Poison"]},{"id":546,"name":"Doudouvet","nameEn":"Cottonee","types":["Plante","Fée"]},{"id":547,"name":"Farfaduvet","nameEn":"Whimsicott","types":["Plante","Fée"]},{"id":548,"name":"Chlorobule","nameEn":"Petilil","types":["Plante"]},{"id":549,"name":"Fragilady","nameEn":"Lilligant","types":["Plante"]},{"id":550,"name":"Bargantua","nameEn":"Basculin","types":["Eau"]},{"id":551,"name":"Mascaïman","nameEn":"Sandile","types":["Sol","Ténèbres"]},{"id":552,"name":"Escroco","nameEn":"Krokorok","types":["Sol","Ténèbres"]},{"id":553,"name":"Crocorible","nameEn":"Krookodile","types":["Sol","Ténèbres"]},{"id":554,"name":"Darumarond","nameEn":"Darumaka","types":["Feu"]},{"id":555,"name":"Darumacho","nameEn":"Darmanitan","types":["Feu"]},{"id":556,"name":"Maracachi","nameEn":"Maractus","types":["Plante"]},{"id":557,"name":"Crabicoque","nameEn":"Dwebble","types":["Insecte","Roche"]},{"id":558,"name":"Crabaraque","nameEn":"Crustle","types":["Insecte","Roche"]},{"id":559,"name":"Baggiguane","nameEn":"Scraggy","types":["Ténèbres","Combat"]},{"id":560,"name":"Baggaïd","nameEn":"Scrafty","types":["Ténèbres","Combat"]},{"id":561,"name":"Cryptéro","nameEn":"Sigilyph","types":["Psy","Vol"]},{"id":562,"name":"Tutafeh","nameEn":"Yamask","types":["Spectre"]},{"id":563,"name":"Tutankafer","nameEn":"Cofagrigus","types":["Spectre"]},{"id":564,"name":"Carapagos","nameEn":"Tirtouga","types":["Eau","Roche"]},{"id":565,"name":"Mégapagos","nameEn":"Carracosta","types":["Eau","Roche"]},{"id":566,"name":"Arkéapti","nameEn":"Archen","types":["Roche","Vol"]},{"id":567,"name":"Aéroptéryx","nameEn":"Archeops","types":["Roche","Vol"]},{"id":568,"name":"Miamiasme","nameEn":"Trubbish","types":["Poison"]},{"id":569,"name":"Miasmax","nameEn":"Garbodor","types":["Poison"]},{"id":570,"name":"Zorua","nameEn":"Zorua","types":["Ténèbres"]},{"id":571,"name":"Zoroark","nameEn":"Zoroark","types":["Ténèbres"]},{"id":572,"name":"Chinchidou","nameEn":"Minccino","types":["Normal"]},{"id":573,"name":"Pashmilla","nameEn":"Cinccino","types":["Normal"]},{"id":574,"name":"Scrutella","nameEn":"Gothita","types":["Psy"]},{"id":575,"name":"Mesmérella","nameEn":"Gothorita","types":["Psy"]},{"id":576,"name":"Sidérella","nameEn":"Gothitelle","types":["Psy"]},{"id":577,"name":"Nucléos","nameEn":"Solosis","types":["Psy"]},{"id":578,"name":"Méios","nameEn":"Duosion","types":["Psy"]},{"id":579,"name":"Symbios","nameEn":"Reuniclus","types":["Psy"]},{"id":580,"name":"Couaneton","nameEn":"Ducklett","types":["Eau","Vol"]},{"id":581,"name":"Lakmécygne","nameEn":"Swanna","types":["Eau","Vol"]},{"id":582,"name":"Sorbébé","nameEn":"Vanillite","types":["Glace"]},{"id":583,"name":"Sorboul","nameEn":"Vanillish","types":["Glace"]},{"id":584,"name":"Sorbouboul","nameEn":"Vanilluxe","types":["Glace"]},{"id":585,"name":"Vivaldaim","nameEn":"Deerling","types":["Normal","Plante"]},{"id":586,"name":"Haydaim","nameEn":"Sawsbuck","types":["Normal","Plante"]},{"id":587,"name":"Emolga","nameEn":"Emolga","types":["Électrik","Vol"]},{"id":588,"name":"Carabing","nameEn":"Karrablast","types":["Insecte"]},{"id":589,"name":"Lançargot","nameEn":"Escavalier","types":["Insecte","Acier"]},{"id":590,"name":"Trompignon","nameEn":"Foongus","types":["Plante","Poison"]},{"id":591,"name":"Gaulet","nameEn":"Amoonguss","types":["Plante","Poison"]},{"id":592,"name":"Viskuse","nameEn":"Frillish","types":["Eau","Spectre"]},{"id":593,"name":"Moyade","nameEn":"Jellicent","types":["Eau","Spectre"]},{"id":594,"name":"Mamanbo","nameEn":"Alomomola","types":["Eau"]},{"id":595,"name":"Statitik","nameEn":"Joltik","types":["Insecte","Électrik"]},{"id":596,"name":"Mygavolt","nameEn":"Galvantula","types":["Insecte","Électrik"]},{"id":597,"name":"Grindur","nameEn":"Ferroseed","types":["Plante","Acier"]},{"id":598,"name":"Noacier","nameEn":"Ferrothorn","types":["Plante","Acier"]},{"id":599,"name":"Tic","nameEn":"Klink","types":["Acier"]},{"id":600,"name":"Clic","nameEn":"Klang","types":["Acier"]},{"id":601,"name":"Cliticlic","nameEn":"Klinklang","types":["Acier"]},{"id":602,"name":"Anchwatt","nameEn":"Tynamo","types":["Électrik"]},{"id":603,"name":"Lampéroie","nameEn":"Eelektrik","types":["Électrik"]},{"id":604,"name":"Ohmassacre","nameEn":"Eelektross","types":["Électrik"]},{"id":605,"name":"Lewsor","nameEn":"Elgyem","types":["Psy"]},{"id":606,"name":"Neitram","nameEn":"Beheeyem","types":["Psy"]},{"id":607,"name":"Funécire","nameEn":"Litwick","types":["Spectre","Feu"]},{"id":608,"name":"Mélancolux","nameEn":"Lampent","types":["Spectre","Feu"]},{"id":609,"name":"Lugulabre","nameEn":"Chandelure","types":["Spectre","Feu"]},{"id":610,"name":"Coupenotte","nameEn":"Axew","types":["Dragon"]},{"id":611,"name":"Incisache","nameEn":"Fraxure","types":["Dragon"]},{"id":612,"name":"Tranchodon","nameEn":"Haxorus","types":["Dragon"]},{"id":613,"name":"Polarhume","nameEn":"Cubchoo","types":["Glace"]},{"id":614,"name":"Polagriffe","nameEn":"Beartic","types":["Glace"]},{"id":615,"name":"Hexagel","nameEn":"Cryogonal","types":["Glace"]},{"id":616,"name":"Escargaume","nameEn":"Shelmet","types":["Insecte"]},{"id":617,"name":"Limaspeed","nameEn":"Accelgor","types":["Insecte"]},{"id":618,"name":"Limonde","nameEn":"Stunfisk","types":["Sol","Électrik"]},{"id":619,"name":"Kungfouine","nameEn":"Mienfoo","types":["Combat"]},{"id":620,"name":"Shaofouine","nameEn":"Mienshao","types":["Combat"]},{"id":621,"name":"Drakkarmin","nameEn":"Druddigon","types":["Dragon"]},{"id":622,"name":"Gringolem","nameEn":"Golett","types":["Sol","Spectre"]},{"id":623,"name":"Golemastoc","nameEn":"Golurk","types":["Sol","Spectre"]},{"id":624,"name":"Scalpion","nameEn":"Pawniard","types":["Ténèbres","Acier"]},{"id":625,"name":"Scalproie","nameEn":"Bisharp","types":["Ténèbres","Acier"]},{"id":626,"name":"Frison","nameEn":"Bouffalant","types":["Normal"]},{"id":627,"name":"Furaiglon","nameEn":"Rufflet","types":["Normal","Vol"]},{"id":628,"name":"Gueriaigle","nameEn":"Braviary","types":["Normal","Vol"]},{"id":629,"name":"Vostourno","nameEn":"Vullaby","types":["Ténèbres","Vol"]},{"id":630,"name":"Vaututrice","nameEn":"Mandibuzz","types":["Ténèbres","Vol"]},{"id":631,"name":"Aflamanoir","nameEn":"Heatmor","types":["Feu"]},{"id":632,"name":"Fermite","nameEn":"Durant","types":["Insecte","Acier"]},{"id":633,"name":"Solochi","nameEn":"Deino","types":["Ténèbres","Dragon"]},{"id":634,"name":"Diamat","nameEn":"Zweilous","types":["Ténèbres","Dragon"]},{"id":635,"name":"Trioxhydre","nameEn":"Hydreigon","types":["Ténèbres","Dragon"]},{"id":636,"name":"Pyronille","nameEn":"Larvesta","types":["Insecte","Feu"]},{"id":637,"name":"Pyrax","nameEn":"Volcarona","types":["Insecte","Feu"]},{"id":638,"name":"Cobaltium","nameEn":"Cobalion","types":["Acier","Combat"]},{"id":639,"name":"Terrakium","nameEn":"Terrakion","types":["Roche","Combat"]},{"id":640,"name":"Viridium","nameEn":"Virizion","types":["Plante","Combat"]},{"id":641,"name":"Boréas","nameEn":"Tornadus","types":["Vol"]},{"id":642,"name":"Fulguris","nameEn":"Thundurus","types":["Électrik","Vol"]},{"id":643,"name":"Reshiram","nameEn":"Reshiram","types":["Dragon","Feu"]},{"id":644,"name":"Zekrom","nameEn":"Zekrom","types":["Dragon","Électrik"]},{"id":645,"name":"Démétéros","nameEn":"Landorus","types":["Sol","Vol"]},{"id":646,"name":"Kyurem","nameEn":"Kyurem","types":["Dragon","Glace"]},{"id":647,"name":"Keldeo","nameEn":"Keldeo","types":["Eau","Combat"]},{"id":648,"name":"Meloetta","nameEn":"Meloetta","types":["Normal","Psy"]},{"id":649,"name":"Genesect","nameEn":"Genesect","types":["Insecte","Acier"]},{"id":650,"name":"Marisson","nameEn":"Chespin","types":["Plante"]},{"id":651,"name":"Boguérisse","nameEn":"Quilladin","types":["Plante"]},{"id":652,"name":"Blindépique","nameEn":"Chesnaught","types":["Plante","Combat"]},{"id":653,"name":"Feunnec","nameEn":"Fennekin","types":["Feu"]},{"id":654,"name":"Roussil","nameEn":"Braixen","types":["Feu"]},{"id":655,"name":"Goupelin","nameEn":"Delphox","types":["Feu","Psy"]},{"id":656,"name":"Grenousse","nameEn":"Froakie","types":["Eau"]},{"id":657,"name":"Croâporal","nameEn":"Frogadier","types":["Eau"]},{"id":658,"name":"Amphinobi","nameEn":"Greninja","types":["Eau","Ténèbres"]},{"id":659,"name":"Sapereau","nameEn":"Bunnelby","types":["Normal"]},{"id":660,"name":"Excavarenne","nameEn":"Diggersby","types":["Normal","Sol"]},{"id":661,"name":"Passerouge","nameEn":"Fletchling","types":["Normal","Vol"]},{"id":662,"name":"Braisillon","nameEn":"Fletchinder","types":["Feu","Vol"]},{"id":663,"name":"Flambusard","nameEn":"Talonflame","types":["Feu","Vol"]},{"id":664,"name":"Lépidonille","nameEn":"Scatterbug","types":["Insecte"]},{"id":665,"name":"Pérégrain","nameEn":"Spewpa","types":["Insecte"]},{"id":666,"name":"Prismillon","nameEn":"Vivillon","types":["Insecte","Vol"]},{"id":667,"name":"Hélionceau","nameEn":"Litleo","types":["Feu","Normal"]},{"id":668,"name":"Némélios","nameEn":"Pyroar","types":["Feu","Normal"]},{"id":669,"name":"Flabébé","nameEn":"Flabébé","types":["Fée"]},{"id":670,"name":"Floette","nameEn":"Floette","types":["Fée"]},{"id":671,"name":"Florges","nameEn":"Florges","types":["Fée"]},{"id":672,"name":"Cabriolaine","nameEn":"Skiddo","types":["Plante"]},{"id":673,"name":"Chevroum","nameEn":"Gogoat","types":["Plante"]},{"id":674,"name":"Pandespiègle","nameEn":"Pancham","types":["Combat"]},{"id":675,"name":"Pandarbare","nameEn":"Pangoro","types":["Combat","Ténèbres"]},{"id":676,"name":"Couafarel","nameEn":"Furfrou","types":["Normal"]},{"id":677,"name":"Psystigri","nameEn":"Espurr","types":["Psy"]},{"id":678,"name":"Mistigrix","nameEn":"Meowstic","types":["Psy"]},{"id":679,"name":"Monorpale","nameEn":"Honedge","types":["Acier","Spectre"]},{"id":680,"name":"Dimoclès","nameEn":"Doublade","types":["Acier","Spectre"]},{"id":681,"name":"Exagide","nameEn":"Aegislash","types":["Acier","Spectre"]},{"id":682,"name":"Fluvetin","nameEn":"Spritzee","types":["Fée"]},{"id":683,"name":"Cocotine","nameEn":"Aromatisse","types":["Fée"]},{"id":684,"name":"Sucroquin","nameEn":"Swirlix","types":["Fée"]},{"id":685,"name":"Cupcanaille","nameEn":"Slurpuff","types":["Fée"]},{"id":686,"name":"Sepiatop","nameEn":"Inkay","types":["Ténèbres","Psy"]},{"id":687,"name":"Sepiatroce","nameEn":"Malamar","types":["Ténèbres","Psy"]},{"id":688,"name":"Opermine","nameEn":"Binacle","types":["Roche","Eau"]},{"id":689,"name":"Golgopathe","nameEn":"Barbaracle","types":["Roche","Eau"]},{"id":690,"name":"Venalgue","nameEn":"Skrelp","types":["Poison","Eau"]},{"id":691,"name":"Kravarech","nameEn":"Dragalge","types":["Poison","Dragon"]},{"id":692,"name":"Flingouste","nameEn":"Clauncher","types":["Eau"]},{"id":693,"name":"Gamblast","nameEn":"Clawitzer","types":["Eau"]},{"id":694,"name":"Galvaran","nameEn":"Helioptile","types":["Électrik","Normal"]},{"id":695,"name":"Iguolta","nameEn":"Heliolisk","types":["Électrik","Normal"]},{"id":696,"name":"Ptyranidur","nameEn":"Tyrunt","types":["Roche","Dragon"]},{"id":697,"name":"Rexillius","nameEn":"Tyrantrum","types":["Roche","Dragon"]},{"id":698,"name":"Amagara","nameEn":"Amaura","types":["Roche","Glace"]},{"id":699,"name":"Dragmara","nameEn":"Aurorus","types":["Roche","Glace"]},{"id":700,"name":"Nymphali","nameEn":"Sylveon","types":["Fée"]},{"id":701,"name":"Brutalibré","nameEn":"Hawlucha","types":["Combat","Vol"]},{"id":702,"name":"Dedenne","nameEn":"Dedenne","types":["Électrik","Fée"]},{"id":703,"name":"Strassie","nameEn":"Carbink","types":["Roche","Fée"]},{"id":704,"name":"Mucuscule","nameEn":"Goomy","types":["Dragon"]},{"id":705,"name":"Colimucus","nameEn":"Sliggoo","types":["Dragon"]},{"id":706,"name":"Muplodocus","nameEn":"Goodra","types":["Dragon"]},{"id":707,"name":"Trousselin","nameEn":"Klefki","types":["Acier","Fée"]},{"id":708,"name":"Brocélôme","nameEn":"Phantump","types":["Spectre","Plante"]},{"id":709,"name":"Desséliande","nameEn":"Trevenant","types":["Spectre","Plante"]},{"id":710,"name":"Pitrouille","nameEn":"Pumpkaboo","types":["Spectre","Plante"]},{"id":711,"name":"Banshitrouye","nameEn":"Gourgeist","types":["Spectre","Plante"]},{"id":712,"name":"Grelaçon","nameEn":"Bergmite","types":["Glace"]},{"id":713,"name":"Séracrawl","nameEn":"Avalugg","types":["Glace"]},{"id":714,"name":"Sonistrelle","nameEn":"Noibat","types":["Vol","Dragon"]},{"id":715,"name":"Bruyverne","nameEn":"Noivern","types":["Vol","Dragon"]},{"id":716,"name":"Xerneas","nameEn":"Xerneas","types":["Fée"]},{"id":717,"name":"Yveltal","nameEn":"Yveltal","types":["Ténèbres","Vol"]},{"id":718,"name":"Zygarde","nameEn":"Zygarde","types":["Dragon","Sol"]},{"id":719,"name":"Diancie","nameEn":"Diancie","types":["Roche","Fée"]},{"id":720,"name":"Hoopa","nameEn":"Hoopa","types":["Psy","Spectre"]},{"id":721,"name":"Volcanion","nameEn":"Volcanion","types":["Feu","Eau"]},{"id":722,"name":"Brindibou","nameEn":"Rowlet","types":["Plante","Vol"]},{"id":723,"name":"Efflèche","nameEn":"Dartrix","types":["Plante","Vol"]},{"id":724,"name":"Archéduc","nameEn":"Decidueye","types":["Plante","Spectre"]},{"id":725,"name":"Flamiaou","nameEn":"Litten","types":["Feu"]},{"id":726,"name":"Matoufeu","nameEn":"Torracat","types":["Feu"]},{"id":727,"name":"Félinferno","nameEn":"Incineroar","types":["Feu","Ténèbres"]},{"id":728,"name":"Otaquin","nameEn":"Popplio","types":["Eau"]},{"id":729,"name":"Otarlette","nameEn":"Brionne","types":["Eau"]},{"id":730,"name":"Oratoria","nameEn":"Primarina","types":["Eau","Fée"]},{"id":731,"name":"Picassaut","nameEn":"Pikipek","types":["Normal","Vol"]},{"id":732,"name":"Piclairon","nameEn":"Trumbeak","types":["Normal","Vol"]},{"id":733,"name":"Bazoucan","nameEn":"Toucannon","types":["Normal","Vol"]},{"id":734,"name":"Manglouton","nameEn":"Yungoos","types":["Normal"]},{"id":735,"name":"Argouste","nameEn":"Gumshoos","types":["Normal"]},{"id":736,"name":"Larvibule","nameEn":"Grubbin","types":["Insecte"]},{"id":737,"name":"Chrysapile","nameEn":"Charjabug","types":["Insecte","Électrik"]},{"id":738,"name":"Lucanon","nameEn":"Vikavolt","types":["Insecte","Électrik"]},{"id":739,"name":"Crabagarre","nameEn":"Crabrawler","types":["Combat"]},{"id":740,"name":"Crabominable","nameEn":"Crabominable","types":["Combat","Glace"]},{"id":741,"name":"Plumeline","nameEn":"Oricorio","types":["Feu","Vol"]},{"id":742,"name":"Bombydou","nameEn":"Cutiefly","types":["Insecte","Fée"]},{"id":743,"name":"Rubombelle","nameEn":"Ribombee","types":["Insecte","Fée"]},{"id":744,"name":"Rocabot","nameEn":"Rockruff","types":["Roche"]},{"id":745,"name":"Lougaroc","nameEn":"Lycanroc","types":["Roche"]},{"id":746,"name":"Froussardine","nameEn":"Wishiwashi","types":["Eau"]},{"id":747,"name":"Vorastérie","nameEn":"Mareanie","types":["Poison","Eau"]},{"id":748,"name":"Prédastérie","nameEn":"Toxapex","types":["Poison","Eau"]},{"id":749,"name":"Tiboudet","nameEn":"Mudbray","types":["Sol"]},{"id":750,"name":"Bourrinos","nameEn":"Mudsdale","types":["Sol"]},{"id":751,"name":"Araqua","nameEn":"Dewpider","types":["Eau","Insecte"]},{"id":752,"name":"Tarenbulle","nameEn":"Araquanid","types":["Eau","Insecte"]},{"id":753,"name":"Mimantis","nameEn":"Fomantis","types":["Plante"]},{"id":754,"name":"Floramantis","nameEn":"Lurantis","types":["Plante"]},{"id":755,"name":"Spododo","nameEn":"Morelull","types":["Plante","Fée"]},{"id":756,"name":"Lampignon","nameEn":"Shiinotic","types":["Plante","Fée"]},{"id":757,"name":"Tritox","nameEn":"Salandit","types":["Poison","Feu"]},{"id":758,"name":"Malamandre","nameEn":"Salazzle","types":["Poison","Feu"]},{"id":759,"name":"Nounourson","nameEn":"Stufful","types":["Normal","Combat"]},{"id":760,"name":"Chelours","nameEn":"Bewear","types":["Normal","Combat"]},{"id":761,"name":"Croquine","nameEn":"Bounsweet","types":["Plante"]},{"id":762,"name":"Candine","nameEn":"Steenee","types":["Plante"]},{"id":763,"name":"Sucreine","nameEn":"Tsareena","types":["Plante"]},{"id":764,"name":"Guérilande","nameEn":"Comfey","types":["Fée"]},{"id":765,"name":"Gouroutan","nameEn":"Oranguru","types":["Normal","Psy"]},{"id":766,"name":"Quartermac","nameEn":"Passimian","types":["Combat"]},{"id":767,"name":"Sovkipou","nameEn":"Wimpod","types":["Insecte","Eau"]},{"id":768,"name":"Sarmuraï","nameEn":"Golisopod","types":["Insecte","Eau"]},{"id":769,"name":"Bacabouh","nameEn":"Sandygast","types":["Spectre","Sol"]},{"id":770,"name":"Trépassable","nameEn":"Palossand","types":["Spectre","Sol"]},{"id":771,"name":"Concombaffe","nameEn":"Pyukumuku","types":["Eau"]},{"id":772,"name":"Type:0","nameEn":"Type: Null","types":["Normal"]},{"id":773,"name":"Silvallié","nameEn":"Silvally","types":["Normal"]},{"id":774,"name":"Météno","nameEn":"Minior","types":["Roche","Vol"]},{"id":775,"name":"Dodoala","nameEn":"Komala","types":["Normal"]},{"id":776,"name":"Boumata","nameEn":"Turtonator","types":["Feu","Dragon"]},{"id":777,"name":"Togedemaru","nameEn":"Togedemaru","types":["Électrik","Acier"]},{"id":778,"name":"Mimiqui","nameEn":"Mimikyu","types":["Spectre","Fée"]},{"id":779,"name":"Denticrisse","nameEn":"Bruxish","types":["Eau","Psy"]},{"id":780,"name":"Draïeul","nameEn":"Drampa","types":["Normal","Dragon"]},{"id":781,"name":"Sinistrail","nameEn":"Dhelmise","types":["Spectre","Plante"]},{"id":782,"name":"Bébécaille","nameEn":"Jangmo-o","types":["Dragon"]},{"id":783,"name":"Écaïd","nameEn":"Hakamo-o","types":["Dragon","Combat"]},{"id":784,"name":"Ékaïser","nameEn":"Kommo-o","types":["Dragon","Combat"]},{"id":785,"name":"Tokorico","nameEn":"Tapu Koko","types":["Électrik","Fée"]},{"id":786,"name":"Tokopiyon","nameEn":"Tapu Lele","types":["Psy","Fée"]},{"id":787,"name":"Tokotoro","nameEn":"Tapu Bulu","types":["Plante","Fée"]},{"id":788,"name":"Tokopisco","nameEn":"Tapu Fini","types":["Eau","Fée"]},{"id":789,"name":"Cosmog","nameEn":"Cosmog","types":["Psy"]},{"id":790,"name":"Cosmovum","nameEn":"Cosmoem","types":["Psy"]},{"id":791,"name":"Solgaleo","nameEn":"Solgaleo","types":["Psy","Acier"]},{"id":792,"name":"Lunala","nameEn":"Lunala","types":["Psy","Spectre"]},{"id":793,"name":"Zéroïd","nameEn":"Nihilego","types":["Roche","Poison"]},{"id":794,"name":"Mouscoto","nameEn":"Buzzwole","types":["Insecte","Combat"]},{"id":795,"name":"Cancrelove","nameEn":"Pheromosa","types":["Insecte","Combat"]},{"id":796,"name":"Câblifère","nameEn":"Xurkitree","types":["Électrik"]},{"id":797,"name":"Bamboiselle","nameEn":"Celesteela","types":["Acier","Vol"]},{"id":798,"name":"Katagami","nameEn":"Kartana","types":["Plante","Acier"]},{"id":799,"name":"Engloutyran","nameEn":"Guzzlord","types":["Ténèbres","Dragon"]},{"id":800,"name":"Necrozma","nameEn":"Necrozma","types":["Psy"]},{"id":801,"name":"Magearna","nameEn":"Magearna","types":["Acier","Fée"]},{"id":802,"name":"Marshadow","nameEn":"Marshadow","types":["Combat","Spectre"]},{"id":803,"name":"Vémini","nameEn":"Poipole","types":["Poison"]},{"id":804,"name":"Mandrillon","nameEn":"Naganadel","types":["Poison","Dragon"]},{"id":805,"name":"Ama-Ama","nameEn":"Stakataka","types":["Roche","Acier"]},{"id":806,"name":"Pierroteknik","nameEn":"Blacephalon","types":["Feu","Spectre"]},{"id":807,"name":"Zeraora","nameEn":"Zeraora","types":["Électrik"]},{"id":808,"name":"Meltan","nameEn":"Meltan","types":["Acier"]},{"id":809,"name":"Melmetal","nameEn":"Melmetal","types":["Acier"]},{"id":810,"name":"Ouistempo","nameEn":"Grookey","types":["Plante"]},{"id":811,"name":"Badabouin","nameEn":"Thwackey","types":["Plante"]},{"id":812,"name":"Gorythmic","nameEn":"Rillaboom","types":["Plante"]},{"id":813,"name":"Flambino","nameEn":"Scorbunny","types":["Feu"]},{"id":814,"name":"Lapyro","nameEn":"Raboot","types":["Feu"]},{"id":815,"name":"Pyrobut","nameEn":"Cinderace","types":["Feu"]},{"id":816,"name":"Larméléon","nameEn":"Sobble","types":["Eau"]},{"id":817,"name":"Arrozard","nameEn":"Drizzile","types":["Eau"]},{"id":818,"name":"Lézargus","nameEn":"Inteleon","types":["Eau"]},{"id":819,"name":"Rongourmand","nameEn":"Skwovet","types":["Normal"]},{"id":820,"name":"Rongrigou","nameEn":"Greedent","types":["Normal"]},{"id":821,"name":"Minisange","nameEn":"Rookidee","types":["Vol"]},{"id":822,"name":"Bleuseille","nameEn":"Corvisquire","types":["Vol"]},{"id":823,"name":"Corvaillus","nameEn":"Corviknight","types":["Vol","Acier"]},{"id":824,"name":"Larvadar","nameEn":"Blipbug","types":["Insecte"]},{"id":825,"name":"Coléodôme","nameEn":"Dottler","types":["Insecte","Psy"]},{"id":826,"name":"Astronelle","nameEn":"Orbeetle","types":["Insecte","Psy"]},{"id":827,"name":"Goupilou","nameEn":"Nickit","types":["Ténèbres"]},{"id":828,"name":"Roublenard","nameEn":"Thievul","types":["Ténèbres"]},{"id":829,"name":"Tournicoton","nameEn":"Gossifleur","types":["Plante"]},{"id":830,"name":"Blancoton","nameEn":"Eldegoss","types":["Plante"]},{"id":831,"name":"Moumouton","nameEn":"Wooloo","types":["Normal"]},{"id":832,"name":"Moumouflon","nameEn":"Dubwool","types":["Normal"]},{"id":833,"name":"Khélocrok","nameEn":"Chewtle","types":["Eau"]},{"id":834,"name":"Torgamord","nameEn":"Drednaw","types":["Eau","Roche"]},{"id":835,"name":"Voltoutou","nameEn":"Yamper","types":["Électrik"]},{"id":836,"name":"Fulgudog","nameEn":"Boltund","types":["Électrik"]},{"id":837,"name":"Charbi","nameEn":"Rolycoly","types":["Roche"]},{"id":838,"name":"Wagomine","nameEn":"Carkol","types":["Roche","Feu"]},{"id":839,"name":"Monthracite","nameEn":"Coalossal","types":["Roche","Feu"]},{"id":840,"name":"Verpom","nameEn":"Applin","types":["Plante","Dragon"]},{"id":841,"name":"Pomdrapi","nameEn":"Flapple","types":["Plante","Dragon"]},{"id":842,"name":"Dratatin","nameEn":"Appletun","types":["Plante","Dragon"]},{"id":843,"name":"Dunaja","nameEn":"Silicobra","types":["Sol"]},{"id":844,"name":"Dunaconda","nameEn":"Sandaconda","types":["Sol"]},{"id":845,"name":"Nigosier","nameEn":"Cramorant","types":["Vol","Eau"]},{"id":846,"name":"Embrochet","nameEn":"Arrokuda","types":["Eau"]},{"id":847,"name":"Hastacuda","nameEn":"Barraskewda","types":["Eau"]},{"id":848,"name":"Toxizap","nameEn":"Toxel","types":["Électrik","Poison"]},{"id":849,"name":"Salarsen","nameEn":"Toxtricity","types":["Électrik","Poison"]},{"id":850,"name":"Grillepattes","nameEn":"Sizzlipede","types":["Feu","Insecte"]},{"id":851,"name":"Scolocendre","nameEn":"Centiskorch","types":["Feu","Insecte"]},{"id":852,"name":"Poulpaf","nameEn":"Clobbopus","types":["Combat"]},{"id":853,"name":"Krakos","nameEn":"Grapploct","types":["Combat"]},{"id":854,"name":"Théffroi","nameEn":"Sinistea","types":["Spectre"]},{"id":855,"name":"Polthégeist","nameEn":"Polteageist","types":["Spectre"]},{"id":856,"name":"Bibichut","nameEn":"Hatenna","types":["Psy"]},{"id":857,"name":"Chapotus","nameEn":"Hattrem","types":["Psy"]},{"id":858,"name":"Sorcilence","nameEn":"Hatterene","types":["Psy","Fée"]},{"id":859,"name":"Grimalin","nameEn":"Impidimp","types":["Ténèbres","Fée"]},{"id":860,"name":"Fourbelin","nameEn":"Morgrem","types":["Ténèbres","Fée"]},{"id":861,"name":"Angoliath","nameEn":"Grimmsnarl","types":["Ténèbres","Fée"]},{"id":862,"name":"Ixon","nameEn":"Obstagoon","types":["Ténèbres","Normal"]},{"id":863,"name":"Berserkatt","nameEn":"Perrserker","types":["Acier"]},{"id":864,"name":"Corayôme","nameEn":"Cursola","types":["Spectre"]},{"id":865,"name":"Palarticho","nameEn":"Sirfetch'd","types":["Combat"]},{"id":866,"name":"M. Glaquette","nameEn":"Mr. Rime","types":["Glace","Psy"]},{"id":867,"name":"Tutétékri","nameEn":"Runerigus","types":["Sol","Spectre"]},{"id":868,"name":"Crèmy","nameEn":"Milcery","types":["Fée"]},{"id":869,"name":"Charmilly","nameEn":"Alcremie","types":["Fée"]},{"id":870,"name":"Hexadron","nameEn":"Falinks","types":["Combat"]},{"id":871,"name":"Wattapik","nameEn":"Pincurchin","types":["Électrik"]},{"id":872,"name":"Frissonille","nameEn":"Snom","types":["Glace","Insecte"]},{"id":873,"name":"Beldeneige","nameEn":"Frosmoth","types":["Glace","Insecte"]},{"id":874,"name":"Dolman","nameEn":"Stonjourner","types":["Roche"]},{"id":875,"name":"Bekaglaçon","nameEn":"Eiscue","types":["Glace"]},{"id":876,"name":"Wimessir","nameEn":"Indeedee","types":["Psy","Normal"]},{"id":877,"name":"Morpeko","nameEn":"Morpeko","types":["Électrik","Ténèbres"]},{"id":878,"name":"Charibari","nameEn":"Cufant","types":["Acier"]},{"id":879,"name":"Pachyradjah","nameEn":"Copperajah","types":["Acier"]},{"id":880,"name":"Galvagon","nameEn":"Dracozolt","types":["Électrik","Dragon"]},{"id":881,"name":"Galvagla","nameEn":"Arctozolt","types":["Électrik","Glace"]},{"id":882,"name":"Hydragon","nameEn":"Dracovish","types":["Eau","Dragon"]},{"id":883,"name":"Hydragla","nameEn":"Arctovish","types":["Eau","Glace"]},{"id":884,"name":"Duralugon","nameEn":"Duraludon","types":["Acier","Dragon"]},{"id":885,"name":"Fantyrm","nameEn":"Dreepy","types":["Dragon","Spectre"]},{"id":886,"name":"Dispareptil","nameEn":"Drakloak","types":["Dragon","Spectre"]},{"id":887,"name":"Lanssorien","nameEn":"Dragapult","types":["Dragon","Spectre"]},{"id":888,"name":"Zacian","nameEn":"Zacian","types":["Fée"]},{"id":889,"name":"Zamazenta","nameEn":"Zamazenta","types":["Combat"]},{"id":890,"name":"Éthernatos","nameEn":"Eternatus","types":["Poison","Dragon"]},{"id":891,"name":"Wushours","nameEn":"Kubfu","types":["Combat"]},{"id":892,"name":"Shifours","nameEn":"Urshifu","types":["Combat","Ténèbres"]},{"id":893,"name":"Zarude","nameEn":"Zarude","types":["Ténèbres","Plante"]},{"id":894,"name":"Regieleki","nameEn":"Regieleki","types":["Électrik"]},{"id":895,"name":"Regidrago","nameEn":"Regidrago","types":["Dragon"]},{"id":896,"name":"Blizzeval","nameEn":"Glastrier","types":["Glace"]},{"id":897,"name":"Spectreval","nameEn":"Spectrier","types":["Spectre"]},{"id":898,"name":"Sylveroy","nameEn":"Calyrex","types":["Psy","Plante"]},{"id":899,"name":"Cerbyllin","nameEn":"Wyrdeer","types":["Normal","Psy"]},{"id":900,"name":"Hachécateur","nameEn":"Kleavor","types":["Insecte","Roche"]},{"id":901,"name":"Ursaking","nameEn":"Ursaluna","types":["Sol","Normal"]},{"id":902,"name":"Paragruel","nameEn":"Basculegion","types":["Eau","Spectre"]},{"id":903,"name":"Farfurex","nameEn":"Sneasler","types":["Combat","Poison"]},{"id":904,"name":"Qwilpik","nameEn":"Overqwil","types":["Ténèbres","Poison"]},{"id":905,"name":"Amovénus","nameEn":"Enamorus","types":["Fée","Vol"]},{"id":906,"name":"Poussacha","nameEn":"Sprigatito","types":["Plante"]},{"id":907,"name":"Matourgeon","nameEn":"Floragato","types":["Plante"]},{"id":908,"name":"Miascarade","nameEn":"Meowscarada","types":["Plante","Ténèbres"]},{"id":909,"name":"Chochodile","nameEn":"Fuecoco","types":["Feu"]},{"id":910,"name":"Crocogril","nameEn":"Crocalor","types":["Feu"]},{"id":911,"name":"Flâmigator","nameEn":"Skeledirge","types":["Feu","Spectre"]},{"id":912,"name":"Coiffeton","nameEn":"Quaxly","types":["Eau"]},{"id":913,"name":"Canarbello","nameEn":"Quaxwell","types":["Eau"]},{"id":914,"name":"Palmaval","nameEn":"Quaquaval","types":["Eau","Combat"]},{"id":915,"name":"Gourmelet","nameEn":"Lechonk","types":["Normal"]},{"id":916,"name":"Fragroin","nameEn":"Oinkologne","types":["Normal"]},{"id":917,"name":"Tissenboule","nameEn":"Tarountula","types":["Insecte"]},{"id":918,"name":"Filentrappe","nameEn":"Spidops","types":["Insecte"]},{"id":919,"name":"Lilliterelle","nameEn":"Nymble","types":["Insecte"]},{"id":920,"name":"Gambex","nameEn":"Lokix","types":["Insecte","Ténèbres"]},{"id":921,"name":"Pohm","nameEn":"Pawmi","types":["Électrik"]},{"id":922,"name":"Pohmotte","nameEn":"Pawmo","types":["Électrik","Combat"]},{"id":923,"name":"Pohmarmotte","nameEn":"Pawmot","types":["Électrik","Combat"]},{"id":924,"name":"Compagnol","nameEn":"Tandemaus","types":["Normal"]},{"id":925,"name":"Famignol","nameEn":"Maushold","types":["Normal"]},{"id":926,"name":"Pâtachiot","nameEn":"Fidough","types":["Fée"]},{"id":927,"name":"Briochien","nameEn":"Dachsbun","types":["Fée"]},{"id":928,"name":"Olivini","nameEn":"Smoliv","types":["Plante","Normal"]},{"id":929,"name":"Olivado","nameEn":"Dolliv","types":["Plante","Normal"]},{"id":930,"name":"Arboliva","nameEn":"Arboliva","types":["Plante","Normal"]},{"id":931,"name":"Tapatoès","nameEn":"Squawkabilly","types":["Normal","Vol"]},{"id":932,"name":"Selutin","nameEn":"Nacli","types":["Roche"]},{"id":933,"name":"Amassel","nameEn":"Naclstack","types":["Roche"]},{"id":934,"name":"Gigansel","nameEn":"Garganacl","types":["Roche"]},{"id":935,"name":"Charbambin","nameEn":"Charcadet","types":["Feu"]},{"id":936,"name":"Carmadura","nameEn":"Armarouge","types":["Feu","Psy"]},{"id":937,"name":"Malvalame","nameEn":"Ceruledge","types":["Feu","Spectre"]},{"id":938,"name":"Têtampoule","nameEn":"Tadbulb","types":["Électrik"]},{"id":939,"name":"Ampibidou","nameEn":"Bellibolt","types":["Électrik"]},{"id":940,"name":"Zapétrel","nameEn":"Wattrel","types":["Électrik","Vol"]},{"id":941,"name":"Fulgulairo","nameEn":"Kilowattrel","types":["Électrik","Vol"]},{"id":942,"name":"Grondogue","nameEn":"Maschiff","types":["Ténèbres"]},{"id":943,"name":"Dogrino","nameEn":"Mabosstiff","types":["Ténèbres"]},{"id":944,"name":"Gribouraigne","nameEn":"Shroodle","types":["Poison","Normal"]},{"id":945,"name":"Tag-Tag","nameEn":"Grafaiai","types":["Poison","Normal"]},{"id":946,"name":"Virovent","nameEn":"Bramblin","types":["Plante","Spectre"]},{"id":947,"name":"Virevorreur","nameEn":"Brambleghast","types":["Plante","Spectre"]},{"id":948,"name":"Terracool","nameEn":"Toedscool","types":["Sol","Plante"]},{"id":949,"name":"Terracruel","nameEn":"Toedscruel","types":["Sol","Plante"]},{"id":950,"name":"Craparoi","nameEn":"Klawf","types":["Roche"]},{"id":951,"name":"Pimito","nameEn":"Capsakid","types":["Plante"]},{"id":952,"name":"Scovilain","nameEn":"Scovillain","types":["Plante","Feu"]},{"id":953,"name":"Léboulérou","nameEn":"Rellor","types":["Insecte"]},{"id":954,"name":"Bérasca","nameEn":"Rabsca","types":["Insecte","Psy"]},{"id":955,"name":"Flotillon","nameEn":"Flittle","types":["Psy"]},{"id":956,"name":"Cléopsytra","nameEn":"Espathra","types":["Psy"]},{"id":957,"name":"Forgerette","nameEn":"Tinkatink","types":["Fée","Acier"]},{"id":958,"name":"Forgella","nameEn":"Tinkatuff","types":["Fée","Acier"]},{"id":959,"name":"Forgelina","nameEn":"Tinkaton","types":["Fée","Acier"]},{"id":960,"name":"Taupikeau","nameEn":"Wiglett","types":["Eau"]},{"id":961,"name":"Triopikeau","nameEn":"Wugtrio","types":["Eau"]},{"id":962,"name":"Lestombaile","nameEn":"Bombirdier","types":["Vol","Ténèbres"]},{"id":963,"name":"Dofin","nameEn":"Finizen","types":["Eau"]},{"id":964,"name":"Superdofin","nameEn":"Palafin","types":["Eau"]},{"id":965,"name":"Vrombi","nameEn":"Varoom","types":["Acier","Poison"]},{"id":966,"name":"Vrombotor","nameEn":"Revavroom","types":["Acier","Poison"]},{"id":967,"name":"Motorizard","nameEn":"Cyclizar","types":["Dragon","Normal"]},{"id":968,"name":"Ferdeter","nameEn":"Orthworm","types":["Acier"]},{"id":969,"name":"Germéclat","nameEn":"Glimmet","types":["Roche","Poison"]},{"id":970,"name":"Floréclat","nameEn":"Glimmora","types":["Roche","Poison"]},{"id":971,"name":"Toutombe","nameEn":"Greavard","types":["Spectre"]},{"id":972,"name":"Tomberro","nameEn":"Houndstone","types":["Spectre"]},{"id":973,"name":"Flamenroule","nameEn":"Flamigo","types":["Vol","Combat"]},{"id":974,"name":"Piétacé","nameEn":"Cetoddle","types":["Glace"]},{"id":975,"name":"Balbalèze","nameEn":"Cetitan","types":["Glace"]},{"id":976,"name":"Délestin","nameEn":"Veluza","types":["Eau","Psy"]},{"id":977,"name":"Oyacata","nameEn":"Dondozo","types":["Eau"]},{"id":978,"name":"Nigirigon","nameEn":"Tatsugiri","types":["Dragon","Eau"]},{"id":979,"name":"Courrousinge","nameEn":"Annihilape","types":["Combat","Spectre"]},{"id":980,"name":"Terraiste","nameEn":"Clodsire","types":["Poison","Sol"]},{"id":981,"name":"Farigiraf","nameEn":"Farigiraf","types":["Normal","Psy"]},{"id":982,"name":"Deusolourdo","nameEn":"Dudunsparce","types":["Normal"]},{"id":983,"name":"Scalpereur","nameEn":"Kingambit","types":["Ténèbres","Acier"]},{"id":984,"name":"Fort-Ivoire","nameEn":"Great Tusk","types":["Sol","Combat"]},{"id":985,"name":"Hurle-Queue","nameEn":"Scream Tail","types":["Fée","Psy"]},{"id":986,"name":"Fongus-Furie","nameEn":"Brute Bonnet","types":["Plante","Ténèbres"]},{"id":987,"name":"Flotte-Mèche","nameEn":"Flutter Mane","types":["Spectre","Fée"]},{"id":988,"name":"Rampe-Ailes","nameEn":"Slither Wing","types":["Insecte","Combat"]},{"id":989,"name":"Pelage-Sablé","nameEn":"Sandy Shocks","types":["Électrik","Sol"]},{"id":990,"name":"Roue-de-Fer","nameEn":"Iron Treads","types":["Sol","Acier"]},{"id":991,"name":"Hotte-de-Fer","nameEn":"Iron Bundle","types":["Glace","Eau"]},{"id":992,"name":"Paume-de-Fer","nameEn":"Iron Hands","types":["Combat","Électrik"]},{"id":993,"name":"Têtes-de-Fer","nameEn":"Iron Jugulis","types":["Ténèbres","Vol"]},{"id":994,"name":"Mite-de-Fer","nameEn":"Iron Moth","types":["Feu","Poison"]},{"id":995,"name":"Épine-de-Fer","nameEn":"Iron Thorns","types":["Roche","Électrik"]},{"id":996,"name":"Frigodo","nameEn":"Frigibax","types":["Dragon","Glace"]},{"id":997,"name":"Cryodo","nameEn":"Arctibax","types":["Dragon","Glace"]},{"id":998,"name":"Glaivodo","nameEn":"Baxcalibur","types":["Dragon","Glace"]},{"id":999,"name":"Mordudor","nameEn":"Gimmighoul","types":["Spectre"]},{"id":1000,"name":"Gromago","nameEn":"Gholdengo","types":["Acier","Spectre"]},{"id":1001,"name":"Chongjian","nameEn":"Wo-Chien","types":["Ténèbres","Plante"]},{"id":1002,"name":"Baojian","nameEn":"Chien-Pao","types":["Ténèbres","Glace"]},{"id":1003,"name":"Dinglu","nameEn":"Ting-Lu","types":["Ténèbres","Sol"]},{"id":1004,"name":"Yuyu","nameEn":"Chi-Yu","types":["Ténèbres","Feu"]},{"id":1005,"name":"Rugit-Lune","nameEn":"Roaring Moon","types":["Dragon","Ténèbres"]},{"id":1006,"name":"Garde-de-Fer","nameEn":"Iron Valiant","types":["Fée","Combat"]},{"id":1007,"name":"Koraidon","nameEn":"Koraidon","types":["Combat","Dragon"]},{"id":1008,"name":"Miraidon","nameEn":"Miraidon","types":["Électrik","Dragon"]},{"id":1009,"name":"Serpente-Eau","nameEn":"Walking Wake","types":["Eau","Dragon"]},{"id":1010,"name":"Vert-de-Fer","nameEn":"Iron Leaves","types":["Plante","Psy"]},{"id":1011,"name":"Pomdramour","nameEn":"Dipplin","types":["Plante","Dragon"]},{"id":1012,"name":"Poltchageist","nameEn":"Poltchageist","types":["Plante","Spectre"]},{"id":1013,"name":"Théffroyable","nameEn":"Sinistcha","types":["Plante","Spectre"]},{"id":1014,"name":"Félicanis","nameEn":"Okidogi","types":["Poison","Combat"]},{"id":1015,"name":"Fortusimia","nameEn":"Munkidori","types":["Poison","Psy"]},{"id":1016,"name":"Favianos","nameEn":"Fezandipiti","types":["Poison","Fée"]},{"id":1017,"name":"Ogerpon","nameEn":"Ogerpon","types":["Plante"]},{"id":1018,"name":"Pondralugon","nameEn":"Archaludon","types":["Acier","Dragon"]},{"id":1019,"name":"Pomdorochi","nameEn":"Hydrapple","types":["Plante","Dragon"]},{"id":1020,"name":"Feu-Perçant","nameEn":"Gouging Fire","types":["Feu","Dragon"]},{"id":1021,"name":"Ire-Foudre","nameEn":"Raging Bolt","types":["Électrik","Dragon"]},{"id":1022,"name":"Roc-de-Fer","nameEn":"Iron Boulder","types":["Roche","Psy"]},{"id":1023,"name":"Chef-de-Fer","nameEn":"Iron Crown","types":["Acier","Psy"]},{"id":1024,"name":"Terapagos","nameEn":"Terapagos","types":["Normal"]},{"id":1025,"name":"Pêchaminus","nameEn":"Pecharunt","types":["Poison","Spectre"]}];
+
+const POKEMON_BY_ID = new Map(POKEMON_DATABASE.map(p => [p.id, p]));
+
+const TYPE_TRANSLATIONS_EN = {
+  "Plante": "Grass",
+  "Poison": "Poison",
+  "Feu": "Fire",
+  "Eau": "Water",
+  "Insecte": "Bug",
+  "Vol": "Flying",
+  "Normal": "Normal",
+  "Électrik": "Electric",
+  "Sol": "Ground",
+  "Fée": "Fairy",
+  "Combat": "Fighting",
+  "Psy": "Psychic",
+  "Roche": "Rock",
+  "Acier": "Steel",
+  "Glace": "Ice",
+  "Spectre": "Ghost",
+  "Dragon": "Dragon",
+  "Ténèbres": "Dark"
+};
 
 const GENERATIONS = [
-  { id: "all", name: "Toutes les générations", min: 1, max: 1025 },
-  { id: "gen1", name: "Gen 1 (Kanto #001 - #151)", min: 1, max: 151 },
-  { id: "gen2", name: "Gen 2 (Johto #152 - #251)", min: 152, max: 251 },
-  { id: "gen3", name: "Gen 3 (Hoenn #252 - #386)", min: 252, max: 386 },
-  { id: "gen4", name: "Gen 4 (Sinnoh #387 - #493)", min: 387, max: 493 },
-  { id: "gen5", name: "Gen 5 (Unys #494 - #649)", min: 494, max: 649 },
-  { id: "gen6", name: "Gen 6 (Kalos #650 - #721)", min: 650, max: 721 },
-  { id: "gen7", name: "Gen 7 (Alola #722 - #809)", min: 722, max: 809 },
-  { id: "gen8", name: "Gen 8 (Galar #810 - #905)", min: 810, max: 905 },
-  { id: "gen9", name: "Gen 9 (Paldea #906 - #1025)", min: 906, max: 1025 }
+  { id: "all", nameFr: "Toutes les générations", nameEn: "All Generations", min: 1, max: 1025 },
+  { id: "gen1", nameFr: "Gen 1 (Kanto #001 - #151)", nameEn: "Gen 1 (Kanto #001 - #151)", min: 1, max: 151 },
+  { id: "gen2", nameFr: "Gen 2 (Johto #152 - #251)", nameEn: "Gen 2 (Johto #152 - #251)", min: 152, max: 251 },
+  { id: "gen3", nameFr: "Gen 3 (Hoenn #252 - #386)", nameEn: "Gen 3 (Hoenn #252 - #386)", min: 252, max: 386 },
+  { id: "gen4", nameFr: "Gen 4 (Sinnoh #387 - #493)", nameEn: "Gen 4 (Sinnoh #387 - #493)", min: 387, max: 493 },
+  { id: "gen5", nameFr: "Gen 5 (Unys #494 - #649)", nameEn: "Gen 5 (Unova #494 - #649)", min: 494, max: 649 },
+  { id: "gen6", nameFr: "Gen 6 (Kalos #650 - #721)", nameEn: "Gen 6 (Kalos #650 - #721)", min: 650, max: 721 },
+  { id: "gen7", nameFr: "Gen 7 (Alola #722 - #809)", nameEn: "Gen 7 (Alola #722 - #809)", min: 722, max: 809 },
+  { id: "gen8", nameFr: "Gen 8 (Galar #810 - #905)", nameEn: "Gen 8 (Galar #810 - #905)", min: 810, max: 905 },
+  { id: "gen9", nameFr: "Gen 9 (Paldea #906 - #1025)", nameEn: "Gen 9 (Paldea #906 - #1025)", min: 906, max: 1025 }
 ];
+
+const I18N = {
+  fr: {
+    ribbonOpenPokedex: "Ouvrir le Pokédex",
+    cmdOpenPokedex: "Ouvrir le Pokédex",
+    cmdDownloadSprites: "Télécharger les 2050 sprites Pokémon (Hors-Ligne)",
+    cmdTestEncounter: "Tester une apparition de Pokémon",
+    cmdTestShiny: "Tester une apparition de Pokémon Shiny",
+    activeNoteFile: "Note active.md",
+    activeNoteTitle: "Note active",
+    testNoteFile: "Note de test.md",
+    testNoteTitle: "Note de test",
+    noticeDownloadInProgress: "⏳ Un téléchargement de sprites est déjà en cours...",
+    noticeFsError: "❌ Impossible d'accéder au système de fichiers d'Obsidian.",
+    noticeDownloadStart: "📥 Début du téléchargement des 2050 sprites Pokémon...",
+    noticeDownloadPaused: "⏸️ Téléchargement interrompu ({ready}/{total} sprites prêts). Vous pourrez reprendre à tout moment.",
+    noticeDownloadErrors: "⚠️ Téléchargement terminé avec {failed} erreur(s) ({ready}/{total} sprites installés). Relancez pour compléter.",
+    noticeDownloadComplete: "🎉 Les 2050 sprites Pokémon (Normaux + Shiny) sont installés en local !",
+    noticeCaught: "🎉 {name} #{id}{tags} attrapé !",
+    hudClickTooltip: "Cliquer pour ouvrir le Pokédex",
+    headerTitle: "Pokédex National",
+    headerSubtitle: "1025 Pokémon découverts et capturés au fil de votre écriture dans Obsidian.",
+    bannerTitle: "📦 Pack d'Animations Hors-Ligne (2050 GIFs)",
+    bannerDownloading: "Téléchargement depuis PokéAPI / Showdown en cours : {current} / {total} ({pct}%)...",
+    bannerPauseBtn: "⏸️ Mettre en pause",
+    bannerDesc: "Les GIFs ne sont pas inclus par défaut (droits d'auteur). Téléchargez-les en 1 clic pour un affichage instantané 100% hors-ligne.",
+    bannerResumeBtn: "📥 Reprendre le téléchargement des GIFs",
+    bannerDownloadBtn: "📥 Télécharger les 2050 GIFs",
+    statTotalCaught: "Total Capturés",
+    statUniquePokemon: "Pokémon Uniques",
+    statCompletion: "Complétion Pokédex",
+    statShinyPokemon: "Pokémon Shiny",
+    tabJournal: "📋 Journal des Captures ({count})",
+    tabGrid: "🗂️ Grille Pokédex ({total})",
+    searchPlaceholder: "🔍 Rechercher un Pokémon, une note ou un type...",
+    sortDateDesc: "Date (plus récent)",
+    sortDateAsc: "Date (plus ancien)",
+    sortIdAsc: "N° Pokédex (1 à 1025)",
+    sortNameAsc: "Nom (A - Z)",
+    emptyTitle: "Aucun Pokémon trouvé",
+    emptySearchDesc: "Aucun résultat ne correspond à votre recherche.",
+    emptyInitialDesc: "Écrivez du texte dans vos notes pour commencer à attraper des Pokémon !",
+    thSprite: "Sprite",
+    thName: "N° & Pokémon",
+    thTypes: "Types",
+    thDate: "Date de Capture",
+    thDoc: "Document Source",
+    thActions: "Actions",
+    unknownDate: "Date inconnue",
+    deleteTooltip: "Supprimer cette capture",
+    noticeDeleted: "Supprimé : {name}",
+    normalCountTooltip: "{count} capture(s) normale(s)",
+    shinyCountTooltip: "{count} capture(s) en version Shiny ✨",
+    noticeDocNotFound: "Document introuvable : {path}",
+    modalResetTitle: "Vider tout le Pokédex ?",
+    modalResetDesc: "Voulez-vous vraiment effacer tout votre historique de Pokédex ? Cette action est irréversible.",
+    modalCancelBtn: "Annuler",
+    modalConfirmBtn: "Confirmer la suppression",
+    settingsLangHeading: "Langue / Language",
+    settingsLangName: "Langue de l'interface et des Pokémon",
+    settingsLangDesc: "Choisissez la langue des noms des 1025 Pokémon, des types et de l'interface.",
+    settingsLangAuto: "Automatique (selon la langue d'Obsidian)",
+    settingsSpritesHeading: "Pack d'animations hors-ligne (2050 GIFs)",
+    settingsSpritesInstalledName: "Sprites locaux : Installés",
+    settingsSpritesMissingName: "Sprites locaux : Non installés",
+    settingsSpritesInstalledDesc: "✅ Les 2050 animations GIF (1025 Normaux + 1025 Shiny) sont installées dans le dossier local 'sprites/'.",
+    settingsSpritesMissingDesc: "🌐 Les GIFs ne sont pas fournis avec le plugin (respect des droits d'auteur). Téléchargez-les gratuitement en 1 clic depuis PokéAPI / Showdown pour activer le mode 100% hors-ligne.",
+    settingsProgressLabel: "⏳ Téléchargement en cours : {current} / {total} fichiers ({pct}%)",
+    settingsRepairBtn: "🔄 Vérifier / Réparer les GIFs",
+    settingsResumeBtn: "📥 Reprendre le téléchargement",
+    settingsCatchHeading: "Préférences de capture",
+    settingsFreqName: "Fréquence d'apparition (Caractères)",
+    settingsFreqDesc: "Nombre de caractères à taper dans une note pour faire apparaître et capturer un Pokémon.",
+    settingsPosName: "Position de l'animation d'apparition",
+    settingsPosDesc: "Emplacement de la bannière de capture sur l'écran.",
+    settingsPosRight: "En bas à droite",
+    settingsPosCenter: "En bas au centre",
+    settingsPosLeft: "En bas à gauche",
+    settingsAnimName: "Afficher l'animation de capture",
+    settingsAnimDesc: "Affiche la Pokéball animée et le Pokémon lors de chaque capture.",
+    settingsSoundName: "Effets sonores 8-bit",
+    settingsSoundDesc: "Joue une mélodie rétro 8-bit lors de la capture d'un Pokémon (synthèse audio sans fichier externe).",
+    settingsTestNormalName: "Tester une capture normale",
+    settingsTestNormalDesc: "Déclenche immédiatement une capture de test normale.",
+    settingsTestNormalBtn: "Tester normale",
+    settingsTestShinyName: "Tester une capture Shiny (✨)",
+    settingsTestShinyDesc: "Déclenche immédiatement une capture de test d'un Pokémon Shiny.",
+    settingsTestShinyBtn: "Tester Shiny ✨",
+    settingsDataHeading: "Gestion des données",
+    settingsResetCountName: "Réinitialiser la progression actuelle",
+    settingsResetCountDesc: "Remet le compteur de frappe actuel à zéro.",
+    settingsResetCountBtn: "Remettre à 0",
+    noticeCountReset: "Compteur réinitialisé à 0.",
+    settingsClearAllName: "Vider tout le Pokédex",
+    settingsClearAllDesc: "Attention : supprime définitivement toutes les captures enregistrées.",
+    settingsClearAllBtn: "Vider le Pokédex",
+    noticePokedexCleared: "Pokédex vidé."
+  },
+  en: {
+    ribbonOpenPokedex: "Open Pokédex",
+    cmdOpenPokedex: "Open Pokédex",
+    cmdDownloadSprites: "Download all 2050 Pokémon sprites (Offline Pack)",
+    cmdTestEncounter: "Test a normal Pokémon encounter",
+    cmdTestShiny: "Test a Shiny Pokémon encounter",
+    activeNoteFile: "Active note.md",
+    activeNoteTitle: "Active note",
+    testNoteFile: "Test note.md",
+    testNoteTitle: "Test note",
+    noticeDownloadInProgress: "⏳ Sprite download is already in progress...",
+    noticeFsError: "❌ Unable to access Obsidian file system.",
+    noticeDownloadStart: "📥 Starting download of 2050 Pokémon sprites...",
+    noticeDownloadPaused: "⏸️ Download paused ({ready}/{total} sprites ready). You can resume anytime.",
+    noticeDownloadErrors: "⚠️ Download finished with {failed} error(s) ({ready}/{total} sprites installed). Run again to complete.",
+    noticeDownloadComplete: "🎉 All 2050 Pokémon sprites (Normal + Shiny) are now installed locally!",
+    noticeCaught: "🎉 Caught {name} #{id}{tags}!",
+    hudClickTooltip: "Click to open Pokédex",
+    headerTitle: "National Pokédex",
+    headerSubtitle: "1025 Pokémon discovered and caught as you write in your notes.",
+    bannerTitle: "📦 Offline Animation Pack (2050 GIFs)",
+    bannerDownloading: "Downloading from PokéAPI / Showdown: {current} / {total} ({pct}%)...",
+    bannerPauseBtn: "⏸️ Pause",
+    bannerDesc: "GIFs are not bundled by default (copyright compliance). Download them in 1 click for instant 100% offline display.",
+    bannerResumeBtn: "📥 Resume GIF download",
+    bannerDownloadBtn: "📥 Download 2050 GIFs",
+    statTotalCaught: "Total Caught",
+    statUniquePokemon: "Unique Pokémon",
+    statCompletion: "Pokédex Completion",
+    statShinyPokemon: "Shiny Pokémon",
+    tabJournal: "📋 Catch Log ({count})",
+    tabGrid: "🗂️ Pokédex Grid ({total})",
+    searchPlaceholder: "🔍 Search Pokémon, note, or type...",
+    sortDateDesc: "Date (newest first)",
+    sortDateAsc: "Date (oldest first)",
+    sortIdAsc: "Pokédex # (1 to 1025)",
+    sortNameAsc: "Name (A - Z)",
+    emptyTitle: "No Pokémon found",
+    emptySearchDesc: "No results match your search query.",
+    emptyInitialDesc: "Start typing in your notes to encounter and catch wild Pokémon!",
+    thSprite: "Sprite",
+    thName: "# & Pokémon",
+    thTypes: "Types",
+    thDate: "Caught Date",
+    thDoc: "Source Note",
+    thActions: "Actions",
+    unknownDate: "Unknown date",
+    deleteTooltip: "Delete this catch",
+    noticeDeleted: "Deleted: {name}",
+    normalCountTooltip: "{count} normal catch(es)",
+    shinyCountTooltip: "{count} Shiny ✨ catch(es)",
+    noticeDocNotFound: "Note not found: {path}",
+    modalResetTitle: "Clear entire Pokédex?",
+    modalResetDesc: "Are you sure you want to permanently delete your entire Pokédex catch history? This cannot be undone.",
+    modalCancelBtn: "Cancel",
+    modalConfirmBtn: "Confirm deletion",
+    settingsLangHeading: "Language / Langue",
+    settingsLangName: "Interface & Pokémon language",
+    settingsLangDesc: "Choose the display language for all 1025 Pokémon names, types, and the plugin interface.",
+    settingsLangAuto: "Automatic (match Obsidian language)",
+    settingsSpritesHeading: "Offline animation pack (2050 GIFs)",
+    settingsSpritesInstalledName: "Local sprites: Installed",
+    settingsSpritesMissingName: "Local sprites: Not installed",
+    settingsSpritesInstalledDesc: "✅ All 2050 animated GIFs (1025 Normal + 1025 Shiny) are installed in the local 'sprites/' folder.",
+    settingsSpritesMissingDesc: "🌐 GIFs are not bundled with the plugin (copyright compliance). Download them for free in 1 click from PokéAPI / Showdown to enable 100% offline mode.",
+    settingsProgressLabel: "⏳ Downloading: {current} / {total} files ({pct}%)",
+    settingsRepairBtn: "🔄 Verify / Repair GIFs",
+    settingsResumeBtn: "📥 Resume download",
+    settingsCatchHeading: "Catch preferences",
+    settingsFreqName: "Encounter frequency (Characters)",
+    settingsFreqDesc: "Number of characters to type in a note to trigger a wild Pokémon encounter and catch.",
+    settingsPosName: "Encounter animation position",
+    settingsPosDesc: "Screen position of the minimalist catch HUD banner.",
+    settingsPosRight: "Bottom right",
+    settingsPosCenter: "Bottom center",
+    settingsPosLeft: "Bottom left",
+    settingsAnimName: "Show catch animation",
+    settingsAnimDesc: "Display the animated Pokéball and Pokémon during each catch.",
+    settingsSoundName: "8-bit sound effects",
+    settingsSoundDesc: "Play a retro 8-bit victory jingle when catching a Pokémon (synthesized Web Audio, no external files).",
+    settingsTestNormalName: "Test normal catch",
+    settingsTestNormalDesc: "Immediately trigger a test normal Pokémon catch.",
+    settingsTestNormalBtn: "Test normal",
+    settingsTestShinyName: "Test Shiny catch (✨)",
+    settingsTestShinyDesc: "Immediately trigger a test Shiny Pokémon catch.",
+    settingsTestShinyBtn: "Test Shiny ✨",
+    settingsDataHeading: "Data management",
+    settingsResetCountName: "Reset current keystroke counter",
+    settingsResetCountDesc: "Reset the current typing progress counter back to zero.",
+    settingsResetCountBtn: "Reset to 0",
+    noticeCountReset: "Counter reset to 0.",
+    settingsClearAllName: "Clear entire Pokédex",
+    settingsClearAllDesc: "Warning: permanently deletes all recorded Pokémon catches.",
+    settingsClearAllBtn: "Clear Pokédex",
+    noticePokedexCleared: "Pokédex cleared."
+  }
+};
 
 function playCatchSound() {
   try {
@@ -102,20 +321,20 @@ class PokemonPokedexPlugin extends Plugin {
     );
 
     // Add ribbon icon
-    this.addRibbonIcon("pokeball", "Ouvrir le Pokédex", () => {
+    this.addRibbonIcon("pokeball", this.t("ribbonOpenPokedex"), () => {
       this.activatePokedexView();
     });
 
     // Add Command Palette commands
     this.addCommand({
       id: "open-pokedex",
-      name: "Ouvrir le Pokédex",
+      name: this.t("cmdOpenPokedex"),
       callback: () => this.activatePokedexView()
     });
 
     this.addCommand({
       id: "download-pokemon-sprites",
-      name: "Télécharger les 2050 sprites Pokémon (Hors-Ligne)",
+      name: this.t("cmdDownloadSprites"),
       callback: () => {
         this.downloadAllSprites();
       }
@@ -123,22 +342,22 @@ class PokemonPokedexPlugin extends Plugin {
 
     this.addCommand({
       id: "test-encounter-pokemon",
-      name: "Tester une apparition de Pokémon",
+      name: this.t("cmdTestEncounter"),
       callback: () => {
         const activeFile = this.app.workspace.getActiveFile();
-        const docPath = activeFile ? activeFile.path : "Note active.md";
-        const docTitle = activeFile ? activeFile.basename : "Note active";
+        const docPath = activeFile ? activeFile.path : this.t("activeNoteFile");
+        const docTitle = activeFile ? activeFile.basename : this.t("activeNoteTitle");
         this.triggerEncounter(docPath, docTitle, false);
       }
     });
 
     this.addCommand({
       id: "test-shiny-pokemon",
-      name: "Tester une apparition de Pokémon Shiny",
+      name: this.t("cmdTestShiny"),
       callback: () => {
         const activeFile = this.app.workspace.getActiveFile();
-        const docPath = activeFile ? activeFile.path : "Note active.md";
-        const docTitle = activeFile ? activeFile.basename : "Note active";
+        const docPath = activeFile ? activeFile.path : this.t("activeNoteFile");
+        const docTitle = activeFile ? activeFile.basename : this.t("activeNoteTitle");
         this.triggerEncounter(docPath, docTitle, true);
       }
     });
@@ -162,6 +381,43 @@ class PokemonPokedexPlugin extends Plugin {
     if (this.currentNotificationEl && this.currentNotificationEl.parentNode) {
       this.currentNotificationEl.parentNode.removeChild(this.currentNotificationEl);
     }
+  }
+
+  getLang() {
+    const pref = this.settings && this.settings.language ? this.settings.language : "auto";
+    if (pref === "fr" || pref === "en") return pref;
+    try {
+      const obsLang = window.localStorage ? window.localStorage.getItem("language") : "";
+      if (obsLang && obsLang.toLowerCase().startsWith("fr")) return "fr";
+      if (obsLang && obsLang.length > 0) return "en";
+      if (navigator.language && navigator.language.toLowerCase().startsWith("fr")) return "fr";
+    } catch (e) {
+      // Fallback below
+    }
+    return "en";
+  }
+
+  t(key, vars = {}) {
+    const lang = this.getLang();
+    const dict = I18N[lang] || I18N.en;
+    let str = dict[key] !== undefined ? dict[key] : (I18N.en[key] || key);
+    Object.keys(vars).forEach(k => {
+      str = str.replace(new RegExp(`\\{${k}\\}`, "g"), String(vars[k]));
+    });
+    return str;
+  }
+
+  getPokemonName(pkmOrId, fallbackName = "") {
+    const pkm = typeof pkmOrId === "number" ? POKEMON_BY_ID.get(pkmOrId) : pkmOrId;
+    if (!pkm) return fallbackName;
+    return this.getLang() === "en" ? (pkm.nameEn || pkm.name) : pkm.name;
+  }
+
+  getTypeName(typeFr) {
+    if (this.getLang() === "en") {
+      return TYPE_TRANSLATIONS_EN[typeFr] || typeFr;
+    }
+    return typeFr;
   }
 
   getPluginDir() {
@@ -252,18 +508,18 @@ class PokemonPokedexPlugin extends Plugin {
     if (resFallback && resFallback.status === 200 && resFallback.arrayBuffer && resFallback.arrayBuffer.byteLength > 0) {
       return resFallback.arrayBuffer;
     }
-    throw new Error(`Impossible de télécharger le sprite #${pokemonId}`);
+    throw new Error(`Failed to download sprite #${pokemonId}`);
   }
 
   async downloadAllSprites(onProgress = null, forceRedownload = false) {
     if (this.isDownloadingSprites) {
-      new Notice("⏳ Un téléchargement de sprites est déjà en cours...");
+      new Notice(this.t("noticeDownloadInProgress"));
       return;
     }
 
     const adapter = this.app && this.app.vault ? this.app.vault.adapter : null;
     if (!adapter || typeof adapter.writeBinary !== "function") {
-      new Notice("❌ Impossible d'accéder au système de fichiers d'Obsidian.");
+      new Notice(this.t("noticeFsError"));
       return;
     }
 
@@ -282,7 +538,7 @@ class PokemonPokedexPlugin extends Plugin {
         await adapter.mkdir(shinyDir);
       }
     } catch (err) {
-      console.error("[Pokédex] Erreur création dossier sprites :", err);
+      // Directory may already exist
     }
 
     const tasks = [];
@@ -297,7 +553,7 @@ class PokemonPokedexPlugin extends Plugin {
     let currentIndex = 0;
     this.downloadProgress = { current: 0, total, failed: 0 };
 
-    new Notice("📥 Début du téléchargement des 2050 sprites Pokémon...");
+    new Notice(this.t("noticeDownloadStart"));
     this.notifyViewsToRefresh();
 
     const notifyProgress = () => {
@@ -348,11 +604,11 @@ class PokemonPokedexPlugin extends Plugin {
     this.notifyViewsToRefresh();
 
     if (wasCancelled) {
-      new Notice(`⏸️ Téléchargement interrompu (${completed - failed}/${total} sprites prêts). Vous pourrez reprendre à tout moment.`);
+      new Notice(this.t("noticeDownloadPaused", { ready: completed - failed, total }));
     } else if (failed > 0) {
-      new Notice(`⚠️ Téléchargement terminé avec ${failed} erreur(s) (${completed - failed}/${total} sprites installés). Relancez pour compléter.`);
+      new Notice(this.t("noticeDownloadErrors", { failed, ready: completed - failed, total }));
     } else {
-      new Notice("🎉 Les 2050 sprites Pokémon (Normaux + Shiny) sont installés en local !");
+      new Notice(this.t("noticeDownloadComplete"));
     }
   }
 
@@ -424,8 +680,8 @@ class PokemonPokedexPlugin extends Plugin {
       this.settings.currentKeystrokeCount = overflow;
 
       const activeFile = this.app.workspace.getActiveFile();
-      const docPath = activeFile ? activeFile.path : "Note active.md";
-      const docTitle = activeFile ? activeFile.basename : "Note active";
+      const docPath = activeFile ? activeFile.path : this.t("activeNoteFile");
+      const docTitle = activeFile ? activeFile.basename : this.t("activeNoteTitle");
 
       this.triggerEncounter(docPath, docTitle, false);
     } else {
@@ -446,19 +702,24 @@ class PokemonPokedexPlugin extends Plugin {
     const isShiny = forceShiny ? true : (Math.random() < (this.settings.shinyRate || 0.02));
 
     const now = new Date();
-    const formattedDate = now.toLocaleDateString("fr-FR", {
+    const isEn = this.getLang() === "en";
+    const locale = isEn ? "en-US" : "fr-FR";
+    const sep = isEn ? " at " : " à ";
+    const formattedDate = now.toLocaleDateString(locale, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric"
-    }) + " à " + now.toLocaleTimeString("fr-FR", {
+    }) + sep + now.toLocaleTimeString(locale, {
       hour: "2-digit",
       minute: "2-digit"
     });
 
+    const displayName = this.getPokemonName(pkm);
+
     const catchEntry = {
       uid: Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
       pokemonId: pkm.id,
-      pokemonName: pkm.name,
+      pokemonName: displayName,
       types: pkm.types,
       isShiny: isShiny,
       caughtAt: formattedDate,
@@ -474,7 +735,11 @@ class PokemonPokedexPlugin extends Plugin {
       this.showBottomEncounterAnimation(pkm, isShiny, isNew);
     } else {
       const tagText = (isNew && isShiny) ? " [N][S]" : isNew ? " [N]" : isShiny ? " [S]" : "";
-      new Notice(`🎉 ${pkm.name} #${String(pkm.id).padStart(3, "0")}${tagText} attrapé !`);
+      new Notice(this.t("noticeCaught", {
+        name: displayName,
+        id: String(pkm.id).padStart(3, "0"),
+        tags: tagText
+      }));
     }
   }
 
@@ -483,13 +748,15 @@ class PokemonPokedexPlugin extends Plugin {
       this.currentNotificationEl.parentNode.removeChild(this.currentNotificationEl);
     }
 
+    const displayName = this.getPokemonName(pkm);
+
     const container = document.createElement("div");
     container.className = `pokemon-encounter-container ${this.settings.notificationPosition}`;
     this.currentNotificationEl = container;
 
     const card = container.createDiv({
       cls: "pokemon-encounter-card",
-      attr: { title: "Cliquer pour ouvrir le Pokédex" }
+      attr: { title: this.t("hudClickTooltip") }
     });
 
     const stage = card.createDiv({ cls: "pokemon-encounter-stage" });
@@ -497,7 +764,7 @@ class PokemonPokedexPlugin extends Plugin {
     const spriteWrap = stage.createDiv({ cls: "pokemon-stage-sprite-wrap" });
     const spriteImg = spriteWrap.createEl("img", {
       cls: "pokemon-stage-sprite",
-      attr: { alt: pkm.name }
+      attr: { alt: displayName }
     });
     this.applySpriteWithFallback(spriteImg, pkm.id, isShiny);
     spriteWrap.createDiv({ cls: "pokemon-stage-shadow" });
@@ -523,7 +790,7 @@ class PokemonPokedexPlugin extends Plugin {
     const footer = card.createDiv({ cls: "pokemon-mini-footer" });
     footer.createSpan({
       cls: "pokemon-mini-name",
-      text: `${pkm.name} #${String(pkm.id).padStart(3, "0")}`
+      text: `${displayName} #${String(pkm.id).padStart(3, "0")}`
     });
 
     if (isNew || isShiny) {
@@ -675,8 +942,8 @@ class PokedexView extends ItemView {
     setIcon(iconWrapper, "pokeball");
 
     const titleText = titleGroup.createDiv({ cls: "pokedex-title-text" });
-    titleText.createEl("h1", { text: "Pokédex National" });
-    titleText.createEl("p", { text: "1025 Pokémon découverts et capturés au fil de votre écriture dans Obsidian." });
+    titleText.createEl("h1", { text: this.plugin.t("headerTitle") });
+    titleText.createEl("p", { text: this.plugin.t("headerSubtitle") });
   }
 
   renderDownloadBanner(container) {
@@ -695,13 +962,13 @@ class PokedexView extends ItemView {
     this.downloadBannerEl.style.display = "flex";
 
     const infoDiv = this.downloadBannerEl.createDiv({ cls: "pokedex-sprites-banner-info" });
-    infoDiv.createEl("strong", { text: "📦 Pack d'Animations Hors-Ligne (2050 GIFs)" });
+    infoDiv.createEl("strong", { text: this.plugin.t("bannerTitle") });
 
     if (this.plugin.isDownloadingSprites) {
       const { current, total } = this.plugin.downloadProgress;
       const pct = total > 0 ? Math.round((current / total) * 100) : 0;
       infoDiv.createEl("span", {
-        text: `Téléchargement depuis PokéAPI / Showdown en cours : ${current} / ${total} (${pct}%)...`
+        text: this.plugin.t("bannerDownloading", { current, total, pct })
       });
 
       const progressWrap = infoDiv.createDiv({ cls: "pokedex-progress-bar-wrap" });
@@ -711,20 +978,20 @@ class PokedexView extends ItemView {
       const actionsDiv = this.downloadBannerEl.createDiv({ cls: "pokedex-sprites-banner-actions" });
       const cancelBtn = actionsDiv.createEl("button", {
         cls: "pokedex-btn-secondary",
-        text: "⏸️ Mettre en pause"
+        text: this.plugin.t("bannerPauseBtn")
       });
       cancelBtn.addEventListener("click", () => {
         this.plugin.cancelSpriteDownload = true;
       });
     } else {
       infoDiv.createEl("span", {
-        text: "Les GIFs ne sont pas inclus par défaut (droits d'auteur). Téléchargez-les en 1 clic pour un affichage instantané 100% hors-ligne."
+        text: this.plugin.t("bannerDesc")
       });
 
       const actionsDiv = this.downloadBannerEl.createDiv({ cls: "pokedex-sprites-banner-actions" });
       const dlBtn = actionsDiv.createEl("button", {
         cls: "mod-cta pokedex-btn-download",
-        text: this.plugin.hasAnyLocalSprite ? "📥 Reprendre le téléchargement des GIFs" : "📥 Télécharger les 2050 GIFs"
+        text: this.plugin.hasAnyLocalSprite ? this.plugin.t("bannerResumeBtn") : this.plugin.t("bannerDownloadBtn")
       });
       dlBtn.addEventListener("click", () => {
         this.plugin.downloadAllSprites();
@@ -742,10 +1009,10 @@ class PokedexView extends ItemView {
     const completionPercent = ((uniqueCount / TOTAL_POKEMON) * 100).toFixed(1);
 
     const stats = [
-      { label: "Total Capturés", value: totalCaught },
-      { label: "Pokémon Uniques", value: `${uniqueCount} / ${TOTAL_POKEMON}` },
-      { label: "Complétion Pokédex", value: `${completionPercent}%` },
-      { label: "Pokémon Shiny", value: shinyCount }
+      { label: this.plugin.t("statTotalCaught"), value: totalCaught },
+      { label: this.plugin.t("statUniquePokemon"), value: `${uniqueCount} / ${TOTAL_POKEMON}` },
+      { label: this.plugin.t("statCompletion"), value: `${completionPercent}%` },
+      { label: this.plugin.t("statShinyPokemon"), value: shinyCount }
     ];
 
     stats.forEach(s => {
@@ -762,7 +1029,7 @@ class PokedexView extends ItemView {
     
     const journalBtn = tabs.createEl("button", {
       cls: `pokedex-tab-btn ${this.activeTab === "journal" ? "active" : ""}`,
-      text: `📋 Journal des Captures (${this.plugin.catches.length})`
+      text: this.plugin.t("tabJournal", { count: this.plugin.catches.length })
     });
     journalBtn.addEventListener("click", () => {
       this.activeTab = "journal";
@@ -771,7 +1038,7 @@ class PokedexView extends ItemView {
 
     const gridBtn = tabs.createEl("button", {
       cls: `pokedex-tab-btn ${this.activeTab === "grid" ? "active" : ""}`,
-      text: `🗂️ Grille Pokédex (${TOTAL_POKEMON})`
+      text: this.plugin.t("tabGrid", { total: TOTAL_POKEMON })
     });
     gridBtn.addEventListener("click", () => {
       this.activeTab = "grid";
@@ -782,8 +1049,12 @@ class PokedexView extends ItemView {
     // Generation Selector (when in grid)
     if (this.activeTab === "grid") {
       const genSelect = navBar.createEl("select", { cls: "dropdown pokedex-gen-select" });
+      const isEn = this.plugin.getLang() === "en";
       GENERATIONS.forEach(g => {
-        const opt = genSelect.createEl("option", { value: g.id, text: g.name });
+        const opt = genSelect.createEl("option", {
+          value: g.id,
+          text: isEn ? g.nameEn : g.nameFr
+        });
         if (g.id === this.selectedGen) opt.selected = true;
       });
       genSelect.addEventListener("change", (e) => {
@@ -797,7 +1068,7 @@ class PokedexView extends ItemView {
     const searchInput = searchBox.createEl("input", {
       cls: "pokedex-search-input",
       type: "text",
-      placeholder: "🔍 Rechercher un Pokémon, une note ou un type..."
+      placeholder: this.plugin.t("searchPlaceholder")
     });
     searchInput.value = this.searchQuery;
     searchInput.addEventListener("input", (e) => {
@@ -809,10 +1080,10 @@ class PokedexView extends ItemView {
     if (this.activeTab === "journal") {
       const sortSelect = navBar.createEl("select", { cls: "dropdown" });
       const sortOptions = [
-        { value: "date-desc", text: "Date (plus récent)" },
-        { value: "date-asc", text: "Date (plus ancien)" },
-        { value: "id-asc", text: "N° Pokédex (1 à 1025)" },
-        { value: "name-asc", text: "Nom (A - Z)" }
+        { value: "date-desc", text: this.plugin.t("sortDateDesc") },
+        { value: "date-asc", text: this.plugin.t("sortDateAsc") },
+        { value: "id-asc", text: this.plugin.t("sortIdAsc") },
+        { value: "name-asc", text: this.plugin.t("sortNameAsc") }
       ];
       sortOptions.forEach(opt => {
         const o = sortSelect.createEl("option", { value: opt.value, text: opt.text });
@@ -831,9 +1102,15 @@ class PokedexView extends ItemView {
     if (this.searchQuery) {
       const q = this.searchQuery;
       list = list.filter(c => {
-        const nameMatch = c.pokemonName.toLowerCase().includes(q);
-        const docMatch = c.documentTitle.toLowerCase().includes(q) || c.documentPath.toLowerCase().includes(q);
-        const typeMatch = Array.isArray(c.types) && c.types.some(t => t.toLowerCase().includes(q));
+        const dbPkm = POKEMON_BY_ID.get(c.pokemonId);
+        const frName = dbPkm ? dbPkm.name.toLowerCase() : (c.pokemonName || "").toLowerCase();
+        const enName = dbPkm && dbPkm.nameEn ? dbPkm.nameEn.toLowerCase() : "";
+        const nameMatch = frName.includes(q) || enName.includes(q) || (c.pokemonName || "").toLowerCase().includes(q);
+        const docMatch = (c.documentTitle || "").toLowerCase().includes(q) || (c.documentPath || "").toLowerCase().includes(q);
+        const typeMatch = Array.isArray(c.types) && c.types.some(t => {
+          const tEn = TYPE_TRANSLATIONS_EN[t] || "";
+          return t.toLowerCase().includes(q) || tEn.toLowerCase().includes(q);
+        });
         const numMatch = String(c.pokemonId).includes(q);
         return nameMatch || docMatch || typeMatch || numMatch;
       });
@@ -843,7 +1120,11 @@ class PokedexView extends ItemView {
       if (this.sortBy === "date-desc") return (b.timestamp || 0) - (a.timestamp || 0);
       if (this.sortBy === "date-asc") return (a.timestamp || 0) - (b.timestamp || 0);
       if (this.sortBy === "id-asc") return a.pokemonId - b.pokemonId;
-      if (this.sortBy === "name-asc") return a.pokemonName.localeCompare(b.pokemonName);
+      if (this.sortBy === "name-asc") {
+        const nameA = this.plugin.getPokemonName(a.pokemonId, a.pokemonName);
+        const nameB = this.plugin.getPokemonName(b.pokemonId, b.pokemonName);
+        return nameA.localeCompare(nameB);
+      }
       return 0;
     });
 
@@ -876,11 +1157,11 @@ class PokedexView extends ItemView {
       const empty = wrapper.createDiv({ cls: "pokedex-empty-state" });
       const icon = empty.createDiv({ cls: "pokedex-empty-icon" });
       setIcon(icon, "pokeball");
-      empty.createEl("h3", { text: "Aucun Pokémon trouvé" });
+      empty.createEl("h3", { text: this.plugin.t("emptyTitle") });
       empty.createEl("p", {
         text: this.searchQuery
-          ? "Aucun résultat ne correspond à votre recherche."
-          : "Écrivez du texte dans vos notes pour commencer à attraper des Pokémon !"
+          ? this.plugin.t("emptySearchDesc")
+          : this.plugin.t("emptyInitialDesc")
       });
       return;
     }
@@ -890,17 +1171,18 @@ class PokedexView extends ItemView {
 
     const thead = table.createEl("thead");
     const headerRow = thead.createEl("tr");
-    headerRow.createEl("th", { text: "Sprite" });
-    headerRow.createEl("th", { text: "N° & Pokémon" });
-    headerRow.createEl("th", { text: "Types" });
-    headerRow.createEl("th", { text: "Date de Capture" });
-    headerRow.createEl("th", { text: "Document Source" });
-    headerRow.createEl("th", { text: "Actions" });
+    headerRow.createEl("th", { text: this.plugin.t("thSprite") });
+    headerRow.createEl("th", { text: this.plugin.t("thName") });
+    headerRow.createEl("th", { text: this.plugin.t("thTypes") });
+    headerRow.createEl("th", { text: this.plugin.t("thDate") });
+    headerRow.createEl("th", { text: this.plugin.t("thDoc") });
+    headerRow.createEl("th", { text: this.plugin.t("thActions") });
 
     const tbody = table.createEl("tbody");
 
     filtered.forEach((entry) => {
       const tr = tbody.createEl("tr");
+      const displayName = this.plugin.getPokemonName(entry.pokemonId, entry.pokemonName);
 
       // 1. Sprite
       const tdSprite = tr.createEl("td");
@@ -908,7 +1190,7 @@ class PokedexView extends ItemView {
         cls: "pokedex-table-sprite"
       });
       this.plugin.applySpriteWithFallback(img, entry.pokemonId, entry.isShiny);
-      img.alt = entry.pokemonName;
+      img.alt = displayName;
 
       // 2. Name & ID
       const tdName = tr.createEl("td");
@@ -917,7 +1199,7 @@ class PokedexView extends ItemView {
         text: `#${String(entry.pokemonId).padStart(3, "0")}`
       });
       const nameDiv = tdName.createDiv({ cls: "pokedex-pkm-name" });
-      nameDiv.createSpan({ text: entry.pokemonName });
+      nameDiv.createSpan({ text: displayName });
       if (entry.isShiny) {
         nameDiv.createSpan({
           cls: "pokemon-mini-tag tag-s",
@@ -932,7 +1214,7 @@ class PokedexView extends ItemView {
           const cleanType = t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
           tdTypes.createSpan({
             cls: `pokemon-type-badge pokemon-type-${cleanType}`,
-            text: t
+            text: this.plugin.getTypeName(t)
           });
         });
       }
@@ -941,7 +1223,7 @@ class PokedexView extends ItemView {
       const tdDate = tr.createEl("td");
       tdDate.createSpan({
         cls: "pokedex-date-badge",
-        text: entry.caughtAt || "Date inconnue"
+        text: entry.caughtAt || this.plugin.t("unknownDate")
       });
 
       // 5. Document Link
@@ -960,14 +1242,14 @@ class PokedexView extends ItemView {
       const delBtn = tdAction.createEl("button", {
         cls: "pokedex-btn-delete",
         text: "🗑️",
-        title: "Supprimer cette capture"
+        title: this.plugin.t("deleteTooltip")
       });
       delBtn.addEventListener("click", async () => {
         const originalIndex = this.plugin.catches.findIndex(c => c.uid === entry.uid);
         if (originalIndex !== -1) {
           this.plugin.catches.splice(originalIndex, 1);
           await this.plugin.savePluginData();
-          new Notice(`Supprimé : ${entry.pokemonName}`);
+          new Notice(this.plugin.t("noticeDeleted", { name: displayName }));
           this.refresh();
         }
       });
@@ -1003,12 +1285,16 @@ class PokedexView extends ItemView {
       const shinyCount = shinyMap[pkm.id] || 0;
       const normalCount = totalCount - shinyCount;
       const isCaught = totalCount > 0;
+      const displayName = this.plugin.getPokemonName(pkm);
 
       if (this.searchQuery) {
         const q = this.searchQuery;
-        const nameMatch = pkm.name.toLowerCase().includes(q);
+        const nameMatch = pkm.name.toLowerCase().includes(q) || (pkm.nameEn && pkm.nameEn.toLowerCase().includes(q));
         const numMatch = String(pkm.id).includes(q);
-        const typeMatch = Array.isArray(pkm.types) && pkm.types.some(t => t.toLowerCase().includes(q));
+        const typeMatch = Array.isArray(pkm.types) && pkm.types.some(t => {
+          const tEn = TYPE_TRANSLATIONS_EN[t] || "";
+          return t.toLowerCase().includes(q) || tEn.toLowerCase().includes(q);
+        });
         if (!nameMatch && !numMatch && !typeMatch) return;
       }
 
@@ -1029,7 +1315,7 @@ class PokedexView extends ItemView {
           badgesWrap.createDiv({
             cls: "pokedex-grid-normal-badge",
             text: `x${normalCount}`,
-            title: `${normalCount} capture(s) normale(s)`
+            title: this.plugin.t("normalCountTooltip", { count: normalCount })
           });
         }
 
@@ -1037,7 +1323,7 @@ class PokedexView extends ItemView {
           badgesWrap.createDiv({
             cls: "pokedex-grid-shiny-badge",
             text: `x${shinyCount}`,
-            title: `${shinyCount} capture(s) en version Shiny ✨`
+            title: this.plugin.t("shinyCountTooltip", { count: shinyCount })
           });
         }
       }
@@ -1047,17 +1333,17 @@ class PokedexView extends ItemView {
       });
       const showShinySprite = shinyCount > 0 && normalCount === 0;
       this.plugin.applySpriteWithFallback(sprite, pkm.id, showShinySprite);
-      sprite.alt = pkm.name;
+      sprite.alt = displayName;
 
       card.createDiv({
         cls: "pokedex-grid-name",
-        text: isCaught ? pkm.name : "???"
+        text: isCaught ? displayName : "???"
       });
 
       if (isCaught) {
         card.addEventListener("click", () => {
           this.activeTab = "journal";
-          this.searchQuery = pkm.name.toLowerCase();
+          this.searchQuery = displayName.toLowerCase();
           this.refresh();
         });
       }
@@ -1070,7 +1356,7 @@ class PokedexView extends ItemView {
     if (file) {
       this.app.workspace.getLeaf(false).openFile(file);
     } else {
-      new Notice(`Document introuvable : ${docPath}`);
+      new Notice(this.plugin.t("noticeDocNotFound", { path: docPath }));
     }
   }
 }
@@ -1079,26 +1365,27 @@ class PokedexView extends ItemView {
 // CONFIRMATION MODAL (Obsidian Community Guidelines Compliant)
 // ============================================================================
 class ConfirmResetModal extends Modal {
-  constructor(app, onConfirm) {
+  constructor(app, plugin, onConfirm) {
     super(app);
+    this.plugin = plugin;
     this.onConfirm = onConfirm;
   }
 
   onOpen() {
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.createEl("h3", { text: "Vider tout le Pokédex ?" });
+    contentEl.createEl("h3", { text: this.plugin.t("modalResetTitle") });
     contentEl.createEl("p", {
-      text: "Voulez-vous vraiment effacer tout votre historique de Pokédex ? Cette action est irréversible."
+      text: this.plugin.t("modalResetDesc")
     });
 
     new Setting(contentEl)
       .addButton(btn => btn
-        .setButtonText("Annuler")
+        .setButtonText(this.plugin.t("modalCancelBtn"))
         .onClick(() => this.close())
       )
       .addButton(btn => btn
-        .setButtonText("Confirmer la suppression")
+        .setButtonText(this.plugin.t("modalConfirmBtn"))
         .setWarning()
         .onClick(async () => {
           await this.onConfirm();
@@ -1128,17 +1415,37 @@ class PokemonSettingTab extends PluginSettingTab {
 
     await this.plugin.checkLocalSpritesStatus();
 
-    // 0. Offline Sprites Download Section
+    // 0a. Language Selection
     new Setting(containerEl)
-      .setName("Pack d'animations hors-ligne (2050 GIFs)")
+      .setName(this.plugin.t("settingsLangHeading"))
+      .setHeading();
+
+    new Setting(containerEl)
+      .setName(this.plugin.t("settingsLangName"))
+      .setDesc(this.plugin.t("settingsLangDesc"))
+      .addDropdown(drop => drop
+        .addOption("auto", this.plugin.t("settingsLangAuto"))
+        .addOption("fr", "🇫🇷 Français")
+        .addOption("en", "🇬🇧 English")
+        .setValue(this.plugin.settings.language || "auto")
+        .onChange(async (val) => {
+          this.plugin.settings.language = val;
+          await this.plugin.savePluginData();
+          this.display();
+        })
+      );
+
+    // 0b. Offline Sprites Download Section
+    new Setting(containerEl)
+      .setName(this.plugin.t("settingsSpritesHeading"))
       .setHeading();
 
     const spriteStatusDesc = this.plugin.hasLocalSprites
-      ? "✅ Les 2050 animations GIF (1025 Normaux + 1025 Shiny) sont installées dans le dossier local 'sprites/'."
-      : "🌐 Les GIFs ne sont pas fournis avec le plugin (respect des droits d'auteur). Téléchargez-les gratuitement en 1 clic depuis PokéAPI / Showdown pour activer le mode 100% hors-ligne.";
+      ? this.plugin.t("settingsSpritesInstalledDesc")
+      : this.plugin.t("settingsSpritesMissingDesc");
 
     const spriteSetting = new Setting(containerEl)
-      .setName(this.plugin.hasLocalSprites ? "Sprites locaux : Installés" : "Sprites locaux : Non installés")
+      .setName(this.plugin.hasLocalSprites ? this.plugin.t("settingsSpritesInstalledName") : this.plugin.t("settingsSpritesMissingName"))
       .setDesc(spriteStatusDesc);
 
     const progressContainer = containerEl.createDiv({ cls: "pokedex-settings-progress" });
@@ -1154,7 +1461,7 @@ class PokemonSettingTab extends PluginSettingTab {
       const pct = total > 0 ? Math.round((current / total) * 100) : 0;
       progressContainer.createDiv({
         cls: "pokedex-settings-progress-label",
-        text: `⏳ Téléchargement en cours : ${current} / ${total} fichiers (${pct}%)`
+        text: this.plugin.t("settingsProgressLabel", { current, total, pct })
       });
       const barWrap = progressContainer.createDiv({ cls: "pokedex-progress-bar-wrap" });
       const barFill = barWrap.createDiv({ cls: "pokedex-progress-bar-fill" });
@@ -1164,7 +1471,7 @@ class PokemonSettingTab extends PluginSettingTab {
     if (this.plugin.isDownloadingSprites) {
       updateSettingsProgress(this.plugin.downloadProgress.current, this.plugin.downloadProgress.total);
       spriteSetting.addButton(btn => btn
-        .setButtonText("⏸️ Mettre en pause")
+        .setButtonText(this.plugin.t("bannerPauseBtn"))
         .onClick(() => {
           this.plugin.cancelSpriteDownload = true;
           setTimeout(() => this.display(), 400);
@@ -1174,8 +1481,8 @@ class PokemonSettingTab extends PluginSettingTab {
       spriteSetting.addButton(btn => btn
         .setButtonText(
           this.plugin.hasLocalSprites
-            ? "🔄 Vérifier / Réparer les GIFs"
-            : (this.plugin.hasAnyLocalSprite ? "📥 Reprendre le téléchargement" : "📥 Télécharger les 2050 GIFs")
+            ? this.plugin.t("settingsRepairBtn")
+            : (this.plugin.hasAnyLocalSprite ? this.plugin.t("settingsResumeBtn") : this.plugin.t("bannerDownloadBtn"))
         )
         .setCta()
         .onClick(async () => {
@@ -1189,12 +1496,12 @@ class PokemonSettingTab extends PluginSettingTab {
 
     // 1. Characters Threshold
     new Setting(containerEl)
-      .setName("Préférences de capture")
+      .setName(this.plugin.t("settingsCatchHeading"))
       .setHeading();
 
     new Setting(containerEl)
-      .setName("Fréquence d'apparition (Caractères)")
-      .setDesc("Nombre de caractères à taper dans une note pour faire apparaître et capturer un Pokémon.")
+      .setName(this.plugin.t("settingsFreqName"))
+      .setDesc(this.plugin.t("settingsFreqDesc"))
       .addSlider(slider => slider
         .setLimits(20, 500, 10)
         .setValue(this.plugin.settings.charactersPerPokemon)
@@ -1217,12 +1524,12 @@ class PokemonSettingTab extends PluginSettingTab {
 
     // 2. Notification Position
     new Setting(containerEl)
-      .setName("Position de l'animation d'apparition")
-      .setDesc("Emplacement de la bannière de capture sur l'écran.")
+      .setName(this.plugin.t("settingsPosName"))
+      .setDesc(this.plugin.t("settingsPosDesc"))
       .addDropdown(drop => drop
-        .addOption("pos-bottom-right", "En bas à droite")
-        .addOption("pos-bottom-center", "En bas au centre")
-        .addOption("pos-bottom-left", "En bas à gauche")
+        .addOption("pos-bottom-right", this.plugin.t("settingsPosRight"))
+        .addOption("pos-bottom-center", this.plugin.t("settingsPosCenter"))
+        .addOption("pos-bottom-left", this.plugin.t("settingsPosLeft"))
         .setValue(this.plugin.settings.notificationPosition)
         .onChange(async (val) => {
           this.plugin.settings.notificationPosition = val;
@@ -1232,8 +1539,8 @@ class PokemonSettingTab extends PluginSettingTab {
 
     // 3. Show Animation Toggle
     new Setting(containerEl)
-      .setName("Afficher l'animation de capture")
-      .setDesc("Affiche la Pokéball animée et le Pokémon lors de chaque capture.")
+      .setName(this.plugin.t("settingsAnimName"))
+      .setDesc(this.plugin.t("settingsAnimDesc"))
       .addToggle(toggle => toggle
         .setValue(this.plugin.settings.showCatchAnimation)
         .onChange(async (val) => {
@@ -1244,8 +1551,8 @@ class PokemonSettingTab extends PluginSettingTab {
 
     // 4. Sound Effects Toggle
     new Setting(containerEl)
-      .setName("Effets sonores 8-bit")
-      .setDesc("Joue une mélodie rétro 8-bit lors de la capture d'un Pokémon (synthèse audio sans fichier externe).")
+      .setName(this.plugin.t("settingsSoundName"))
+      .setDesc(this.plugin.t("settingsSoundDesc"))
       .addToggle(toggle => toggle
         .setValue(this.plugin.settings.soundEnabled)
         .onChange(async (val) => {
@@ -1256,63 +1563,63 @@ class PokemonSettingTab extends PluginSettingTab {
 
     // 5. Test Normal Encounter
     new Setting(containerEl)
-      .setName("Tester une capture normale")
-      .setDesc("Déclenche immédiatement une capture de test normale.")
+      .setName(this.plugin.t("settingsTestNormalName"))
+      .setDesc(this.plugin.t("settingsTestNormalDesc"))
       .addButton(btn => btn
-        .setButtonText("Tester normale")
+        .setButtonText(this.plugin.t("settingsTestNormalBtn"))
         .onClick(() => {
           const activeFile = this.app.workspace.getActiveFile();
-          const docPath = activeFile ? activeFile.path : "Note de test.md";
-          const docTitle = activeFile ? activeFile.basename : "Note de test";
+          const docPath = activeFile ? activeFile.path : this.plugin.t("testNoteFile");
+          const docTitle = activeFile ? activeFile.basename : this.plugin.t("testNoteTitle");
           this.plugin.triggerEncounter(docPath, docTitle, false);
         })
       );
 
     // 6. Test Shiny Encounter
     new Setting(containerEl)
-      .setName("Tester une capture Shiny (✨)")
-      .setDesc("Déclenche immédiatement une capture de test d'un Pokémon Shiny.")
+      .setName(this.plugin.t("settingsTestShinyName"))
+      .setDesc(this.plugin.t("settingsTestShinyDesc"))
       .addButton(btn => btn
-        .setButtonText("Tester Shiny ✨")
+        .setButtonText(this.plugin.t("settingsTestShinyBtn"))
         .setCta()
         .onClick(() => {
           const activeFile = this.app.workspace.getActiveFile();
-          const docPath = activeFile ? activeFile.path : "Note de test.md";
-          const docTitle = activeFile ? activeFile.basename : "Note de test";
+          const docPath = activeFile ? activeFile.path : this.plugin.t("testNoteFile");
+          const docTitle = activeFile ? activeFile.basename : this.plugin.t("testNoteTitle");
           this.plugin.triggerEncounter(docPath, docTitle, true);
         })
       );
 
     // 7. Reset Data
     new Setting(containerEl)
-      .setName("Gestion des données")
+      .setName(this.plugin.t("settingsDataHeading"))
       .setHeading();
 
     new Setting(containerEl)
-      .setName("Réinitialiser la progression actuelle")
-      .setDesc("Remet le compteur de frappe actuel à zéro.")
+      .setName(this.plugin.t("settingsResetCountName"))
+      .setDesc(this.plugin.t("settingsResetCountDesc"))
       .addButton(btn => btn
-        .setButtonText("Remettre à 0")
+        .setButtonText(this.plugin.t("settingsResetCountBtn"))
         .onClick(async () => {
           this.plugin.settings.currentKeystrokeCount = 0;
           await this.plugin.savePluginData();
-          new Notice("Compteur réinitialisé à 0.");
+          new Notice(this.plugin.t("noticeCountReset"));
         })
       );
 
     new Setting(containerEl)
-      .setName("Vider tout le Pokédex")
-      .setDesc("Attention : supprime définitivement toutes les captures enregistrées.")
+      .setName(this.plugin.t("settingsClearAllName"))
+      .setDesc(this.plugin.t("settingsClearAllDesc"))
       .addButton(btn => btn
-        .setButtonText("Vider le Pokédex")
+        .setButtonText(this.plugin.t("settingsClearAllBtn"))
         .setWarning()
         .onClick(() => {
-          new ConfirmResetModal(this.app, async () => {
+          new ConfirmResetModal(this.app, this.plugin, async () => {
             this.plugin.catches = [];
             this.plugin.settings.totalCharactersTyped = 0;
             this.plugin.settings.currentKeystrokeCount = 0;
             await this.plugin.savePluginData();
-            new Notice("Pokédex vidé.");
+            new Notice(this.plugin.t("noticePokedexCleared"));
           }).open();
         })
       );
@@ -1320,5 +1627,6 @@ class PokemonSettingTab extends PluginSettingTab {
 }
 
 module.exports = PokemonPokedexPlugin;
+
 
 
