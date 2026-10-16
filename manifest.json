@@ -1,0 +1,9 @@
+{
+  "id": "obsidian-pokemon-pokedex",
+  "name": "Pokémon Pokédex",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Fait apparaitre et capture un Pokémon tous les X caractères tapés avec animation, journal de bord et Pokédex completée.",
+  "author": "Briec Lamour",
+  "isDesktopOnly": false
+}

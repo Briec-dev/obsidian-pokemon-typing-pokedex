@@ -1,0 +1,799 @@
+/* ==========================================================================
+   Pokémon Pokédex Obsidian Plugin Styles
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Bottom Encounter Notification / Animation (Minimalist Lightweight HUD)
+   -------------------------------------------------------------------------- */
+.pokemon-encounter-container {
+  position: fixed;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-interface, sans-serif);
+}
+
+.pokemon-encounter-container.pos-bottom-right {
+  bottom: 24px;
+  right: 24px;
+}
+
+.pokemon-encounter-container.pos-bottom-center {
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pokemon-encounter-container.pos-bottom-left {
+  bottom: 24px;
+  left: 24px;
+}
+
+.pokemon-encounter-card {
+  pointer-events: auto;
+  position: relative;
+  width: 200px;
+  background: var(--background-secondary, #1e1e24);
+  border: 1px solid var(--background-modifier-border, rgba(255, 255, 255, 0.15));
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  animation: pokemon-card-entrance 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  user-select: none;
+}
+
+.pokemon-encounter-card.closing {
+  animation: pokemon-card-exit 0.35s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+}
+
+@keyframes pokemon-card-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pokemon-card-exit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.92);
+  }
+}
+
+/* Battle / Encounter Stage */
+.pokemon-encounter-stage {
+  position: relative;
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pokemon-stage-sprite-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s ease;
+}
+
+.pokemon-stage-sprite {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+  animation: pokemon-bounce 0.9s ease-in-out infinite alternate;
+}
+
+.pokemon-stage-shadow {
+  width: 44px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  margin-top: -3px;
+  animation: pokemon-shadow-scale 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes pokemon-bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+@keyframes pokemon-shadow-scale {
+  0% { transform: scale(1); opacity: 0.3; }
+  100% { transform: scale(0.8); opacity: 0.15; }
+}
+
+/* Pokémon sucked into Pokéball */
+.pokemon-stage-sprite-wrap.captured {
+  animation: pokemon-capture-shrink 0.5s ease forwards;
+}
+
+@keyframes pokemon-capture-shrink {
+  0% {
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 0 red);
+  }
+  30% {
+    filter: brightness(2) drop-shadow(0 0 10px #ff334b);
+  }
+  100% {
+    transform: scale(0.05) translateY(24px);
+    opacity: 0;
+  }
+}
+
+/* Pokéball inside Stage */
+.pokemon-stage-pokeball {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  z-index: 10;
+  display: none;
+}
+
+.pokemon-stage-pokeball.visible {
+  display: block;
+}
+
+.pokemon-stage-pokeball.throw {
+  animation: pokeball-throw 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.pokemon-stage-pokeball.wiggle {
+  animation: pokeball-wiggle 0.65s ease-in-out 3;
+}
+
+.pokemon-stage-pokeball.caught-success {
+  animation: pokeball-success 0.4s ease-out forwards;
+}
+
+@keyframes pokeball-throw {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.3) rotate(0deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-16px) scale(1) rotate(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(8px) scale(0.9) rotate(360deg);
+  }
+}
+
+@keyframes pokeball-wiggle {
+  0% { transform: translateY(8px) scale(0.9) rotate(0deg); }
+  25% { transform: translateY(8px) scale(0.9) rotate(-22deg); }
+  50% { transform: translateY(8px) scale(0.9) rotate(22deg); }
+  75% { transform: translateY(8px) scale(0.9) rotate(-12deg); }
+  100% { transform: translateY(8px) scale(0.9) rotate(0deg); }
+}
+
+@keyframes pokeball-success {
+  0% { transform: translateY(8px) scale(0.9); }
+  50% { transform: translateY(0) scale(1.15); filter: drop-shadow(0 0 12px #facc15); }
+  100% { transform: translateY(8px) scale(1); filter: drop-shadow(0 0 6px #facc15); }
+}
+
+/* Pokéball CSS Design */
+.pokeball-sphere {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: white;
+  position: relative;
+  border: 2px solid #222224;
+  box-shadow: inset -1.5px -1.5px 3px rgba(0,0,0,0.2), 0 2px 5px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+.pokeball-top-half {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: #ee1515;
+  border-bottom: 2px solid #222224;
+}
+
+.pokeball-center-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #222224;
+  box-shadow: 0 0 2px rgba(0,0,0,0.4);
+  z-index: 5;
+  transition: background 0.2s;
+}
+
+.pokeball-center-btn.active {
+  background: #ff3838;
+  box-shadow: 0 0 6px #ff3838;
+}
+
+/* Sparks / Celebration particles */
+.pokemon-sparks {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+  display: none;
+}
+.pokemon-sparks.visible {
+  display: block;
+}
+
+.spark-item {
+  position: absolute;
+  font-size: 13px;
+  animation: spark-fly 0.75s ease-out forwards;
+}
+
+@keyframes spark-fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(1.2);
+  }
+}
+
+/* Mini HUD Footer */
+.pokemon-mini-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 4px 4px 2px 4px;
+  border-top: 1px solid var(--background-modifier-border, rgba(255, 255, 255, 0.08));
+}
+
+.pokemon-mini-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-normal, #ffffff);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pokemon-mini-tags {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.pokemon-mini-tag {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 5px;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.pokemon-mini-tag.tag-n {
+  background: #3b82f6; /* Bleu */
+  color: #ffffff;
+}
+
+.pokemon-mini-tag.tag-s {
+  background: #ef4444; /* Rouge */
+  color: #ffffff;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   2. Pokédex Main View (ItemView)
+   -------------------------------------------------------------------------- */
+.pokemon-pokedex-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: var(--background-primary);
+  font-family: var(--font-interface);
+  gap: 16px;
+}
+
+/* Pokédex Header */
+.pokedex-header-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(238, 21, 21, 0.12) 0%, rgba(124, 58, 237, 0.12) 100%);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 12px;
+}
+
+.pokedex-title-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pokedex-logo-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.pokedex-title-text h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-normal);
+  letter-spacing: -0.4px;
+}
+
+.pokedex-title-text p {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Summary Stats */
+.pokedex-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.pokedex-stat-box {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.15s ease;
+}
+.pokedex-stat-box:hover {
+  transform: translateY(-2px);
+  border-color: var(--interactive-accent);
+}
+
+.pokedex-stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-normal);
+}
+
+.pokedex-stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Controls / Tabs Bar */
+.pokedex-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pokedex-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.pokedex-tab-btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pokedex-tab-btn:hover {
+  color: var(--text-normal);
+}
+.pokedex-tab-btn.active {
+  background: var(--interactive-accent);
+  color: #ffffff;
+}
+
+.pokedex-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.pokedex-search-input {
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+}
+
+/* --------------------------------------------------------------------------
+   3. Journal des Captures (Table View)
+   -------------------------------------------------------------------------- */
+.pokedex-table-wrapper {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pokedex-capture-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+
+.pokedex-capture-table th {
+  padding: 10px 14px;
+  background: var(--background-secondary-alt);
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.pokedex-capture-table td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  color: var(--text-normal);
+  vertical-align: middle;
+}
+
+.pokedex-capture-table tr:last-child td {
+  border-bottom: none;
+}
+
+.pokedex-capture-table tr:hover td {
+  background: var(--background-modifier-hover);
+}
+
+.pokedex-table-sprite {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.pokedex-pkm-id {
+  font-family: var(--font-monospace);
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.pokedex-pkm-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-normal);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pokedex-doc-link {
+  color: var(--interactive-accent);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 6px;
+  background: rgba(124, 58, 237, 0.08);
+}
+.pokedex-doc-link:hover {
+  text-decoration: underline;
+  background: rgba(124, 58, 237, 0.16);
+}
+
+.pokedex-date-badge {
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.pokedex-btn-delete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.pokedex-btn-delete:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Empty State */
+.pokedex-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.pokedex-empty-icon {
+  width: 64px;
+  height: 64px;
+  opacity: 0.4;
+}
+
+.pokedex-empty-state h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-normal);
+}
+
+.pokedex-empty-state p {
+  margin: 0;
+  font-size: 12px;
+  max-width: 380px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Pokédex Grid View (151 Kanto Cards)
+   -------------------------------------------------------------------------- */
+.pokedex-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.pokedex-grid-card {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.pokedex-grid-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--interactive-accent);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.pokedex-grid-card.uncaught {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+
+.pokedex-grid-card.uncaught:hover {
+  opacity: 0.65;
+}
+
+.pokedex-grid-number {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-monospace);
+  color: var(--text-muted);
+}
+
+/* Badges Wrapper (Top Right) */
+.pokedex-grid-badges {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Blue badge: Number of normal/non-shiny caught */
+.pokedex-grid-normal-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 7px;
+  background: #3b82f6; /* Bleu */
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+/* Red badge: Number of shiny caught */
+.pokedex-grid-shiny-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 7px;
+  background: #ef4444; /* Rouge */
+  color: #ffffff;
+  line-height: 1.2;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+}
+
+.pokedex-grid-sprite {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin: 12px 0 4px 0;
+}
+
+.pokedex-grid-card.uncaught .pokedex-grid-sprite {
+  filter: brightness(0);
+  opacity: 0.5;
+}
+
+.pokedex-grid-name {
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   5. Pokémon Type Badges
+   -------------------------------------------------------------------------- */
+.pokemon-type-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-right: 4px;
+}
+
+.pokemon-type-plante { background-color: #78C850; color: #fff; }
+.pokemon-type-poison { background-color: #A040A0; color: #fff; }
+.pokemon-type-feu { background-color: #F08030; color: #fff; }
+.pokemon-type-eau { background-color: #6890F0; color: #fff; }
+.pokemon-type-insecte { background-color: #A8B820; color: #fff; }
+.pokemon-type-vol { background-color: #A890F0; color: #fff; }
+.pokemon-type-normal { background-color: #A8A878; color: #fff; }
+.pokemon-type-electrik, .pokemon-type-électrik { background-color: #F8D030; color: #111; }
+.pokemon-type-sol { background-color: #E0C068; color: #111; }
+.pokemon-type-fee, .pokemon-type-fée { background-color: #EE99AC; color: #fff; }
+.pokemon-type-combat { background-color: #C03028; color: #fff; }
+.pokemon-type-psy { background-color: #F85888; color: #fff; }
+.pokemon-type-roche { background-color: #B8A038; color: #fff; }
+.pokemon-type-acier { background-color: #B8B8D0; color: #111; }
+.pokemon-type-glace { background-color: #98D8D8; color: #111; }
+.pokemon-type-spectre { background-color: #705598; color: #fff; }
+.pokemon-type-dragon { background-color: #7038F8; color: #fff; }
+.pokemon-type-tenebres, .pokemon-type-ténèbres { background-color: #705848; color: #fff; }
+
+/* --------------------------------------------------------------------------
+   6. Offline Sprites Download Banner & Progress Bar
+   -------------------------------------------------------------------------- */
+.pokedex-sprites-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 12px 16px;
+  background: var(--background-secondary);
+  border: 1px dashed var(--interactive-accent);
+  border-radius: 10px;
+}
+
+.pokedex-sprites-banner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 240px;
+}
+
+.pokedex-sprites-banner-info strong {
+  font-size: 13px;
+  color: var(--text-normal);
+}
+
+.pokedex-sprites-banner-info span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.pokedex-sprites-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pokedex-progress-bar-wrap {
+  width: 100%;
+  height: 8px;
+  background: var(--background-modifier-border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.pokedex-progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  border-radius: 999px;
+  transition: width 0.2s ease;
+}
+
+.pokedex-settings-progress {
+  margin: -8px 0 16px 0;
+  padding: 10px 14px;
+  background: var(--background-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.pokedex-settings-progress-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-normal);
+  margin-bottom: 4px;
+}
+

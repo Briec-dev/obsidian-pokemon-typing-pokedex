@@ -1,0 +1,20 @@
+# ==========================================================================
+# Protection des droits d'auteur (Nintendo / The Pokémon Company)
+# Les 2050 animations GIF ne doivent PAS être distribuées sur GitHub.
+# Elles sont téléchargées directement par l'utilisateur via le plugin ou le script.
+# ==========================================================================
+sprites/
+*.gif
+
+# Données personnelles et progression locale du dresseur dans Obsidian
+data.json
+
+# Dépendances et fichiers système / éditeur
+node_modules/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.zip
+.vscode/
+.idea/
