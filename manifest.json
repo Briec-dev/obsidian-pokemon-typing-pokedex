@@ -1,9 +1,10 @@
 {
-  "id": "obsidian-pokemon-pokedex",
-  "name": "Pokémon Pokédex",
+  "id": "pokemon-typing-pokedex",
+  "name": "Pokémon Typing Pokédex",
   "version": "1.0.0",
   "minAppVersion": "0.15.0",
-  "description": "Fait apparaitre et capture un Pokémon tous les X caractères tapés avec animation, journal de bord et Pokédex completée.",
+  "description": "Catch wild Pokémon as you type in your notes, featuring animations, a chronological catch log, and a full 1025 National Pokédex.",
   "author": "Briec Lamour",
+  "authorUrl": "https://github.com/Briec-dev",
   "isDesktopOnly": false
 }

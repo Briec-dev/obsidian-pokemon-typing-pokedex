@@ -4,8 +4,10 @@ const {
   Setting,
   ItemView,
   WorkspaceLeaf,
+  Modal,
   Notice,
   addIcon,
+  setIcon,
   requestUrl
 } = require("obsidian");
 
@@ -82,7 +84,6 @@ function playCatchSound() {
 // ============================================================================
 class PokemonPokedexPlugin extends Plugin {
   async onload() {
-    console.log("[Pokédex] Chargement du plugin Pokémon Companion & Pokédex (1025 Pokémon)...");
     this.hasLocalSprites = false;
     this.hasAnyLocalSprite = false;
     this.isDownloadingSprites = false;
@@ -154,17 +155,22 @@ class PokemonPokedexPlugin extends Plugin {
   }
 
   onunload() {
-    console.log("[Pokédex] Déchargement du plugin Pokémon Companion & Pokédex");
     this.cancelSpriteDownload = true;
+    if (this.saveTimeout) {
+      clearTimeout(this.saveTimeout);
+    }
     if (this.currentNotificationEl && this.currentNotificationEl.parentNode) {
       this.currentNotificationEl.parentNode.removeChild(this.currentNotificationEl);
     }
   }
 
   getPluginDir() {
-    return (this.manifest && this.manifest.dir)
-      ? this.manifest.dir
-      : ".obsidian/plugins/obsidian-pokemon-pokedex";
+    if (this.manifest && this.manifest.dir) {
+      return this.manifest.dir;
+    }
+    const configDir = (this.app && this.app.vault && this.app.vault.configDir) ? this.app.vault.configDir : ".obsidian";
+    const pluginId = (this.manifest && this.manifest.id) ? this.manifest.id : "pokemon-typing-pokedex";
+    return `${configDir}/plugins/${pluginId}`;
   }
 
   async checkLocalSpritesStatus() {
@@ -481,53 +487,56 @@ class PokemonPokedexPlugin extends Plugin {
     container.className = `pokemon-encounter-container ${this.settings.notificationPosition}`;
     this.currentNotificationEl = container;
 
-    let tagsHtml = "";
-    if (isNew || isShiny) {
-      tagsHtml = `<div class="pokemon-mini-tags">` +
-        (isNew ? `<span class="pokemon-mini-tag tag-n">N</span>` : "") +
-        (isShiny ? `<span class="pokemon-mini-tag tag-s">S</span>` : "") +
-        `</div>`;
-    }
+    const card = container.createDiv({
+      cls: "pokemon-encounter-card",
+      attr: { title: "Cliquer pour ouvrir le Pokédex" }
+    });
 
-    container.innerHTML = `
-      <div class="pokemon-encounter-card" title="Cliquer pour ouvrir le Pokédex">
-        <div class="pokemon-encounter-stage">
-          <div class="pokemon-stage-sprite-wrap">
-            <img class="pokemon-stage-sprite" alt="${pkm.name}" />
-            <div class="pokemon-stage-shadow"></div>
-          </div>
-          <div class="pokemon-stage-pokeball">
-            <div class="pokeball-sphere">
-              <div class="pokeball-top-half"></div>
-              <div class="pokeball-center-btn"></div>
-            </div>
-          </div>
-          <div class="pokemon-sparks">
-            <span class="spark-item" style="--dx: -30px; --dy: -25px;">⭐</span>
-            <span class="spark-item" style="--dx: 30px; --dy: -30px;">✨</span>
-            <span class="spark-item" style="--dx: -35px; --dy: 15px;">🌟</span>
-            <span class="spark-item" style="--dx: 35px; --dy: 20px;">⭐</span>
-          </div>
-        </div>
-        <div class="pokemon-mini-footer">
-          <span class="pokemon-mini-name">${pkm.name} #${String(pkm.id).padStart(3, "0")}</span>
-          ${tagsHtml}
-        </div>
-      </div>
-    `;
+    const stage = card.createDiv({ cls: "pokemon-encounter-stage" });
+
+    const spriteWrap = stage.createDiv({ cls: "pokemon-stage-sprite-wrap" });
+    const spriteImg = spriteWrap.createEl("img", {
+      cls: "pokemon-stage-sprite",
+      attr: { alt: pkm.name }
+    });
+    this.applySpriteWithFallback(spriteImg, pkm.id, isShiny);
+    spriteWrap.createDiv({ cls: "pokemon-stage-shadow" });
+
+    const pokeball = stage.createDiv({ cls: "pokemon-stage-pokeball" });
+    const sphere = pokeball.createDiv({ cls: "pokeball-sphere" });
+    sphere.createDiv({ cls: "pokeball-top-half" });
+    const pokeballBtn = sphere.createDiv({ cls: "pokeball-center-btn" });
+
+    const sparks = stage.createDiv({ cls: "pokemon-sparks" });
+    const sparkOffsets = [
+      { icon: "⭐", dx: "-30px", dy: "-25px" },
+      { icon: "✨", dx: "30px", dy: "-30px" },
+      { icon: "🌟", dx: "-35px", dy: "15px" },
+      { icon: "⭐", dx: "35px", dy: "20px" }
+    ];
+    sparkOffsets.forEach(s => {
+      const sp = sparks.createSpan({ cls: "spark-item", text: s.icon });
+      sp.style.setProperty("--dx", s.dx);
+      sp.style.setProperty("--dy", s.dy);
+    });
+
+    const footer = card.createDiv({ cls: "pokemon-mini-footer" });
+    footer.createSpan({
+      cls: "pokemon-mini-name",
+      text: `${pkm.name} #${String(pkm.id).padStart(3, "0")}`
+    });
+
+    if (isNew || isShiny) {
+      const tagsDiv = footer.createDiv({ cls: "pokemon-mini-tags" });
+      if (isNew) {
+        tagsDiv.createSpan({ cls: "pokemon-mini-tag tag-n", text: "N" });
+      }
+      if (isShiny) {
+        tagsDiv.createSpan({ cls: "pokemon-mini-tag tag-s", text: "S" });
+      }
+    }
 
     document.body.appendChild(container);
-
-    const card = container.querySelector(".pokemon-encounter-card");
-    const spriteWrap = container.querySelector(".pokemon-stage-sprite-wrap");
-    const spriteImg = container.querySelector(".pokemon-stage-sprite");
-    const pokeball = container.querySelector(".pokemon-stage-pokeball");
-    const pokeballBtn = container.querySelector(".pokeball-center-btn");
-    const sparks = container.querySelector(".pokemon-sparks");
-
-    if (spriteImg) {
-      this.applySpriteWithFallback(spriteImg, pkm.id, isShiny);
-    }
 
     let isDismissed = false;
     const dismiss = () => {
@@ -663,7 +672,7 @@ class PokedexView extends ItemView {
     const titleGroup = banner.createDiv({ cls: "pokedex-title-group" });
     
     const iconWrapper = titleGroup.createDiv({ cls: "pokedex-logo-icon" });
-    iconWrapper.innerHTML = POKEBALL_SVG;
+    setIcon(iconWrapper, "pokeball");
 
     const titleText = titleGroup.createDiv({ cls: "pokedex-title-text" });
     titleText.createEl("h1", { text: "Pokédex National" });
@@ -866,7 +875,7 @@ class PokedexView extends ItemView {
     if (filtered.length === 0) {
       const empty = wrapper.createDiv({ cls: "pokedex-empty-state" });
       const icon = empty.createDiv({ cls: "pokedex-empty-icon" });
-      icon.innerHTML = POKEBALL_SVG;
+      setIcon(icon, "pokeball");
       empty.createEl("h3", { text: "Aucun Pokémon trouvé" });
       empty.createEl("p", {
         text: this.searchQuery
@@ -1067,6 +1076,44 @@ class PokedexView extends ItemView {
 }
 
 // ============================================================================
+// CONFIRMATION MODAL (Obsidian Community Guidelines Compliant)
+// ============================================================================
+class ConfirmResetModal extends Modal {
+  constructor(app, onConfirm) {
+    super(app);
+    this.onConfirm = onConfirm;
+  }
+
+  onOpen() {
+    const { contentEl } = this;
+    contentEl.empty();
+    contentEl.createEl("h3", { text: "Vider tout le Pokédex ?" });
+    contentEl.createEl("p", {
+      text: "Voulez-vous vraiment effacer tout votre historique de Pokédex ? Cette action est irréversible."
+    });
+
+    new Setting(contentEl)
+      .addButton(btn => btn
+        .setButtonText("Annuler")
+        .onClick(() => this.close())
+      )
+      .addButton(btn => btn
+        .setButtonText("Confirmer la suppression")
+        .setWarning()
+        .onClick(async () => {
+          await this.onConfirm();
+          this.close();
+        })
+      );
+  }
+
+  onClose() {
+    const { contentEl } = this;
+    contentEl.empty();
+  }
+}
+
+// ============================================================================
 // SETTINGS TAB
 // ============================================================================
 class PokemonSettingTab extends PluginSettingTab {
@@ -1081,10 +1128,10 @@ class PokemonSettingTab extends PluginSettingTab {
 
     await this.plugin.checkLocalSpritesStatus();
 
-    containerEl.createEl("h2", { text: "⚡ Paramètres du Compagnon Pokémon & Pokédex" });
-
     // 0. Offline Sprites Download Section
-    containerEl.createEl("h3", { text: "📦 Pack d'Animations Hors-Ligne (2050 GIFs)" });
+    new Setting(containerEl)
+      .setName("Pack d'animations hors-ligne (2050 GIFs)")
+      .setHeading();
 
     const spriteStatusDesc = this.plugin.hasLocalSprites
       ? "✅ Les 2050 animations GIF (1025 Normaux + 1025 Shiny) sont installées dans le dossier local 'sprites/'."
@@ -1141,7 +1188,9 @@ class PokemonSettingTab extends PluginSettingTab {
     }
 
     // 1. Characters Threshold
-    containerEl.createEl("h3", { text: "⚙️ Préférences de Capture" });
+    new Setting(containerEl)
+      .setName("Préférences de capture")
+      .setHeading();
 
     new Setting(containerEl)
       .setName("Fréquence d'apparition (Caractères)")
@@ -1235,7 +1284,9 @@ class PokemonSettingTab extends PluginSettingTab {
       );
 
     // 7. Reset Data
-    containerEl.createEl("h3", { text: "Gestion des données" });
+    new Setting(containerEl)
+      .setName("Gestion des données")
+      .setHeading();
 
     new Setting(containerEl)
       .setName("Réinitialiser la progression actuelle")
@@ -1255,18 +1306,19 @@ class PokemonSettingTab extends PluginSettingTab {
       .addButton(btn => btn
         .setButtonText("Vider le Pokédex")
         .setWarning()
-        .onClick(async () => {
-          if (confirm("Voulez-vous vraiment effacer tout votre historique de Pokédex ?")) {
+        .onClick(() => {
+          new ConfirmResetModal(this.app, async () => {
             this.plugin.catches = [];
             this.plugin.settings.totalCharactersTyped = 0;
             this.plugin.settings.currentKeystrokeCount = 0;
             await this.plugin.savePluginData();
             new Notice("Pokédex vidé.");
-          }
+          }).open();
         })
       );
   }
 }
 
 module.exports = PokemonPokedexPlugin;
+
 

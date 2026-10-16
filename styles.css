@@ -354,6 +354,12 @@
   flex-shrink: 0;
 }
 
+.pokedex-logo-icon svg,
+.pokedex-empty-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
 .pokedex-title-text h1 {
   margin: 0;
   font-size: 20px;
