@@ -1,4 +1,4 @@
-# 🐾 Pokémon Typing Pokédex (National Pokédex 1–1025)
+# Pokemon Typing Pokedex
 
 > 🇬🇧 **[English Overview](#-english-overview--installation)** | 🇫🇷 **[Documentation en Français](#-documentation-en-français)**
 

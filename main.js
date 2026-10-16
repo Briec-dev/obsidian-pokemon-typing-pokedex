@@ -387,7 +387,9 @@ class PokemonPokedexPlugin extends Plugin {
     const pref = this.settings && this.settings.language ? this.settings.language : "auto";
     if (pref === "fr" || pref === "en") return pref;
     try {
-      const obsLang = window.localStorage ? window.localStorage.getItem("language") : "";
+      const obsLang = typeof obsidian.getLanguage === "function"
+        ? obsidian.getLanguage()
+        : (window.moment && typeof window.moment.locale === "function" ? window.moment.locale() : "");
       if (obsLang && obsLang.toLowerCase().startsWith("fr")) return "fr";
       if (obsLang && obsLang.length > 0) return "en";
       if (navigator.language && navigator.language.toLowerCase().startsWith("fr")) return "fr";
