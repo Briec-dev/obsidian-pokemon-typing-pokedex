@@ -1,9 +1,9 @@
 {
   "id": "pokemon-typing-pokedex",
-  "name": "Pokémon Typing Pokédex",
+  "name": "Pokemon Typing Pokedex",
   "version": "1.0.1",
   "minAppVersion": "0.15.0",
-  "description": "Catch wild Pokémon as you type in your notes, featuring animations, a chronological catch log, and a full 1025 National Pokédex.",
+  "description": "Catch wild Pokemon as you type in your notes, featuring animations, a chronological catch log, and a full 1025 National Pokedex.",
   "author": "Briec Lamour",
   "authorUrl": "https://github.com/Briec-dev",
   "isDesktopOnly": false
