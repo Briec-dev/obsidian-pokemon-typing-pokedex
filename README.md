@@ -9,9 +9,11 @@
 **Turn your writing sessions in Obsidian into a Pokémon Trainer adventure!**
 
 Every time you type in your notes, a keystroke counter tracks your progress. Every **$X$ characters typed**, a wild Pokémon (from **Generations 1 to 9**, #001 to #1025, with a 2% natural Shiny rate) appears at the bottom of your screen, gets caught by an animated Pokéball, and is recorded in your personal **National Pokédex** with the exact date, time, and a direct link to the note where you caught it.
+<img width="238" height="148" alt="catch-demo" src="https://github.com/user-attachments/assets/f9291f6e-fcf9-4e22-a875-5c58a915c752" />
 
 ### ✨ Key Features
 * **Complete National Pokédex (1025 Pokémon)**: Covers all 9 Generations (Kanto to Paldea) with types and generation filters.
+<img width="1596" height="874" alt="pokedex-preview" src="https://github.com/user-attachments/assets/f2aa3b53-6dfd-44c4-9d6b-6ab6c93dee8c" />
 * **Minimalist Catch HUD**: Non-intrusive bottom encounter animation with Pokéball throw, wiggle, and capture celebration, plus `[N]` (New) and `[S]` (Shiny ✨) badges.
 * **Chronological Catch Log & Grid View**: Track every duplicate caught, filter by generation/type/note, click on a note link to open the source document, and view separate normal (`xN`) and Shiny (`xN`) counters.
 * **Synthesized 8-Bit Audio**: Optional retro victory jingle generated via the Web Audio API (no external audio files required).
@@ -30,6 +32,7 @@ Every time you type in your notes, a keystroke counter tracks your progress. Eve
 > **Transformez vos sessions d'écriture dans Obsidian en une véritable aventure de dresseur Pokémon !**
 
 Chaque fois que vous écrivez dans vos notes, un compteur enregistre vos frappes. Tous les **$X$ caractères** saisis, un Pokémon sauvage apparaît au bas de votre écran, est capturé par une Pokéball animée, et est immédiatement enregistré dans votre **Pokédex National** personnel avec la date, l'heure et un lien direct vers votre document source.
+<img width="238" height="148" alt="catch-demo" src="https://github.com/user-attachments/assets/f9291f6e-fcf9-4e22-a875-5c58a915c752" />
 
 ---
 
@@ -88,6 +91,7 @@ Si vous ne téléchargez pas le pack hors-ligne, le plugin fonctionne quand mêm
   * **Gen 8 — Galar** : #810 Ouistempo à #905 Amovénus
   * **Gen 9 — Paldea** : #906 Poussacha à #1025 Pêchaminus
 * Noms officiels français et types traduits pour l'ensemble des 1025 espèces.
+<img width="238" height="148" alt="catch-demo" src="https://github.com/user-attachments/assets/f9291f6e-fcf9-4e22-a875-5c58a915c752" />
 
 ---
 
