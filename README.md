@@ -93,7 +93,7 @@ Si vous ne téléchargez pas le pack hors-ligne, le plugin fonctionne quand mêm
   * **Gen 8 — Galar** : #810 Ouistempo à #905 Amovénus
   * **Gen 9 — Paldea** : #906 Poussacha à #1025 Pêchaminus
 * Noms officiels français et types traduits pour l'ensemble des 1025 espèces.
-<img width="238" height="148" alt="catch-demo" src="https://github.com/user-attachments/assets/f9291f6e-fcf9-4e22-a875-5c58a915c752" />
+<img width="1596" height="874" alt="pokedex-preview" src="https://github.com/user-attachments/assets/f2aa3b53-6dfd-44c4-9d6b-6ab6c93dee8c" />
 
 ---
 
